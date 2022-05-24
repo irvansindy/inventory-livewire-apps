@@ -37,9 +37,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($products as $product)
+                        @foreach($produccts as $product)
                             <tr>
-                                <td class="border px-4 py-2">{{ $product->id }}</td>
+                                <td class="border px-4 py-2">{{ $product->productCode }}</td>
                                 <td class="border px-4 py-2">{{ $product->productName }}</td>
                                 <td class="border px-4 py-2">{{ $product->categories->categoryName }}</td>
                                 <td class="border px-4 py-2">{{ $product->merk }}</td>
