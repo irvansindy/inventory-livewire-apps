@@ -14,6 +14,7 @@ class ProductsData extends Component
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isDeleteModalOpen = 0;
+    public $isProductInventarisModalOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -59,6 +60,10 @@ class ProductsData extends Component
         $this->isDeleteModalOpen = true;
     }
 
+    public function openProductInventarisModal() {
+        $this->isProductInventarisModalOpen = true;
+    }
+
     public function closeModal() {
         $this->isModalOpen = false;
         $this->isEditModalOpen = false;
@@ -77,7 +82,7 @@ class ProductsData extends Component
     }
 
     public function createProduct() {
-        // $this->resetCreateProductForm();
+        $this->resetCreateProductForm();
         $this->dataCategory = ProductCategories::all();
         $this->openModal();
     }
@@ -85,7 +90,7 @@ class ProductsData extends Component
     public function storeProduct() {
         $this->validate([
             'productName' => 'required|string',
-            'categoryId' => 'required',
+            'categoryId' => 'required|string',
             'productDescription' => 'required|string',
             'merk' => 'required|string',
             'qty' => 'required|numeric',
@@ -164,5 +169,11 @@ class ProductsData extends Component
         session()->flash('message', 'Product has been deleted successfully.');
         $this->closeModal();
         $this->resetCreateProductForm();
+    }
+
+    public function viewProductInventaries($id)
+    {
+        $productInventaries = Products::with(['categories', 'inventories'])->findOrFail($id);
+        $this->openProductInventarisModal();
     }
 }

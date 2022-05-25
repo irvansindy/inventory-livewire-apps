@@ -30,21 +30,21 @@ class Products extends Model
     {
         return $this->hasOne(ProductCategories::class, 'id', 'categoryId');
     }
-
-    public function ProductCategories() 
+    
+    public function inventories()
     {
-        return $this->belongsTo(ProductCategories::class, 'categoryId', 'id');
+        return $this->belongTo(ProductInventory::class, 'productId', 'id');
     }
 
     public function getAutoNumberOptions()
-{
-    return [
-        'productCode' => [
-            'format' => function () {
-                return 'PRO/' . date('ym') . '/?'; // autonumber format. '?' will be replaced with the generated number.
-            },
-            'length' => 4, // The number of digits in the autonumber
-        ],
-    ];
-}
+    {
+        return [
+            'productCode' => [
+                'format' => function () {
+                    return 'PRO/' . date('ym') . '/?'; // autonumber format. '?' will be replaced with the generated number.
+                },
+                'length' => 4, // The number of digits in the autonumber
+            ],
+        ];
+    }
 }

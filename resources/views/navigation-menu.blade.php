@@ -54,7 +54,7 @@
                                 {{ __('Product Categories') }}
                             </x-jet-dropdown-link>
                             
-                            <x-jet-dropdown-link href="{{ route('categories') }}" :active="request()->routeIs('categories')">
+                            <x-jet-dropdown-link href="{{ route('inventaries') }}" :active="request()->routeIs('inventaries')">
                                 {{ __('Product Inventories') }}
                             </x-jet-dropdown-link>
                         </x-slot>
@@ -221,6 +221,9 @@
                             {{ __('Product Categories') }}
                         </x-jet-dropdown-link>
                     
+                        <x-jet-dropdown-link href="{{ route('inventaries') }}" :active="request()->routeIs('inventaries')">
+                            {{ __('Product Inventories') }}
+                        </x-jet-dropdown-link>
                     </x-slot>
                 </x-jet-dropdown>
             </div>

@@ -23,6 +23,8 @@
                     @include('livewire.product.form-edit-products')
                 @elseif ($isDeleteModalOpen)
                     @include('livewire.product.form-delete-products')
+                @elseif ($isProductInventarisModalOpen)
+                    @include('livewire.product.product-inventory-details')
                 @endif
                 <table class="table-auto w-full">
                     <thead>
@@ -49,6 +51,9 @@
                                     <button wire:click="editProduct({{ $product->id }})"
                                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Edit</button>
+                                    <button wire:click="viewProductInventory({{ $product->id }})"
+                                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                        View Inventory</button>
                                     <button wire:click="confirmDeleteProduct({{ $product->id }})"
                                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                         Delete</button>

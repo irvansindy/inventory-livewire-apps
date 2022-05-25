@@ -29,6 +29,8 @@ class CreateProductInventoriesTable extends Migration
             $table->string('productPrice');
             $table->string('productDescription');
             $table->string('productStatus');
+            $table->string('inventaryImageUrl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
