@@ -55,8 +55,8 @@ class ProductCategoryData extends Component
     }
 
     public function resetCreateProductCategoryForm(){
-        $this->categoryId = null;
-        $this->categoryName = null;
+        $this->categoryId = '';
+        $this->categoryName = '';
 
     }
 
@@ -74,22 +74,50 @@ class ProductCategoryData extends Component
             'categoryName' => $this->categoryName,
         ]);
 
-        session()->flash('success', 'Category has been created');
+        session()->flash('message', 'Category has been created');
 
         $this->closeModal();
         $this->resetCreateProductCategoryForm();
     }
 
     public function editProductCategory($id) {
-        $productCategory = ProductCategories::find($id);
-        $this->categoryId = $productCategory->categoryId;
+        $productCategory = ProductCategories::findOrFail($id);
+        $this->categoryId = $id;
         $this->categoryName = $productCategory->categoryName;
+        $this->openEditModal();
     }
 
-    public function deleteProductCategory($id) {
-        $productCategory = ProductCategories::find($id);
+    public function updateProductCategory() {
+        $this->validate([
+            'categoryName' => 'required|string|min:3|max:255',
+        ]);
+
+        $productCategory = ProductCategories::findOrFail($this->categoryId);
+        $productCategory->update([
+            'categoryName' => $this->categoryName,
+        ]);
+
+        session()->flash('message', 'Category has been updated');
+
+        $this->closeModal();
+        $this->resetCreateProductCategoryForm();
+    }
+
+    public function confirmDeleteProductCategory($id) {
+        $productCategory = ProductCategories::findOrFail($id);
+        $this->categoryId = $id;
+        $this->categoryName = $productCategory->categoryName;
+        $this->openDeleteModal();
+    }
+
+    public function deleteProductCategory() {
+        $productCategory = ProductCategories::findOrFail($this->categoryId);
         $productCategory->delete();
-        $this->emit('productCategoryPostData');
+
+        session()->flash('message', 'Category has been deleted');
+
+        $this->closeModal();
+        $this->resetCreateProductCategoryForm();
     }
 
     

@@ -23,7 +23,7 @@
                         {{ __('Products') }}
                     </x-jet-nav-link> --}}
                 </div>
-                <div class="hidden sm:flex sm:items-center sm:ml-6" :active="request()->routeIs('products')">
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-jet-dropdown align="left" width="48">
                         <x-slot name="trigger">
                             <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
@@ -53,7 +53,10 @@
                             <x-jet-dropdown-link href="{{ route('categories') }}" :active="request()->routeIs('categories')">
                                 {{ __('Product Categories') }}
                             </x-jet-dropdown-link>
-                        
+                            
+                            <x-jet-dropdown-link href="{{ route('categories') }}" :active="request()->routeIs('categories')">
+                                {{ __('Product Inventories') }}
+                            </x-jet-dropdown-link>
                         </x-slot>
                     </x-jet-dropdown>
                 </div>

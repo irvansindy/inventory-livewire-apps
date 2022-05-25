@@ -37,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($produccts as $product)
+                        @foreach($products as $product)
                             <tr>
                                 <td class="border px-4 py-2">{{ $product->productCode }}</td>
                                 <td class="border px-4 py-2">{{ $product->productName }}</td>

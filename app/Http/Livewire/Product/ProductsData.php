@@ -114,6 +114,7 @@ class ProductsData extends Component
         $this->productCode = $product->productCode;
         $this->productName = $product->productName;
         $this->categoryId = $product->categoryId;
+        $this->dataCategory = ProductCategories::all();
         $this->productDescription = $product->productDescription;
         $this->merk = $product->merk;
         $this->qty = $product->qty;

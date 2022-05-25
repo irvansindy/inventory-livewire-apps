@@ -1,6 +1,6 @@
 <div>
     <x-slot name="header">
-        <h2 class="text-left">List Data Product</h2>
+        <h2 class="text-left">List Data Product Categories</h2>
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -20,7 +20,9 @@
                 @if($isModalOpen)
                     @include('livewire.product.form-product-category')
                 @elseif ($isEditModalOpen)
-                    @include('livewire.product.form-edit-products')
+                    @include('livewire.product.form-edit-product-category')
+                @elseif ($isDeleteModalOpen)
+                    @include('livewire.product.form-delete-product-category')
                 @endif
                 <table class="table-auto w-full">
                     <thead>
@@ -37,10 +39,10 @@
                                     <td class="border px-4 py-2">{{ $category->id }}</td>
                                     <td class="border px-4 py-2">{{ $category->categoryName }}</td>
                                     <td class="border px-4 py-2">
-                                        <button wire:click="editCategory({{ $category->id }})"
+                                        <button wire:click="editProductCategory({{ $category->id }})"
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                             Edit</button>
-                                        <button wire:click="confirmDeleteCategory({{ $category->id }})"
+                                        <button wire:click="confirmDeleteProductCategory({{ $category->id }})"
                                             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                             Delete</button>
                                     </td>
