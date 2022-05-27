@@ -15,7 +15,7 @@ class CreateProductInventoriesTable extends Migration
     {
         Schema::create('product_inventories', function (Blueprint $table) {
             $table->id();
-            $table->string('inventaryCode');
+            $table->string('inventoryCode');
             $table->string('productId');
             $table->string('purchasingNumber');
             $table->date('registeredDate');
@@ -29,7 +29,7 @@ class CreateProductInventoriesTable extends Migration
             $table->string('productPrice');
             $table->string('productDescription');
             $table->string('productStatus');
-            $table->string('inventaryImageUrl');
+            $table->string('inventoryImageUrl');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -3,18 +3,26 @@
 namespace App\Http\Livewire\Product;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use App\Models\Products;
 use App\Models\ProductCategories;
+use App\Models\ProductInventory;
 
 class ProductsData extends Component
 {
+    use WithFileUploads;
+
     public $allDataProduct, $productId, $productCode, $productName, $categoryId, $productDescription, $merk, $qty, $minimumStock;
+
+    public $allDataProductInventory, $inventoryId, $inventoryCode, $purchasingNumber, $registeredDate, $yearOfEntry, $yearOfUse, $serialNumber, $yearOfEnd, $sertificateNumber, $sertificateMaker, $productOrigin, $productPrice, $productDescription2, $productStatus;
+    
     public $search;
     public $dataCategory;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isDeleteModalOpen = 0;
     public $isProductInventarisModalOpen = 0;
+    public $isCreateProductInventarisModalOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -63,11 +71,21 @@ class ProductsData extends Component
     public function openProductInventarisModal() {
         $this->isProductInventarisModalOpen = true;
     }
+    
+    public function openCreateProductInventarisModal() {
+        $this->isCreateProductInventarisModalOpen = true;
+    }
 
     public function closeModal() {
         $this->isModalOpen = false;
         $this->isEditModalOpen = false;
         $this->isDeleteModalOpen = false;
+        $this->isProductInventarisModalOpen = false;
+    }
+
+    public function closeFromInventory() {
+        $this->isCreateProductInventarisModalOpen = false;
+        $this->openProductInventarisModal();
     }
 
     public function resetCreateProductForm(){
@@ -174,6 +192,24 @@ class ProductsData extends Component
     public function viewProductInventaries($id)
     {
         $productInventaries = Products::with(['categories', 'inventories'])->findOrFail($id);
+        // dd($productInventaries);
+        $this->productId = $id;
+        $this->productCode = $productInventaries->productCode;
+        $this->productName = $productInventaries->productName;
+        $this->categoryId = $productInventaries->categories->categoryName;
+        $this->productDescription = $productInventaries->productDescription;
+        $this->merk = $productInventaries->merk;
+        $this->qty = $productInventaries->qty;
+        $this->minimumStock = $productInventaries->minimumStock;
+        $this->productInventory = array($productInventaries->inventories);
+        // dd($this->productInventory);
         $this->openProductInventarisModal();
+    }
+
+    public function createInventory($id) {
+        $product = Products::findOrFail($id);
+        $this->productId = $id;
+        $this->closeModal();
+        $this->openCreateProductInventarisModal();
     }
 }

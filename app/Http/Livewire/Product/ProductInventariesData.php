@@ -41,4 +41,41 @@ class ProductInventariesData extends Component
 
         return view('livewire.product.product-inventaries-data', ['inventaries' => $inventaries]);
     }
+
+    public function openModal() {
+        $this->isModalOpen = true;
+    }
+
+    public function openEditModal() {
+        $this->isEditModalOpen = true;
+    }
+
+    public function openDeleteModal() {
+        $this->isDeleteModalOpen = true;
+    }
+
+    public function closeModal() {
+        $this->isModalOpen = false;
+        $this->isEditModalOpen = false;
+        $this->isDeleteModalOpen = false;
+    }
+
+    public function resetCreateInventoryForm() {
+        $this->inventoryCode = null;
+        // $this->productId = null;
+        $this->purchasingNumber = null;
+        $this->registeredDate = null;
+        $this->yearOfEntry = null;
+        $this->yearOfUse = null;
+        $this->serialNumber = null;
+        $this->yearOfEnd = null;
+        $this->sertificateNumber = null;
+        $this->sertificateMaker = null;
+        $this->productOrigin = null;
+        $this->productPrice = null;
+        $this->productDescription = null;
+        $this->productStatus = null;
+    }
+
+    
 }

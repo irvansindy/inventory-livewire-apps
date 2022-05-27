@@ -33,7 +33,7 @@ class Products extends Model
     
     public function inventories()
     {
-        return $this->belongTo(ProductInventory::class, 'productId', 'id');
+        return $this->hasMany(ProductInventory::class, 'productId', 'id');
     }
 
     public function getAutoNumberOptions()

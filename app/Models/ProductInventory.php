@@ -14,7 +14,7 @@ class ProductInventory extends Model
     protected $table = 'product_inventories';
 
     protected $fillable = [
-        'inventaryCode',
+        'inventoryCode',
         'productId',
         'purchasingNumber',
         'registeredDate',
@@ -40,9 +40,9 @@ class ProductInventory extends Model
     public function getAutoNumberOptions()
     {
         return [
-            'inventaryCode' => [
+            'inventoryCode' => [
                 'format' => function () {
-                    return 'INVT/' . date('ymd') . '/?'; // autonumber format. '?' will be replaced with the generated number.
+                    return 'INVT/' . date('Ymd') . '/?'; // autonumber format. '?' will be replaced with the generated number.
                 },
                 'length' => 3, // The number of digits in the autonumber
             ],
