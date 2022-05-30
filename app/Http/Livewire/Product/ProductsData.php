@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Product;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Products;
@@ -14,7 +15,7 @@ class ProductsData extends Component
 
     public $allDataProduct, $productId, $productCode, $productName, $categoryId, $productDescription, $merk, $qty, $minimumStock;
 
-    public $allDataProductInventory, $inventoryId, $inventoryCode, $purchasingNumber, $registeredDate, $yearOfEntry, $yearOfUse, $serialNumber, $yearOfEnd, $sertificateNumber, $sertificateMaker, $productOrigin, $productPrice, $productDescription2, $productStatus;
+    public $allDataProductInventory, $inventoryId, $inventoryCode, $purchasingNumber, $registeredDate, $yearOfEntry, $yearOfUse, $serialNumber, $yearOfEnd, $sertificateNumber, $sertificateMaker, $productOrigin, $productPrice, $productDescription2, $productStatus, $inventoryImageUrl;
     
     public $search;
     public $dataCategory;
@@ -97,6 +98,23 @@ class ProductsData extends Component
         $this->merk = null;
         $this->qty = null;
         $this->minimumStock = null;
+    }
+
+    public function resetCreateInventoryForm() {
+        // $this->inventoryCode = null;
+        // $this->productId = null;
+        $this->purchasingNumber = null;
+        $this->registeredDate = null;
+        $this->yearOfEntry = null;
+        $this->yearOfUse = null;
+        $this->serialNumber = null;
+        $this->yearOfEnd = null;
+        $this->sertificateNumber = null;
+        $this->sertificateMaker = null;
+        $this->productOrigin = null;
+        $this->productPrice = null;
+        $this->productDescription = null;
+        $this->productStatus = null;
     }
 
     public function createProduct() {
@@ -211,5 +229,57 @@ class ProductsData extends Component
         $this->productId = $id;
         $this->closeModal();
         $this->openCreateProductInventarisModal();
+    }
+
+    public function storeInventory() {
+        $this->validate([
+            'productId' => 'required',
+            'purchasingNumber' => 'required|string',
+            'registeredDate' => 'required|date',
+            'yearOfEntry' => 'required|date',
+            'yearOfUse' => 'required|date',
+            'serialNumber' => 'required|string',
+            'yearOfEnd' => 'required|date',
+            'sertificateNumber' => 'required|string',
+            // 'sertificateMaker' => 'required|string',
+            'productOrigin' => 'required|string',
+            'productPrice' => 'required',
+            'productDescription' => 'required|string',
+            // 'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
+        ]);
+        // $product = Products::findOrFail($this->productId);
+
+        // $imageName = $this->inventoryImageUrl->extension();
+        // $finalImage = Image::make($imageName)->encode('webp',90)
+        // ->resize(300, 300)
+        // ->store(public_path('uploads/'  .  $imageName . '.webp'));
+        // ->store('images', 'public');
+        
+        // $imageName = md5($this->inventoryImageUrl . microtime()).'.'.$this->inventoryImageUrl->extension();
+        // $imagewebp = Webp::make($imageName);
+        // $imagewebp->save(public_path('imageInventory'));
+
+        ProductInventory::create([
+            'productId' => $this->productId,
+            'purchasingNumber' => $this->purchasingNumber,
+            'registeredDate' => $this->registeredDate,
+            'yearOfEntry' => $this->yearOfEntry,
+            'yearOfUse' => $this->yearOfUse,
+            'serialNumber' => $this->serialNumber,
+            'yearOfEnd' => $this->yearOfEnd,
+            'sertificateNumber' => $this->sertificateNumber,
+            // 'sertificateMaker' => $this->sertificateMaker,
+            'sertificateMaker' => Auth::user()->id,
+            'productOrigin' => $this->productOrigin,
+            'productPrice' => $this->productPrice,
+            'productDescription' => $this->productDescription,
+            // 'inventoryImageUrl' => $this->inventoryImageUrl,
+            // 'inventoryImageUrl' => $imageName,
+        ]);
+
+        session()->flash('message', 'Product Inventory has been created successfully.');
+
+        $this->closeFromInventory();
+        $this->resetCreateInventoryForm();
     }
 }

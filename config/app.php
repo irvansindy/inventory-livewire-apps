@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Wuwx\LaravelAutoNumber\AutoNumberServiceProvider::class,
+        Buglinjo\LaravelWebp\WebpServiceProvider::class,
 
         /*
          * Package Service Providers...

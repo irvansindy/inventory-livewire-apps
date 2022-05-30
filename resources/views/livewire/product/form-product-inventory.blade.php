@@ -7,9 +7,37 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>?
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
             role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-            <form>
+            <form enctype="multipart/form-data">
+                @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    {{-- @if (session()->has('error'))
+                        <div class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                            <div class="flex">
+                                <div>
+                                    <p class="text-sm">{{ session('message') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @elseif (session()->has('message'))
+                        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                            <div class="flex">
+                                <div>
+                                    <p class="text-sm">{{ session('message') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif --}}
                     <div class="">
+                        <div class="mb-4">
+                            <label for="purchasingNumber"
+                                class="block text-gray-700 text-sm font-bold mb-2">Purchasing Number</label>
+                            <input type="text"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="purchasingNumber" placeholder="Enter Purchasing Number" wire:model="purchasingNumber">
+                            @error('purchasingNumber') <span class="text-red-500">{{ $message }}</span>@enderror
+                        </div>
                         <div class="mb-4">
                             <label for="serialNumber"
                                 class="block text-gray-700 text-sm font-bold mb-2">Serial Number</label>
@@ -26,14 +54,14 @@
                                 id="sertificateNumber" placeholder="Enter Sertificate Number" wire:model="sertificateNumber">
                             @error('sertificateNumber') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        <div class="mb-4">
+                        {{-- <div class="mb-4">
                             <label for="sertificateMaker"
                                 class="block text-gray-700 text-sm font-bold mb-2">Sertificate Maker</label>
                             <input type="text"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="sertificateMaker" placeholder="Enter Sertificate Maker" wire:model="sertificateMaker">
                             @error('sertificateMaker') <span class="text-red-500">{{ $message }}</span>@enderror
-                        </div>
+                        </div> --}}
                         <div class="mb-4">
                             <label for="productOrigin"
                                 class="block text-gray-700 text-sm font-bold mb-2">Product Origin</label>
@@ -45,7 +73,7 @@
                         <div class="mb-4">
                             <label for="productPrice"
                                 class="block text-gray-700 text-sm font-bold mb-2">Product Price</label>
-                            <input type="text"
+                            <input type="number"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="productPrice" placeholder="Enter Product Price" wire:model="productPrice">
                             @error('productPrice') <span class="text-red-500">{{ $message }}</span>@enderror
@@ -58,21 +86,21 @@
                                 id="productDescription" placeholder="Enter Product Description" wire:model="productDescription">
                             @error('productDescription') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        <div class="mb-4">
+                        {{-- <div class="mb-4">
                             <label for="inventoryImageUrl"
                                 class="block text-gray-700 text-sm font-bold mb-2">Upload Product Image</label>
                             <input type="file"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="inventoryImageUrl" placeholder="Enter Product Description" wire:model="inventoryImageUrl">
                             @error('inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
-                        </div>
+                        </div> --}}
                         <div class="mb-4">
-                            <label for="registerDate"
+                            <label for="registeredDate"
                                 class="block text-gray-700 text-sm font-bold mb-2">Register Date</label>
                             <input type="date"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="registerDate" placeholder="Enter Register Date" wire:model="registerDate">
-                            @error('registerDate') <span class="text-red-500">{{ $message }}</span>@enderror
+                                id="registeredDate" placeholder="Enter Register Date" wire:model="registeredDate">
+                            @error('registeredDate') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
                         <div class="mb-4">
                             <label for="yearOfEntry"
@@ -102,8 +130,8 @@
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                        <button wire:click.prevent="" type="button"
-                            class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        <button wire:click.prevent="storeInventory()" type="button"
+                            class="inline-flex justify-center w-full rounded-md border border-red-300 px-4 py-2 bg-white text-base leading-6 font-bold text-red-500 shadow-sm hover:text-red-700 focus:outline-none focus:border-red-300 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                             Save
                         </button>
                     </span>

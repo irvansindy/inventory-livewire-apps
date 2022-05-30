@@ -43,26 +43,30 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-2 py-2">Inventory Code</th>
-                            <th class="px-2 py-2">Serial Number</th>
-                            <th class="px-2 py-2">Price</th>
-                            <th class="px-2 py-2">Status</th>
-                            <th class="px-2 py-2">Action</th>
+                            <th class="px-2 py-1">Inventory Code</th>
+                            <th class="px-2 py-1">Serial Number</th>
+                            <th class="px-2 py-1">Price</th>
+                            <th class="px-2 py-1">Status</th>
+                            <th class="px-2 py-1">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         
-                        {{-- @foreach ($this->productInventory)
-                            <tr>
-                                <td class="px-2 py-2">{{ $this->productInventory->inventaryCode }}</td>
-                                <td class="px-2 py-2">{{ $this->productInventory->serialNumber }}</td>
-                                <td class="px-2 py-2">{{ $this->productInventory->price }}</td>
-                                <td class="px-2 py-2">{{ $this->productInventory->status }}</td>
-                                <td class="px-2 py-2">
-                                    <button wire:click="deleteInventory({{ $inventory->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 my-4 rounded">Delete</button>
-                                </td>
-                            </tr>()
-                        @endforeach --}}
+                        @foreach ($this->productInventory as $inventory => $valueInventory)
+                            @foreach ($valueInventory as $inventoryItems)
+                                <tr>
+                                    <td class="px-2 py-1">{{ $inventoryItems->inventoryCode }}</td>
+                                    <td class="px-2 py-1">{{ $inventoryItems->serialNumber }}</td>
+                                    <td class="px-2 py-1">{{ $inventoryItems->productPrice }}</td>
+                                    <td class="px-2 py-1">{{ $inventoryItems->productStatus }}</td>
+                                    
+                                    <td class="px-2 py-1">
+                                        {{-- <button wire:click="deleteInventory({{ $inventory->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 my-4 rounded">Delete</button> --}}
+                                        <button class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 my-4 rounded">Del</button>
+                                    </td>
+                                </tr>    
+                            @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>

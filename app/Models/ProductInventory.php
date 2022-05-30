@@ -9,7 +9,7 @@ use Wuwx\LaravelAutoNumber\AutoNumberTrait;
 
 class ProductInventory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, AutoNumbertrait;
 
     protected $table = 'product_inventories';
 
@@ -28,6 +28,7 @@ class ProductInventory extends Model
         'productPrice',
         'productDescription',
         'productStatus',
+        'inventoryImageUrl'
     ];
 
     protected $hidden = [];

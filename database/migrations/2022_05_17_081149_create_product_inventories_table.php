@@ -28,8 +28,8 @@ class CreateProductInventoriesTable extends Migration
             $table->string('productOrigin');
             $table->string('productPrice');
             $table->string('productDescription');
-            $table->string('productStatus');
-            $table->string('inventoryImageUrl');
+            $table->string('productStatus')->default('AVAILABLE');
+            $table->string('inventoryImageUrl')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
