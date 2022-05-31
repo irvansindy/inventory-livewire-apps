@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 @endif
-                <button wire:click="createProduct()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Add Inventory</button>
+                {{-- <button wire:click="createProduct()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Add Inventory</button> --}}
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                 @if($isModalOpen)
                     @include('livewire.product.form-products')
@@ -29,26 +29,31 @@
                         <tr class="bg-gray-100">
                             <th class="px-4 py-2">Product Code</th>
                             <th class="px-4 py-2">Product Name</th>
-                            <th class="px-4 py-2">Categories</th>
                             <th class="px-4 py-2">Merk</th>
-                            <th class="px-4 py-2">Qty</th>
-                            <th class="px-4 py-2">Minim Stock</th>
+                            <th class="px-4 py-2">Price</th>
+                            <th class="px-4 py-2">Status</th>
                             <th class="px-4 py-2">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($inventaries as $product)
+                        @foreach($inventaries as $product)  
+                        {{-- @php
+                            dd($product);
+                        @endphp --}}
+
                             <tr>
-                                <td class="border px-4 py-2">{{ $product->productCode }}</td>
-                                <td class="border px-4 py-2">{{ $product->productName }}</td>
-                                <td class="border px-4 py-2">{{ $product->categories->categoryName }}</td>
-                                <td class="border px-4 py-2">{{ $product->merk }}</td>
-                                <td class="border px-4 py-2">{{ $product->qty }}</td>
-                                <td class="border px-4 py-2">{{ $product->minimumStock }}</td>
+                                <td class="border px-4 py-2">{{ $product->inventoryCode[0] }}</td>
+                                <td class="border px-4 py-2">{{ $product->products->productName }}</td>
+                                <td class="border px-4 py-2">{{ $product->products->merk }}</td>
+                                <td class="border px-4 py-2">Rp.{{ number_format($product->productPrice, 2, ',','.') }}</td>
+                                <td class="border px-4 py-2">{{ $product->productStatus }}</td>
                                 <td class="border px-4 py-2">
                                     <button wire:click="editProduct({{ $product->id }})"
                                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Edit</button>
+                                    <button wire:click="editProduct({{ $product->id }})"
+                                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                        View</button>
                                     <button wire:click="confirmDeleteProduct({{ $product->id }})"
                                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                         Delete</button>

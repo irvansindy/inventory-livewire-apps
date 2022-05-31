@@ -163,6 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Wuwx\LaravelAutoNumber\AutoNumberServiceProvider::class,
         Buglinjo\LaravelWebp\WebpServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -233,6 +234,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Webp' => Buglinjo\LaravelWebp\Facades\Webp::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

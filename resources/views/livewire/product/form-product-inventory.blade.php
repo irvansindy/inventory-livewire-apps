@@ -10,25 +10,16 @@
             <form enctype="multipart/form-data">
                 @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    {{-- @if (session()->has('error'))
+                    @if (session()->has('error'))
                         <div class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md my-3"
-                        role="alert">
+                            role="alert">
                             <div class="flex">
                                 <div>
-                                    <p class="text-sm">{{ session('message') }}</p>
+                                    <p class="text-sm">{{ session('error') }}</p>
                                 </div>
                             </div>
                         </div>
-                    @elseif (session()->has('message'))
-                        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
-                        role="alert">
-                            <div class="flex">
-                                <div>
-                                    <p class="text-sm">{{ session('message') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif --}}
+                    @endif
                     <div class="">
                         <div class="mb-4">
                             <label for="purchasingNumber"
@@ -54,14 +45,6 @@
                                 id="sertificateNumber" placeholder="Enter Sertificate Number" wire:model="sertificateNumber">
                             @error('sertificateNumber') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        {{-- <div class="mb-4">
-                            <label for="sertificateMaker"
-                                class="block text-gray-700 text-sm font-bold mb-2">Sertificate Maker</label>
-                            <input type="text"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="sertificateMaker" placeholder="Enter Sertificate Maker" wire:model="sertificateMaker">
-                            @error('sertificateMaker') <span class="text-red-500">{{ $message }}</span>@enderror
-                        </div> --}}
                         <div class="mb-4">
                             <label for="productOrigin"
                                 class="block text-gray-700 text-sm font-bold mb-2">Product Origin</label>
@@ -86,14 +69,14 @@
                                 id="productDescription" placeholder="Enter Product Description" wire:model="productDescription">
                             @error('productDescription') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        {{-- <div class="mb-4">
+                        <div class="mb-4">
                             <label for="inventoryImageUrl"
                                 class="block text-gray-700 text-sm font-bold mb-2">Upload Product Image</label>
                             <input type="file"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="inventoryImageUrl" placeholder="Enter Product Description" wire:model="inventoryImageUrl">
                             @error('inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
-                        </div> --}}
+                        </div>
                         <div class="mb-4">
                             <label for="registeredDate"
                                 class="block text-gray-700 text-sm font-bold mb-2">Register Date</label>

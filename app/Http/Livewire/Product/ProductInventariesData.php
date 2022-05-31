@@ -32,10 +32,9 @@ class ProductInventariesData extends Component
             $inventaries = ProductInventory::with('products')->whereHas('products', function($query) {
                 $query->where('productName', 'LIKE', '%'.$this->search.'%')
                 ->orWhere('productCode',  'LIKE', '%'.$this->search.'%')
-                ->orWhere('productDescription',  'LIKE', '%'.$this->search.'%')
+                ->orWhere('productPrice',  'LIKE', '%'.$this->search.'%')
                 ->orWhere('merk',  'LIKE', '%'.$this->search.'%')
-                ->orWhere('qty',  'LIKE', '%'.$this->search.'%')
-                ->orWhere('minimumStock',  'LIKE', '%'.$this->search.'%');
+                ->orWhere('productStatus',  'LIKE', '%'.$this->search.'%');
             })->paginate($this->limitPerPage);
         }
 

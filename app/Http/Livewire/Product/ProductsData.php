@@ -8,6 +8,9 @@ use Livewire\WithFileUploads;
 use App\Models\Products;
 use App\Models\ProductCategories;
 use App\Models\ProductInventory;
+use Buglinjo\LaravelWebp\Facades\Webp;
+use Image;
+use Intervention\Image\Exception\NotReadableException;
 
 class ProductsData extends Component
 {
@@ -86,7 +89,9 @@ class ProductsData extends Component
 
     public function closeFromInventory() {
         $this->isCreateProductInventarisModalOpen = false;
-        $this->openProductInventarisModal();
+        $this->closeModal();
+        // $this->closeFromInventory();
+        // $this->openProductInventarisModal();
     }
 
     public function resetCreateProductForm(){
@@ -232,54 +237,55 @@ class ProductsData extends Component
     }
 
     public function storeInventory() {
-        $this->validate([
-            'productId' => 'required',
-            'purchasingNumber' => 'required|string',
-            'registeredDate' => 'required|date',
-            'yearOfEntry' => 'required|date',
-            'yearOfUse' => 'required|date',
-            'serialNumber' => 'required|string',
-            'yearOfEnd' => 'required|date',
-            'sertificateNumber' => 'required|string',
-            // 'sertificateMaker' => 'required|string',
-            'productOrigin' => 'required|string',
-            'productPrice' => 'required',
-            'productDescription' => 'required|string',
-            // 'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
-        ]);
-        // $product = Products::findOrFail($this->productId);
+        // $this->validate([
+        //     'productId' => 'required',
+        //     'purchasingNumber' => 'required|string',
+        //     'registeredDate' => 'required|date',
+        //     'yearOfEntry' => 'required|date',
+        //     'yearOfUse' => 'required|date',
+        //     'serialNumber' => 'required|string',
+        //     'yearOfEnd' => 'required|date',
+        //     'sertificateNumber' => 'required|string',
+        //     'productOrigin' => 'required|string',
+        //     'productPrice' => 'required',
+        //     'productDescription' => 'required|string',
+        //     'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
+        // ]);
 
-        // $imageName = $this->inventoryImageUrl->extension();
-        // $finalImage = Image::make($imageName)->encode('webp',90)
-        // ->resize(300, 300)
-        // ->store(public_path('uploads/'  .  $imageName . '.webp'));
-        // ->store('images', 'public');
+        // $images = $this->inventoryImageUrl->extension();
+        $images = rand().".".$this->inventoryImageUrl->getClientOriginalExtension();
+        // dd($images);
+        // for real images
+        $this->inventoryImageUrl->storeAs('real_images', $images, 'path');
+        // $imageToWebp = Image::make($images)->encode('webp');
         
-        // $imageName = md5($this->inventoryImageUrl . microtime()).'.'.$this->inventoryImageUrl->extension();
-        // $imagewebp = Webp::make($imageName);
-        // $imagewebp->save(public_path('imageInventory'));
-
-        ProductInventory::create([
-            'productId' => $this->productId,
-            'purchasingNumber' => $this->purchasingNumber,
-            'registeredDate' => $this->registeredDate,
-            'yearOfEntry' => $this->yearOfEntry,
-            'yearOfUse' => $this->yearOfUse,
-            'serialNumber' => $this->serialNumber,
-            'yearOfEnd' => $this->yearOfEnd,
-            'sertificateNumber' => $this->sertificateNumber,
-            // 'sertificateMaker' => $this->sertificateMaker,
-            'sertificateMaker' => Auth::user()->id,
-            'productOrigin' => $this->productOrigin,
-            'productPrice' => $this->productPrice,
-            'productDescription' => $this->productDescription,
-            // 'inventoryImageUrl' => $this->inventoryImageUrl,
-            // 'inventoryImageUrl' => $imageName,
-        ]);
+        // for webp images
+        $imageToWebp = Image::make($this->inventoryImageUrl)->encode('webp', 80)
+        ->save("upload/images/webp/$images.webp", 80);
+        // Storage::disk()
+        
+        return dd('success');
+        
+        // ProductInventory::create([
+        //     'productId' => $this->productId,
+        //     'purchasingNumber' => $this->purchasingNumber,
+        //     'registeredDate' => $this->registeredDate,
+        //     'yearOfEntry' => $this->yearOfEntry,
+        //     'yearOfUse' => $this->yearOfUse,
+        //     'serialNumber' => $this->serialNumber,
+        //     'yearOfEnd' => $this->yearOfEnd,
+        //     'sertificateNumber' => $this->sertificateNumber,
+        //     'sertificateMaker' => Auth::user()->id,
+        //     'productOrigin' => $this->productOrigin,
+        //     'productPrice' => $this->productPrice,
+        //     'productDescription' => $this->productDescription,
+        //     'inventoryImageUrl' => $this->inventoryImageUrl,
+        // ]);
 
         session()->flash('message', 'Product Inventory has been created successfully.');
 
         $this->closeFromInventory();
+        $this->closeModal();
         $this->resetCreateInventoryForm();
     }
 }
