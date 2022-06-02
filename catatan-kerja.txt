@@ -1,0 +1,5 @@
+Note alur bisnis Pralon Inventory-apps :
+
+1. Pembuatan user management (single user) : done 
+2. Pembuatan CRUD (create, read, update, delete) bagian products & product category : done
+3. Pembuatan CRUD (create, read, update, delete) bagian procurement : on progress

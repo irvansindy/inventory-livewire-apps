@@ -8,6 +8,7 @@ use Livewire\WithFileUploads;
 use App\Models\Products;
 use App\Models\ProductCategories;
 use App\Models\ProductInventory;
+use App\Models\Suppliers;
 use Buglinjo\LaravelWebp\Facades\Webp;
 use Image;
 use Intervention\Image\Exception\NotReadableException;
@@ -22,6 +23,7 @@ class ProductsData extends Component
     
     public $search;
     public $dataCategory;
+    public $dataSupplier;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isDeleteModalOpen = 0;
@@ -231,28 +233,30 @@ class ProductsData extends Component
 
     public function createInventory($id) {
         $product = Products::findOrFail($id);
+        $this->dataSupplier = Suppliers::all();
         $this->productId = $id;
         $this->closeModal();
         $this->openCreateProductInventarisModal();
     }
 
     public function storeInventory() {
-        // $this->validate([
-        //     'productId' => 'required',
-        //     'purchasingNumber' => 'required|string',
-        //     'registeredDate' => 'required|date',
-        //     'yearOfEntry' => 'required|date',
-        //     'yearOfUse' => 'required|date',
-        //     'serialNumber' => 'required|string',
-        //     'yearOfEnd' => 'required|date',
-        //     'sertificateNumber' => 'required|string',
-        //     'productOrigin' => 'required|string',
-        //     'productPrice' => 'required',
-        //     'productDescription' => 'required|string',
-        //     'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
-        // ]);
+        // validation form create inventory
+        $this->validate([
+            'productId' => 'required',
+            'purchasingNumber' => 'required|string',
+            'registeredDate' => 'required|date',
+            'yearOfEntry' => 'required|date',
+            'yearOfUse' => 'required|date',
+            'serialNumber' => 'required|string',
+            'yearOfEnd' => 'required|date',
+            'sertificateNumber' => 'required|string',
+            'productOrigin' => 'required|string',
+            'productPrice' => 'required',
+            'productDescription' => 'required|string',
+            'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
+        ]);
 
-        // $images = $this->inventoryImageUrl->extension();
+        // generate images name
         $images = rand().".".$this->inventoryImageUrl->getClientOriginalExtension();
         // dd($images);
         // for real images
@@ -262,25 +266,24 @@ class ProductsData extends Component
         // for webp images
         $imageToWebp = Image::make($this->inventoryImageUrl)->encode('webp', 80)
         ->save("upload/images/webp/$images.webp", 80);
-        // Storage::disk()
         
-        return dd('success');
-        
-        // ProductInventory::create([
-        //     'productId' => $this->productId,
-        //     'purchasingNumber' => $this->purchasingNumber,
-        //     'registeredDate' => $this->registeredDate,
-        //     'yearOfEntry' => $this->yearOfEntry,
-        //     'yearOfUse' => $this->yearOfUse,
-        //     'serialNumber' => $this->serialNumber,
-        //     'yearOfEnd' => $this->yearOfEnd,
-        //     'sertificateNumber' => $this->sertificateNumber,
-        //     'sertificateMaker' => Auth::user()->id,
-        //     'productOrigin' => $this->productOrigin,
-        //     'productPrice' => $this->productPrice,
-        //     'productDescription' => $this->productDescription,
-        //     'inventoryImageUrl' => $this->inventoryImageUrl,
-        // ]);
+        // save data to database
+        ProductInventory::create([
+            'productId' => $this->productId,
+            'purchasingNumber' => $this->purchasingNumber,
+            'registeredDate' => $this->registeredDate,
+            'yearOfEntry' => $this->yearOfEntry,
+            'yearOfUse' => $this->yearOfUse,
+            'serialNumber' => $this->serialNumber,
+            'yearOfEnd' => $this->yearOfEnd,
+            'sertificateNumber' => $this->sertificateNumber,
+            'sertificateMaker' => Auth::user()->id,
+            'productOrigin' => $this->productOrigin,
+            'productPrice' => $this->productPrice,
+            'productDescription' => $this->productDescription,
+            // 'inventoryImageUrl' => $this->inventoryImageUrl,
+            'inventoryImageUrl' => $imageToWebp,
+        ]);
 
         session()->flash('message', 'Product Inventory has been created successfully.');
 

@@ -27,7 +27,6 @@
                                 <option value="{{ $category->id }}">{{ $category->categoryName }}</option>
                                 @endforeach
                             </select>
-
                             @error('categoryId') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
                         <div class="mb-4">

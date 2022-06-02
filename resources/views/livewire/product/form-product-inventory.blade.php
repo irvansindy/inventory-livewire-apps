@@ -47,10 +47,13 @@
                         </div>
                         <div class="mb-4">
                             <label for="productOrigin"
-                                class="block text-gray-700 text-sm font-bold mb-2">Product Origin</label>
-                            <input type="text"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="productOrigin" placeholder="Enter Product Origin" wire:model="productOrigin">
+                                class="block text-gray-700 text-sm font-bold mb-2">Product Origin (Supplier)</label>
+                            <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="productOrigin" id="productOrigin" wire:model="productOrigin">
+                                <option value="hidden">Select Product Origin</option>
+                                @foreach ($dataSupplier as $supplier)
+                                <option value="{{ $supplier->id }}">{{ $supplier->supplierName }}</option>
+                                @endforeach
+                            </select>
                             @error('productOrigin') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
                         <div class="mb-4">

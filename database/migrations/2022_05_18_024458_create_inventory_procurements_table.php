@@ -20,7 +20,8 @@ class CreateInventoryProcurementsTable extends Migration
             $table->string('productId');
             $table->string('supplierId');
             $table->string('procurementTypeId');
-            $table->text('descriptionProcurement');
+            $table->text('procurementDescription');
+            $table->date('procurementDate');
             $table->string('totalPrice');
             $table->softDeletes();
             $table->timestamps();

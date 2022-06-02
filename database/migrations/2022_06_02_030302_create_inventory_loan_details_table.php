@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInventoryBorrowingDetailsTable extends Migration
+class CreateInventoryLoanDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateInventoryBorrowingDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_borrowing_details', function (Blueprint $table) {
+        Schema::create('inventory_loan_details', function (Blueprint $table) {
             $table->id();
-            $table->string('borrowingId');
+            $table->string('loanId');
             $table->string('productInventaryId');
             $table->softDeletes();
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateInventoryBorrowingDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_borrowing_details');
+        Schema::dropIfExists('inventory_loan_details');
     }
 }
