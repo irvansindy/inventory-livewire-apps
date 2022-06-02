@@ -19,4 +19,12 @@ class Suppliers extends Model
     ];
 
     protected $hidden = [];
+
+    public function productInventory() {
+        return $this->hasMany(ProductInventory::class, 'productOrigin', 'id');
+    }
+
+    public function inventoryProcurement() {
+        return $this->hasMany(InventoryProcurement::class, 'supplierId', 'id');
+    }
 }

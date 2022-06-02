@@ -15,14 +15,14 @@ class CreateInventoryProcurementsTable extends Migration
     {
         Schema::create('inventory_procurements', function (Blueprint $table) {
             $table->id();
-            $table->string('procurmentCode');
+            $table->string('procurementCode');
             $table->string('userId');
-            $table->string('productId');
             $table->string('supplierId');
             $table->string('procurementTypeId');
             $table->text('procurementDescription');
             $table->date('procurementDate');
             $table->string('totalPrice');
+            $table->boolean('status')->default(0)->change();
             $table->softDeletes();
             $table->timestamps();
         });

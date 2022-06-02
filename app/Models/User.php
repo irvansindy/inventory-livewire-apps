@@ -63,4 +63,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function procurementInventory() {
+        return $this->hasMany(InventoryProcurement::class, 'userId', 'id');
+        
+    }
 }

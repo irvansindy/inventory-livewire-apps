@@ -83,7 +83,7 @@
 
                             <div class="border-t border-gray-100"></div>
 
-                            <x-jet-dropdown-link href="">
+                            <x-jet-dropdown-link href="{{ route('procurements') }}">
                                 {{ __('Procurement') }}
                             </x-jet-dropdown-link>
 

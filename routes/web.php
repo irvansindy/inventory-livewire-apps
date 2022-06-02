@@ -8,6 +8,7 @@ use App\Http\Livewire\Product\ProductsDataTable;
 use App\Http\Livewire\Product\ProductCategoryData;
 use App\Http\Livewire\Product\ProductInventariesData;
 use App\Http\Livewire\Supplier\SuppliersData;
+use App\Http\Livewire\Procurement\ProcurementData;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,6 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('productsDataTable', ProductsDataTable::class)->name('productsDataTable');
     Route::get('categories', ProductCategoryData::class)->name('categories');
     Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
+    Route::get('procurements', ProcurementData::class)->name('procurements');
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
