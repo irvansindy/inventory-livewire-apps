@@ -25,7 +25,7 @@ class InventoryProcurementSeeder extends Seeder
             'procurementDate' => '2020-01-01',
             'supplierId' => 1,
             'totalPrice' => 100000,
-            // 'status' => 0,
+            'status' => 0,
         ]);
     }
 }

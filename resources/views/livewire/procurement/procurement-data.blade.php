@@ -15,15 +15,11 @@
                     </div>
                 </div>
                 @endif
-                <button wire:click="" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Add Procurement</button>
+                <button wire:click="addProcurement()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Procurement</button>
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
-                {{-- @if($isModalOpen)
-                    @include('livewire.product.form-product-category')
-                @elseif ($isEditModalOpen)
-                    @include('livewire.product.form-edit-product-category')
-                @elseif ($isDeleteModalOpen)
-                    @include('livewire.product.form-delete-product-category')
-                @endif --}}
+                @if($isModalOpen)
+                    @include('livewire.procurement.form-procurement-data')
+                @endif
                 <table class="table-auto w-full">
                     <thead>
                         <tr class="bg-gray-100">
@@ -50,14 +46,16 @@
                             <td class="border px-4 py-2">{{ $procurement->supplier->supplierName }}</td>
                             <td class="border px-4 py-2">{{ $procurement->procurementType->procurementTypeName }}</td>
                             <td class="border px-4 py-2">{{ $procurement->totalPrice }}</td>
-                            <td class="border px-4 py-2">{{ $procurement->status }}</td>
+                            <td class="border px-4 py-2">
+                                {{ $procurement->status == 0 ? 'PENDING' : 'DONE' }}
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
                     @endif
                 </table>
                 <div class="px-4 mt-4">
-                    {{-- {{$categories->links()}} --}}
+                    {{$procurements->links()}}
                 </div>
             </div>
         </div>

@@ -36,6 +36,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('categories', ProductCategoryData::class)->name('categories');
     Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
     Route::get('procurements', ProcurementData::class)->name('procurements');
+    Route::get('addProcurement', ProcurementData::class, 'addProcurement')->name('addProcurement');
+
+    // Route::get('addProcurement', function () {
+    //     return view('livewire.procurement.form-procurement-data');
+    // })->name('addProcurement');
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');

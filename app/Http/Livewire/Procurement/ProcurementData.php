@@ -17,6 +17,7 @@ class ProcurementData extends Component
     public $procurementId, $productId, $description, $quantity, $unitPrice;
 
     public $search;
+    public $isModalOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -27,10 +28,22 @@ class ProcurementData extends Component
         $this->limitPerPage = $this->limitPerPage+6;
     }
 
+    public function openModal() {
+        $this->isModalOpen = true;
+    }
+
+    public function closeModal() {
+        $this->isModalOpen = false;
+    }
+
     public function render()
     {
         // $procurements = InventoryProcurement::latest()->paginate($this->limitPerPage);
-        $procurements = InventoryProcurement::with('supplier')->with('procurementType')->with('user')->latest()->paginate($this->limitPerPage);
+        $procurements = InventoryProcurement::with('supplier')
+        ->with('procurementType')
+        ->with('user')
+        ->latest()
+        ->paginate($this->limitPerPage);
         
         // dd($procurements);
 
@@ -67,5 +80,10 @@ class ProcurementData extends Component
         return view('livewire.procurement.procurement-data', [
             'procurements' => $procurements
         ]);
+    }
+
+    public function addProcurement() {
+        // return view('livewire.procurement.form-procurement-data');
+        $this->openModal();
     }
 }
