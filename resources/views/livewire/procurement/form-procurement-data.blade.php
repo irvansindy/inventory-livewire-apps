@@ -56,17 +56,53 @@
                         </div>
                     </div>
                 </div>
+                {{-- divider --}}
+                <div class="border-t border-gray-100"></div>
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
+                    <h5 class="text-xl font-bold leading-tight text-gray-900">
+                        Product Details
+                    </h5>
+                </div>
+                {{-- add dynamic form --}}
+                @foreach ($orderProcurements as $index => $orderProcurement)
+                <div class="grid grid-cols-4 gap-4 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="mb-4">
+                        <select class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="productId" id="productId" name="orderProcurements[{{ $index }}][productId]" wire:model="orderProcurements.{{ $index }}.productId">
+                            <option value="hidden">Select Product</option>
+                            @foreach ($allProducts as $product)
+                            <option value="{{ $product->id }}">{{ $product->productName }}</option>
+                            @endforeach
+                        </select>
+                        @error('productId') <span class="text-red-500">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="mb-4 mr-2">
+                        <input type="text"
+                            class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" placeholder="Enter Description" name="orderProcurements[{{ $index }}][description]"  wire:model="orderProcurements.{{ $index }}.description">
+                        @error('description') <span class="text-red-500">{{ $message }}</span>@enderror
+                    </div>
+                    
+                    <div class="mb-4 mr-2">
+                        <input type="number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" placeholder="Enter Quantity" name="orderProcurements[{{ $index }}][quantity]" wire:model="orderProcurements.{{ $index }}.quantity">
+                        @error('quantity') <span class="text-red-500">{{ $message }}</span>@enderror
+                    </div>
+
+                    <div class="mb-4 mr-2 justify-end">
+                        <button class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" wire:click.prevent="removeProductProcurement({{ $index }})">Delete</button>
+                    </div>
+                </div>
+                @endforeach
+                <div class="mb-4 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <button class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" wire:click.prevent="addProductProcurement">Add Another Product</button>
+                </div>
                 <div class="border-t border-gray-100"></div>
                 <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                        <button wire:click.prevent="" type="button"
-                            class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-blue-800 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                            Delete
+                        <button wire:click.prevent="" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-blue-800 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            Save
                         </button>
                     </span>
                     <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-                        <button wire:click="closeModal()" type="button"
-                            class="inline-flex justify-center w-full rounded-md border border-red-300 px-4 py-2 bg-white text-base leading-6 font-bold text-red-500 shadow-sm hover:text-red-800 focus:outline-none focus:border-red-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        <button wire:click="closeModal" type="button" class="inline-flex justify-center w-full rounded-md border border-red-300 px-4 py-2 bg-white text-base leading-6 font-bold text-red-500 shadow-sm hover:text-red-800 focus:outline-none focus:border-red-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                             Close
                         </button>
                     </span>

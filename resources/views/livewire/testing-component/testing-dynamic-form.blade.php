@@ -7,7 +7,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
                 <div class="container">
                     <div class="row mt-5">
-                         <h1 class="fs-5 text-center">Dynamic Form with Laravel 8 & Livewire</h1>
+                        <h1 class="fs-5 text-center">Dynamic Form with Laravel 8 & Livewire</h1>
                     </div>
                     <div class="row justify-content-center">
                         <div class="w-50">
@@ -34,7 +34,7 @@
                                             <button class="btn btn-primary mb-3" wire:click.prevent="add({{$i}})"><i class="bi bi-plus"></i></button>
                                         </div>
                                         {{-- Add Form --}}
-                                        @foreach ($inputUser as $key => $value)
+                                        @foreach ($inputs as $key => $value)
                                         <div class="col-4">
                                             <label class="visually-hidden">Account</label>
                                             <select class="form-select" aria-label="Default select example" wire:model="account.{{ $value }}">

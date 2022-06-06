@@ -1285,6 +1285,9 @@ select {
 .w-32 {
   width: 8rem;
 }
+.w-36 {
+  width: 9rem;
+}
 .w-96 {
   width: 24rem;
 }
@@ -1398,6 +1401,9 @@ select {
 }
 .grid-cols-8 {
   grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .flex-row {
   flex-direction: row;

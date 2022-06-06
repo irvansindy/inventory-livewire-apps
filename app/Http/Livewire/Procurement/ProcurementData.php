@@ -14,7 +14,7 @@ class ProcurementData extends Component
     // table procurement
     public $procurementCode, $userId, $supplierId, $procurementTypeId, $procurementDescription, $procurementDate, $totalPrice, $status;
     // table procurement details
-    public $procurementId, $productId, $description, $quantity, $unitPrice;
+    public $procurementId, $productId, $description, $unitPrice, $procurementDetails;
 
     public $search;
     public $isModalOpen = 0;
@@ -23,6 +23,44 @@ class ProcurementData extends Component
     protected $listeners = [
         'procurement' => 'procurementPostData'
     ];
+
+    // public $updateMode = false;
+    // public $inputs = [];
+    // public $i = 0;
+
+    public $allProducts = [];
+    public $orderProcurements = [];
+
+    public function mount() {
+        $this->allProducts = Products::all();
+        $this->orderProcurements = [
+            [
+                'productId' => '',
+                'description' => '',
+                'quantity' => 1
+            ]
+        ];
+    }
+
+    public function addProductProcurement()
+    {
+        $this->orderProcurements[] = [
+            [
+                'productId' => '',
+                'description' => '',
+                'quantity' => 1
+            ]
+        ];
+
+        dd($this->orderProcurements);
+    }
+
+    public function removeProductProcurement($index)
+    {   
+        unset($this->orderProcurements[$index]);
+        array_values($this->orderProcurements);
+
+    }
 
     public function procurementPostData() {
         $this->limitPerPage = $this->limitPerPage+6;
@@ -36,8 +74,41 @@ class ProcurementData extends Component
         $this->isModalOpen = false;
     }
 
+    // public function add($i) {
+    //     $i = $i + 1;
+    //     $this->i = $i;
+    //     array_push($this->inputs, $i);
+    // }
+
+    // public function remove($i)
+    // {
+    //     unset($this->inputs[$i]);
+    //     unset($this->procurementDetails[$i]);
+    // }
+
+    public function addProcurement() 
+    {
+        // return view('livewire.procurement.form-procurement-data');
+        $this->openModal();
+    }
+
+    public function storeProcurement() 
+    {
+        $this->validate([
+            'procurementCode' => 'required',
+            'userId' => 'required',
+            'supplierId' => 'required',
+            'procurementTypeId' => 'required',
+            'procurementDescription' => 'required',
+            'procurementDate' => 'required',
+            'totalPrice' => 'required',
+            'status' => 'required',
+        ]);
+    }
+
     public function render()
     {
+        info($this->orderProcurements);
         // $procurements = InventoryProcurement::latest()->paginate($this->limitPerPage);
         $procurements = InventoryProcurement::with('supplier')
         ->with('procurementType')
@@ -80,10 +151,5 @@ class ProcurementData extends Component
         return view('livewire.procurement.procurement-data', [
             'procurements' => $procurements
         ]);
-    }
-
-    public function addProcurement() {
-        // return view('livewire.procurement.form-procurement-data');
-        $this->openModal();
     }
 }
