@@ -281,8 +281,8 @@ class ProductsData extends Component
             'productOrigin' => $this->productOrigin,
             'productPrice' => $this->productPrice,
             'productDescription' => $this->productDescription,
-            // 'inventoryImageUrl' => $this->inventoryImageUrl,
-            'inventoryImageUrl' => $imageToWebp,
+            'inventoryImageUrl' => $images.'.webp',
+            // 'inventoryImageUrl' => $imageToWebp,
         ]);
 
         session()->flash('message', 'Product Inventory has been created successfully.');

@@ -80,6 +80,10 @@
                                 id="inventoryImageUrl" placeholder="Enter Product Description" wire:model="inventoryImageUrl">
                             @error('inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
+                        @if ($inventoryImageUrl)
+                            <p class="font-thin">Image Preview :</p>
+                            <img class="object-scale-down h-28 w-36" src="{{ $inventoryImageUrl->temporaryUrl() }}">
+                        @endif
                         <div class="mb-4">
                             <label for="registeredDate"
                                 class="block text-gray-700 text-sm font-bold mb-2">Register Date</label>

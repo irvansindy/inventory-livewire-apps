@@ -53,7 +53,7 @@
                     <tbody>
                         
                         @foreach ($this->productInventory as $inventory => $valueInventory)
-                            @foreach ($valueInventory as $inventoryItems)
+                            @forelse ($valueInventory as $inventoryItems)
                                 <tr>
                                     <td class="px-2 py-1">{{ $inventoryItems->inventoryCode }}</td>
                                     <td class="px-2 py-1">{{ $inventoryItems->serialNumber }}</td>
@@ -61,11 +61,14 @@
                                     <td class="px-2 py-1">{{ $inventoryItems->productStatus }}</td>
                                     
                                     <td class="px-2 py-1">
-                                        {{-- <button wire:click="deleteInventory({{ $inventory->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 my-4 rounded">Delete</button> --}}
-                                        <button class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 my-4 rounded">Del</button>
+                                        <button class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 my-4 rounded" wire:click="">Detail</button>
                                     </td>
-                                </tr>    
-                            @endforeach
+                                </tr>  
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-2 py-1">No data</td>
+                                </tr>
+                            @endforelse
                         @endforeach
                     </tbody>
                 </table>
