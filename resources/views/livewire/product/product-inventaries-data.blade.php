@@ -36,30 +36,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($inventaries as $product)  
-                        {{-- @php
-                            dd($product);
-                        @endphp --}}
-
-                            <tr>
-                                <td class="border px-4 py-2">{{ $product->inventoryCode }}</td>
-                                <td class="border px-4 py-2">{{ $product->products->productName }}</td>
-                                <td class="border px-4 py-2">{{ $product->products->merk }}</td>
-                                <td class="border px-4 py-2">Rp.{{ number_format($product->productPrice, 2, ',','.') }}</td>
-                                <td class="border px-4 py-2">{{ $product->productStatus }}</td>
-                                <td class="border px-4 py-2">
-                                    <button wire:click="editProduct({{ $product->id }})"
-                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                        Edit</button>
-                                    <button wire:click="editProduct({{ $product->id }})"
-                                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                        View</button>
-                                    <button wire:click="confirmDeleteProduct({{ $product->id }})"
-                                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                        Delete</button>
-                                </td>
-                            </tr>
-                        @endforeach
+                        @forelse($inventaries as $product)  
+                        <tr>
+                            <td class="border px-4 py-2">{{ $product->inventoryCode }}</td>
+                            <td class="border px-4 py-2">{{ $product->products->productName }}</td>
+                            <td class="border px-4 py-2">{{ $product->products->merk }}</td>
+                            <td class="border px-4 py-2">Rp.{{ number_format($product->productPrice, 2, ',','.') }}</td>
+                            <td class="border px-4 py-2">{{ $product->productStatus }}</td>
+                            <td class="border px-4 py-2">
+                                <button wire:click="editProduct({{ $product->id }})"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Edit</button>
+                                <button wire:click="editProduct({{ $product->id }})"
+                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    View</button>
+                                <button wire:click="confirmDeleteProduct({{ $product->id }})"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                    Delete</button>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="border px-4 py-2">No data</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <div class="px-4 mt-4">

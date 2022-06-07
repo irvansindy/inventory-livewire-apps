@@ -22,7 +22,7 @@ class CreateInventoryProcurementsTable extends Migration
             $table->text('procurementDescription');
             $table->date('procurementDate');
             $table->string('totalPrice');
-            $table->boolean('status');
+            $table->boolean('status')->default(0);
             // $table->boolean('status')->default(0)->change();
             $table->softDeletes();
             $table->timestamps();

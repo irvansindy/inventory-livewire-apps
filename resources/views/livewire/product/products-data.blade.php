@@ -41,27 +41,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($products as $product)
-                            <tr>
-                                <td class="border px-4 py-2">{{ $product->productCode }}</td>
-                                <td class="border px-4 py-2">{{ $product->productName }}</td>
-                                <td class="border px-4 py-2">{{ $product->categories->categoryName }}</td>
-                                <td class="border px-4 py-2">{{ $product->merk }}</td>
-                                <td class="border px-4 py-2">{{ $product->qty }}</td>
-                                <td class="border px-4 py-2">{{ $product->minimumStock }}</td>
-                                <td class="border px-4 py-2">
-                                    <button wire:click="editProduct({{ $product->id }})"
-                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                        Edit</button>
-                                    <button wire:click="viewProductInventaries({{ $product->id }})"
-                                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                        View Inventory</button>
-                                    <button wire:click="confirmDeleteProduct({{ $product->id }})"
-                                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                        Delete</button>
-                                </td>
-                            </tr>
-                        @endforeach
+                        @forelse($products as $product)
+                        <tr>
+                            <td class="border px-4 py-2">{{ $product->productCode }}</td>
+                            <td class="border px-4 py-2">{{ $product->productName }}</td>
+                            <td class="border px-4 py-2">{{ $product->categories->categoryName }}</td>
+                            <td class="border px-4 py-2">{{ $product->merk }}</td>
+                            <td class="border px-4 py-2">{{ $product->qty }}</td>
+                            <td class="border px-4 py-2">{{ $product->minimumStock }}</td>
+                            <td class="border px-4 py-2">
+                                <button wire:click="editProduct({{ $product->id }})"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Edit</button>
+                                <button wire:click="viewProductInventaries({{ $product->id }})"
+                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    View Inventory</button>
+                                <button wire:click="confirmDeleteProduct({{ $product->id }})"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                    Delete</button>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="border px-4 py-2">No Data</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <div class="px-4 mt-4">

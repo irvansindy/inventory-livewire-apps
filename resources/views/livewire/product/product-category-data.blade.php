@@ -34,7 +34,7 @@
                     </thead>
                     @if ($categories !== NULL)
                         <tbody>
-                            @foreach($categories as $category)
+                            @forelse($categories as $category)
                                 <tr>
                                     <td class="border px-4 py-2">{{ $category->id }}</td>
                                     <td class="border px-4 py-2">{{ $category->categoryName }}</td>
@@ -47,7 +47,11 @@
                                             Delete</button>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="border px-4 py-2">No data</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     @else
                         <tbody>

@@ -13,7 +13,7 @@ class ProcurementType extends Model
     protected $table = 'procurement_types';
 
     protected $fillable = [
-        'procurementType',
+        'procurementTypeName',
     ];
 
     protected $hidden = [];

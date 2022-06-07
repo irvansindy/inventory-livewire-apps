@@ -39,7 +39,7 @@
                     </tbody>
                     @else
                     <tbody>
-                        @foreach ($procurements as $procurement)
+                        @forelse ($procurements as $procurement)
                         <tr>
                             <td class="border px-4 py-2">{{ $procurement->procurementCode }}</td>
                             <td class="border px-4 py-2">{{ $procurement->user->name }}</td>
@@ -50,7 +50,11 @@
                                 {{ $procurement->status == 0 ? 'PENDING' : 'DONE' }}
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="3" class="border px-4 py-2">No data</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                     @endif
                 </table>

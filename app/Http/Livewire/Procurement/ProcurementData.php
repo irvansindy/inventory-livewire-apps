@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire\Procurement;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\Users;
 use App\Models\Suppliers;
 use App\Models\Products;
 use App\Models\InventoryProcurement;
 use App\Models\InventoryProcurementDetails;
+use App\Models\ProcurementType;
 
 class ProcurementData extends Component
 {
@@ -16,6 +18,9 @@ class ProcurementData extends Component
     // table procurement details
     public $procurementId, $productId, $description, $unitPrice, $procurementDetails;
 
+    // data supplier and procurement type
+    public $dataSupplier, $dataProcurementType;
+
     public $search;
     public $isModalOpen = 0;
     public $limitPerPage = 10;
@@ -23,10 +28,6 @@ class ProcurementData extends Component
     protected $listeners = [
         'procurement' => 'procurementPostData'
     ];
-
-    // public $updateMode = false;
-    // public $inputs = [];
-    // public $i = 0;
 
     public $allProducts = [];
     public $orderProcurements = [];
@@ -37,7 +38,8 @@ class ProcurementData extends Component
             [
                 'productId' => '',
                 'description' => '',
-                'quantity' => 1
+                'unitPrice' => 0,
+                'quantity' => 1,
             ]
         ];
     }
@@ -48,17 +50,20 @@ class ProcurementData extends Component
             [
                 'productId' => '',
                 'description' => '',
-                'quantity' => 1
+                'unitPrice' => 0,
+                'quantity' => 1,
             ]
         ];
 
-        dd($this->orderProcurements);
+        // dd($this->orderProcurements);
     }
 
     public function removeProductProcurement($index)
     {   
         unset($this->orderProcurements[$index]);
         array_values($this->orderProcurements);
+
+        // dd($this->orderProcurements);
 
     }
 
@@ -72,43 +77,89 @@ class ProcurementData extends Component
 
     public function closeModal() {
         $this->isModalOpen = false;
+        $this->resetProcurementForm();
     }
 
-    // public function add($i) {
-    //     $i = $i + 1;
-    //     $this->i = $i;
-    //     array_push($this->inputs, $i);
-    // }
-
-    // public function remove($i)
-    // {
-    //     unset($this->inputs[$i]);
-    //     unset($this->procurementDetails[$i]);
-    // }
+    public function resetProcurementForm()
+    {
+        $this->procurementCode = '';
+        $this->userId = '';
+        $this->supplierId = '';
+        $this->procurementTypeId = '';
+        $this->procurementDescription = '';
+        $this->procurementDate = '';
+        $this->totalPrice = '';
+        $this->status = '';
+        $this->procurementId = '';
+        $this->productId = '';
+        $this->description = '';
+        $this->unitPrice = '';
+        $this->procurementDetails = '';
+        $this->orderProcurements = [
+            [
+                'productId' => '',
+                'description' => '',
+                'unitPrice' => 0,
+                'quantity' => 1,
+            ]
+        ];
+    }
 
     public function addProcurement() 
     {
-        // return view('livewire.procurement.form-procurement-data');
+        $this->dataSupplier = Suppliers::all();
+        $this->dataProcurementType = ProcurementType::all();
         $this->openModal();
     }
 
-    public function storeProcurement() 
+    public function storeProcurement()
     {
+        // dd($this->allProducts);
         $this->validate([
-            'procurementCode' => 'required',
-            'userId' => 'required',
             'supplierId' => 'required',
             'procurementTypeId' => 'required',
             'procurementDescription' => 'required',
             'procurementDate' => 'required',
-            'totalPrice' => 'required',
-            'status' => 'required',
+            'productId.*' => 'required',
+            'description.*' => 'required',
+            'unitPrice.*' => 'required',
+            'orderProcurements.*.productId' => 'required',
+            'orderProcurements.*.description' => 'required',
+            'orderProcurements.*.unitPrice' => 'required',
         ]);
+        
+        $this->totalPrice = $this->orderProcurements[0]['unitPrice'] * $this->orderProcurements[0]['quantity'];
+
+        $procurementMaster = InventoryProcurement::create([
+            'userId' => Auth::user()->id,
+            'supplierId' => $this->supplierId,
+            'procurementTypeId' => $this->procurementTypeId,
+            'procurementDescription' => $this->procurementDescription,
+            'procurementDate' => $this->procurementDate,
+            'totalPrice' => $this->totalPrice,
+            'status' => 0,
+        ]);
+
+        foreach ($this->orderProcurements as $procurementDetail => $value)
+        {
+            InventoryProcurementDetails::create([
+                'procurementId' => $procurementMaster->id,
+                'productId' => $value['productId'],
+                'description' => $value['description'],
+                'unitPrice' => $value['unitPrice'],
+                'quantity' => $value['quantity'],
+            ]);
+        }
+
+        session()->flash('message', 'Procurement has been created successfully.');
+
+        $this->closeModal();
+        // $this->resetProcurementForm();
     }
 
     public function render()
     {
-        info($this->orderProcurements);
+        // info($this->orderProcurements);
         // $procurements = InventoryProcurement::latest()->paginate($this->limitPerPage);
         $procurements = InventoryProcurement::with('supplier')
         ->with('procurementType')

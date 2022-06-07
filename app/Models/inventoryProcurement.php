@@ -49,7 +49,7 @@ class InventoryProcurement extends Model
     public function getAutoNumberOptions()
     {
         return [
-            'productCode' => [
+            'procurementCode' => [
                 'format' => function () {
                     return 'PRC/' . date('Ymd') . '/?'; // autonumber format. '?' will be replaced with the generated number.
                 },
