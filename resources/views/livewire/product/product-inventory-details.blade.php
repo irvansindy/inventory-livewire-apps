@@ -57,11 +57,11 @@
                                 <tr>
                                     <td class="px-2 py-1">{{ $inventoryItems->inventoryCode }}</td>
                                     <td class="px-2 py-1">{{ $inventoryItems->serialNumber }}</td>
-                                    <td class="px-2 py-1">{{ $inventoryItems->productPrice }}</td>
+                                    <td class="px-2 py-1">Rp.{{ number_format($inventoryItems->productPrice, 2, ',','.') }}</td>
                                     <td class="px-2 py-1">{{ $inventoryItems->productStatus }}</td>
                                     
                                     <td class="px-2 py-1">
-                                        <button class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 my-4 rounded" wire:click="">Detail</button>
+                                        <button class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 my-4 rounded" wire:click="detailInventory({{ $inventoryItems->id }})">Detail</button>
                                     </td>
                                 </tr>  
                             @empty

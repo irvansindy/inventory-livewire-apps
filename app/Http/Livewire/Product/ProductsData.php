@@ -29,6 +29,7 @@ class ProductsData extends Component
     public $isDeleteModalOpen = 0;
     public $isProductInventarisModalOpen = 0;
     public $isCreateProductInventarisModalOpen = 0;
+    public $isDetailProductInventarisModalOpen =0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -44,7 +45,7 @@ class ProductsData extends Component
 
         $product = Products::latest()->paginate($this->limitPerPage);
 
-        if($this->search !== null) {
+        if($this->search !== NULL) {
             // $product = Products::with('ProductCategories')->whereHas('ProductCategories', function($query) {
             $product = Products::with('categories')->whereHas('categories', function($query) {
                 $query->where('productName', 'LIKE', '%'.$this->search.'%')
@@ -87,13 +88,16 @@ class ProductsData extends Component
         $this->isEditModalOpen = false;
         $this->isDeleteModalOpen = false;
         $this->isProductInventarisModalOpen = false;
+        $this->isCreateProductInventarisModalOpen = false;
+        $this->isDetailProductInventarisModalOpen = false;
     }
 
-    public function closeFromInventory() {
+    public function closeInventory($id) {
         $this->isCreateProductInventarisModalOpen = false;
-        $this->closeModal();
-        // $this->closeFromInventory();
-        // $this->openProductInventarisModal();
+        $productInventaries = Products::with(['categories', 'inventories'])->findOrFail($id);
+        $this->productInventory = [$productInventaries->inventories];
+        $this->resetCreateInventoryForm();
+        $this->openProductInventarisModal();
     }
 
     public function resetCreateProductForm(){
@@ -216,8 +220,8 @@ class ProductsData extends Component
 
     public function viewProductInventaries($id)
     {
+        // get data inventories
         $productInventaries = Products::with(['categories', 'inventories'])->findOrFail($id);
-        // dd($productInventaries);
         $this->productId = $id;
         $this->productCode = $productInventaries->productCode;
         $this->productName = $productInventaries->productName;
@@ -226,13 +230,14 @@ class ProductsData extends Component
         $this->merk = $productInventaries->merk;
         $this->qty = $productInventaries->qty;
         $this->minimumStock = $productInventaries->minimumStock;
-        $this->productInventory = array($productInventaries->inventories);
-        // dd($this->productInventory);
+        $this->productInventory = [$productInventaries->inventories];
         $this->openProductInventarisModal();
     }
 
     public function createInventory($id) {
+        // get data product
         $product = Products::findOrFail($id);
+        // get data supplier
         $this->dataSupplier = Suppliers::all();
         $this->productId = $id;
         $this->closeModal();
@@ -258,10 +263,9 @@ class ProductsData extends Component
 
         // generate images name
         $images = rand().".".$this->inventoryImageUrl->getClientOriginalExtension();
-        // dd($images);
+
         // for real images
         $this->inventoryImageUrl->storeAs('real_images', $images, 'path');
-        // $imageToWebp = Image::make($images)->encode('webp');
         
         // for webp images
         $imageToWebp = Image::make($this->inventoryImageUrl)->encode('webp', 80)
@@ -290,5 +294,32 @@ class ProductsData extends Component
         $this->closeFromInventory();
         $this->closeModal();
         $this->resetCreateInventoryForm();
+    }
+
+    public function openDetailProductInventarisModal() 
+    {
+        $this->isDetailProductInventarisModalOpen = true;
+    }
+
+    public function detailInventory($id)
+    {
+        $detailProductInventory = ProductInventory::with(['products'])->findOrFail($id);
+        // dd($detailProductInventory);
+        $this->productId = $detailProductInventory->productId;
+        $this->productName = $detailProductInventory->products->productName;
+        $this->inventoryCode = $detailProductInventory->inventoryCode;
+        $this->purchasingNumber = $detailProductInventory->purchasingNumber;
+        $this->registeredDate = $detailProductInventory->registeredDate;
+        $this->yearOfEntry = $detailProductInventory->yearOfEntry;
+        $this->yearOfUse = $detailProductInventory->yearOfUse;
+        $this->serialNumber = $detailProductInventory->serialNumber;
+        $this->yearOfEnd = $detailProductInventory->yearOfEnd;
+        $this->sertificateNumber = $detailProductInventory->sertificateNumber;
+        $this->productOrigin = $detailProductInventory->productOrigin;
+        $this->productPrice = $detailProductInventory->productPrice;
+        $this->productDescription2 = $detailProductInventory->productDescription;
+        $this->inventoryImageUrl = $detailProductInventory->inventoryImageUrl;
+        $this->closeModal();
+        $this->openDetailProductInventarisModal();
     }
 }

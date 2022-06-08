@@ -54,17 +54,12 @@ class ProcurementData extends Component
                 'quantity' => 1,
             ]
         ];
-
-        // dd($this->orderProcurements);
     }
 
     public function removeProductProcurement($index)
     {   
         unset($this->orderProcurements[$index]);
         array_values($this->orderProcurements);
-
-        // dd($this->orderProcurements);
-
     }
 
     public function procurementPostData() {
@@ -159,7 +154,6 @@ class ProcurementData extends Component
 
     public function render()
     {
-        // info($this->orderProcurements);
         // $procurements = InventoryProcurement::latest()->paginate($this->limitPerPage);
         $procurements = InventoryProcurement::with('supplier')
         ->with('procurementType')
@@ -170,34 +164,25 @@ class ProcurementData extends Component
         // dd($procurements);
 
         if($this->search !== NULL) {
-            // $procurements = InventoryProcurement::where('procurementCode', 'like', '%'.$this->search.'%')
-            //     ->orWhere('userId', 'like', '%'.$this->search.'%')
-            //     ->orWhere('supplierID', 'like', '%'.$this->search.'%')
-            //     ->orWhere('procurementTypeId', 'like', '%'.$this->search.'%')
-            //     ->orWhere('totalPrice', 'like', '%'.$this->search.'%')
-            //     ->orWhere('status', 'like', '%'.$this->search.'%')
-            //     ->paginate($this->limitPerPage);
+            $procurements = InventoryProcurement::with([
+                'user',
+                'products',
+                'supplier',
+                'procurementType',
+            ])->whereHas('user', function($query) {
+                $query->where('username', 'like', '%'.$this->search.'%');
+            })->orWhereHas('supplier', function($query) {
+                $query->where('supplierName', 'like', '%'.$this->search.'%');
+            })->orWhereHas('procurementType', function($query) {
+                $query->where('procurementTypeName', 'like', '%'.$this->search.'%');
+            })->orWhere('totalPrice', 'like', '%'.$this->search.'%')
+            ->orWhere('status', 'like', '%'.$this->search.'%')
+            ->orWhere('procurementCode', 'like', '%'.$this->search.'%');
 
-            // $procurements = InventoryProcurement::with([
-            //     'user',
-            //     'products',
-            //     'supplier',
-            //     'procurementType',
-            //     // 'procurementDetails'
-            // ])->whereHas('user', function($query) {
-            //     $query->where('username', 'like', '%'.$this->search.'%');
-            // })->orWhereHas('supplier', function($query) {
-            //     $query->where('supplierName', 'like', '%'.$this->search.'%');
-            // })->orWhereHas('procurementType', function($query) {
-            //     $query->where('procurementTypeName', 'like', '%'.$this->search.'%');
-            // })->orWhere('totalPrice', 'like', '%'.$this->search.'%')
-            // ->orWhere('status', 'like', '%'.$this->search.'%')
-            // ->orWhere('procurementCode', 'like', '%'.$this->search.'%');
-
-            // $procurements = $procurements->paginate($this->limitPerPage);
+            $procurements = $procurements->paginate($this->limitPerPage);
         }
 
-        // $this->emit('procurementPostData');
+        $this->emit('procurementPostData');
 
         return view('livewire.procurement.procurement-data', [
             'procurements' => $procurements

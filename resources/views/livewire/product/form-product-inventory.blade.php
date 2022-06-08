@@ -80,10 +80,10 @@
                                 id="inventoryImageUrl" placeholder="Enter Product Description" wire:model="inventoryImageUrl">
                             @error('inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        @if ($inventoryImageUrl)
+                        {{-- @if ($inventoryImageUrl != null)
                             <p class="font-thin">Image Preview :</p>
                             <img class="object-scale-down h-28 w-36" src="{{ $inventoryImageUrl->temporaryUrl() }}">
-                        @endif
+                        @endif --}}
                         <div class="mb-4">
                             <label for="registeredDate"
                                 class="block text-gray-700 text-sm font-bold mb-2">Register Date</label>
@@ -121,13 +121,13 @@
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                         <button wire:click.prevent="storeInventory()" type="button"
-                            class="inline-flex justify-center w-full rounded-md border border-red-300 px-4 py-2 bg-white text-base leading-6 font-bold text-red-500 shadow-sm hover:text-red-700 focus:outline-none focus:border-red-300 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            class="inline-flex justify-center w-full rounded-md border border-sky-300 px-4 py-2 bg-sky-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-sky-800 focus:outline-none focus:border-sky-300 focus:shadow-outline-sky transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                             Save
                         </button>
                     </span>
                     <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-                        <button wire:click="closeFromInventory()" type="button"
-                            class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-bold text-gray-700 shadow-sm hover:text-gray-700 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        <button wire:click="closeInventory({{ $this->productId }})" type="button"
+                            class="inline-flex justify-center w-full rounded-md border border-red-300 px-4 py-2 bg-white text-base leading-6 font-bold text-red-600 shadow-sm hover:text-red-800 focus:outline-none focus:border-red-500 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                             Close
                         </button>
                     </span>

@@ -29,6 +29,7 @@
                             <th class="px-4 py-2">Type</th>
                             <th class="px-4 py-2">Total Price</th>
                             <th class="px-4 py-2">Status</th>
+                            <th class="px-4 py-2">Action</th>
                         </tr>
                     </thead>
                     @if (empty($procurements))
@@ -45,9 +46,13 @@
                             <td class="border px-4 py-2">{{ $procurement->user->name }}</td>
                             <td class="border px-4 py-2">{{ $procurement->supplier->supplierName }}</td>
                             <td class="border px-4 py-2">{{ $procurement->procurementType->procurementTypeName }}</td>
-                            <td class="border px-4 py-2">{{ $procurement->totalPrice }}</td>
+                            <td class="border px-4 py-2">Rp.{{ number_format($procurement->totalPrice, 2, ',','.') }}</td>
                             <td class="border px-4 py-2">
                                 {{ $procurement->status == 0 ? 'PENDING' : 'DONE' }}
+                            </td>
+                            <td class="border px-4 py-2">
+                                <button wire:click="editProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
+                                {{-- <button wire:click="deleteProcurement({{ $procurement->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">Delete</button> --}}
                             </td>
                         </tr>
                         @empty

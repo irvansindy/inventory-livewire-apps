@@ -32,32 +32,26 @@
                             <th class="px-4 py-2">Action</th>
                         </tr>
                     </thead>
-                    @if ($categories !== NULL)
-                        <tbody>
-                            @forelse($categories as $category)
-                                <tr>
-                                    <td class="border px-4 py-2">{{ $category->id }}</td>
-                                    <td class="border px-4 py-2">{{ $category->categoryName }}</td>
-                                    <td class="border px-4 py-2">
-                                        <button wire:click="editProductCategory({{ $category->id }})"
-                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                            Edit</button>
-                                        <button wire:click="confirmDeleteProductCategory({{ $category->id }})"
-                                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                            Delete</button>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="border px-4 py-2">No data</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    @else
-                        <tbody>
-                            <td class="px-12 py-2">Tidak ada data</td>
-                        </tbody>
-                    @endif
+                    <tbody>
+                        @forelse($categories as $category)
+                            <tr>
+                                <td class="border px-4 py-2">{{ $category->id }}</td>
+                                <td class="border px-4 py-2">{{ $category->categoryName }}</td>
+                                <td class="border px-4 py-2">
+                                    <button wire:click="editProductCategory({{ $category->id }})"
+                                        class="bg-teal-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
+                                        Edit</button>
+                                    <button wire:click="confirmDeleteProductCategory({{ $category->id }})"
+                                        class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
+                                        Delete</button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="border px-4 py-2">No data</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
                 </table>
                 <div class="px-4 mt-4">
                     {{$categories->links()}}

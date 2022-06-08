@@ -35,7 +35,7 @@ class ProductInventory extends Model
 
     public function products()
     {
-        return $this->hasOne(Products::class, 'id', 'productId');
+        return $this->belongsTo(Products::class, 'productId', 'id');
     }
     
     public function getAutoNumberOptions()

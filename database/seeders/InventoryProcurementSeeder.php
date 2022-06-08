@@ -17,7 +17,7 @@ class InventoryProcurementSeeder extends Seeder
     public function run()
     {
         DB::table('inventory_procurements')->insert([
-            'procurementCode' => 'PRC/' . date('ym') . '/0001',
+            'procurementCode' => 'PRC/' . date('ymd') . '/0001',
             'userId' => 1,
             'supplierId' => 1,
             'procurementTypeId' => 1,

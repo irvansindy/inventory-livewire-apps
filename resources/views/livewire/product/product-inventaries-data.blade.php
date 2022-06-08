@@ -45,13 +45,13 @@
                             <td class="border px-4 py-2">{{ $product->productStatus }}</td>
                             <td class="border px-4 py-2">
                                 <button wire:click="editProduct({{ $product->id }})"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 rounded">
                                     Edit</button>
-                                <button wire:click="editProduct({{ $product->id }})"
-                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                    View</button>
+                                {{-- <button wire:click="editProduct({{ $product->id }})"
+                                    class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
+                                    View</button> --}}
                                 <button wire:click="confirmDeleteProduct({{ $product->id }})"
-                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                    class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
                                     Delete</button>
                             </td>
                         </tr>
