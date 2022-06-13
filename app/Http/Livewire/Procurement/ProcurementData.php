@@ -224,13 +224,8 @@ class ProcurementData extends Component
 
         // join product and procurement detail
         $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
-        // dd($this->procurementDetails);
 
         $this->procurementDetails = [$procurementDetails->procurementDetails];
-        // $this->productName = $procurementDetails->products->productName;
-        // $this->description = $procurementDetails->procurementDetails->description;
-        // $this->quantity = $procurementDetails->procurementDetails->quantity;
-        // $this->unitPrice = $procurementDetails->procurementDetails->unitPrice;
         $this->openDetailModal();
     }
 }

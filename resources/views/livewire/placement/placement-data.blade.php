@@ -15,13 +15,13 @@
                     </div>
                 </div>
                 @endif
-                <button wire:click="" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Placement</button>
+                <button wire:click="createPlacement()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Placement</button>
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
-                {{-- @if($isModalOpen)
-                    @include('livewire.procurement.form-procurement-data')
-                @elseif($isDetailProcurement)
-                    @include('livewire.procurement.detail-procurement')
-                @endif --}}
+                @if($isModalPlacementOpen)
+                    @include('livewire.placement.modal-placement-data')
+                @elseif($isformCreateModalOpen)
+                    @include('livewire.placement.form-placement-data')
+                @endif
                 <table class="table-auto w-full">
                     <thead>
                         <tr class="bg-gray-100">
@@ -33,26 +33,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @forelse ($procurements as $procurement) --}}
+                        @forelse ($placements as $placement)
                         <tr>
-                            <td class="border px-4 py-2"></td>
-                            <td class="border px-4 py-2"></td>
-                            <td class="border px-4 py-2"></td>
-                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2">{{ $placement->placementDate }}</td>
+                            <td class="border px-4 py-2">{{ $placement->user->name }}</td>
+                            <td class="border px-4 py-2">{{ $placement->location->locationName }}</td>
+                            <td class="border px-4 py-2">{{ $placement->placementType }}</td>
                             <td class="border px-4 py-2">
                                 <button wire:click="" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                             </td>
                         </tr>
-                        {{-- @empty --}}
+                        @empty
                         <tr>
-                            <td colspan="7" class="border px-4 py-2"><p class="text-justify-center hover:font-bold">No Data</p></td>
+                            <td colspan="5" class="border px-4 py-2"><p class="text-justify-center hover:font-bold">No Data</p></td>
                         </tr>
-                        {{-- @endforelse --}}
+                        @endforelse
                     </tbody>
                 </table>
-                {{-- <div class="px-4 mt-4">
-                    {{$procurements->links()}}
-                </div> --}}
+                <div class="px-4 mt-4">
+                    {{$placements->links()}}
+                </div>
             </div>
         </div>
     </div>

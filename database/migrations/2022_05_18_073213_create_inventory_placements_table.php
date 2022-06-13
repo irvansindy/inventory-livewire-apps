@@ -15,7 +15,7 @@ class CreateInventoryPlacementsTable extends Migration
     {
         Schema::create('inventory_placements', function (Blueprint $table) {
             $table->id();
-            $table->string('placementName');
+            $table->string('placementNumber');
             $table->date('placementDate');
             $table->string('userId');
             $table->string('locationId');
