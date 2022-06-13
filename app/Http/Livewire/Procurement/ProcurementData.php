@@ -21,6 +21,10 @@ class ProcurementData extends Component
     // data supplier and procurement type
     public $dataSupplier, $dataProcurementType;
 
+    // data details
+    public $productName, $supplierName, $procurementTypeName, $userName;
+
+    // for view procurement
     public $search;
     public $isModalOpen = 0;
     public $limitPerPage = 10;
@@ -43,6 +47,9 @@ class ProcurementData extends Component
             ]
         ];
     }
+
+    // for view procurement
+    public $isDetailProcurement = 0;
 
     public function addProductProcurement()
     {
@@ -72,7 +79,13 @@ class ProcurementData extends Component
 
     public function closeModal() {
         $this->isModalOpen = false;
+        $this->isDetailProcurement = false;
         $this->resetProcurementForm();
+    }
+
+    public function openDetailModal()
+    {
+        $this->isDetailProcurement = true;
     }
 
     public function resetProcurementForm()
@@ -187,5 +200,37 @@ class ProcurementData extends Component
         return view('livewire.procurement.procurement-data', [
             'procurements' => $procurements
         ]);
+    }
+
+    public function detailProcurement($id)
+    {
+        $procurementDetails = InventoryProcurement::with([
+            'user',
+            'products',
+            'supplier',
+            'procurementType',
+            'procurementDetails'
+        ])->findOrFail($id);
+
+        $this->procurementId = $procurementDetails->id;
+        $this->procurementCode = $procurementDetails->procurementCode;
+        $this->userName = $procurementDetails->user->name;
+        $this->supplierName = $procurementDetails->supplier->supplierName;
+        $this->procurementTypeName = $procurementDetails->procurementType->procurementTypeName;
+        $this->procurementDescription = $procurementDetails->procurementDescription;
+        $this->procurementDate = $procurementDetails->procurementDate;
+        $this->totalPrice = $procurementDetails->totalPrice;
+        $this->status = $procurementDetails->status;
+
+        // join product and procurement detail
+        $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
+        // dd($this->procurementDetails);
+
+        $this->procurementDetails = [$procurementDetails->procurementDetails];
+        // $this->productName = $procurementDetails->products->productName;
+        // $this->description = $procurementDetails->procurementDetails->description;
+        // $this->quantity = $procurementDetails->procurementDetails->quantity;
+        // $this->unitPrice = $procurementDetails->procurementDetails->unitPrice;
+        $this->openDetailModal();
     }
 }

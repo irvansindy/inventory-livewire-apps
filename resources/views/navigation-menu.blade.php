@@ -86,12 +86,8 @@
                             <x-jet-dropdown-link href="{{ route('procurements') }}">
                                 {{ __('Procurement') }}
                             </x-jet-dropdown-link>
-                            
-                            {{-- <x-jet-dropdown-link href="{{ route('testing') }}">
-                                {{ __('Testing') }}
-                            </x-jet-dropdown-link> --}}
 
-                            <x-jet-dropdown-link href="">
+                            <x-jet-dropdown-link href="{{ route('placements') }}">
                                 {{ __('Placement') }}
                             </x-jet-dropdown-link>
                             

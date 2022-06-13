@@ -25,4 +25,8 @@ class InventoryProcurementDetails extends Model
     public function procurement() {
         return $this->hasOne(InventoryProcurement::class, 'id', 'procurementId');
     }
+
+    public function product() {
+        return $this->hasOne(Products::class, 'id', 'productId');
+    }
 }

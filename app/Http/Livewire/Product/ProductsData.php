@@ -96,7 +96,7 @@ class ProductsData extends Component
         $this->isCreateProductInventarisModalOpen = false;
         $productInventaries = Products::with(['categories', 'inventories'])->findOrFail($id);
         $this->productInventory = [$productInventaries->inventories];
-        $this->resetCreateInventoryForm();
+        // $this->resetCreateInventoryForm();
         $this->openProductInventarisModal();
     }
 
@@ -284,7 +284,7 @@ class ProductsData extends Component
             'sertificateMaker' => Auth::user()->id,
             'productOrigin' => $this->productOrigin,
             'productPrice' => $this->productPrice,
-            'productDescription' => $this->productDescription,
+            'productDescription' => $this->productDescription2,
             'inventoryImageUrl' => $images.'.webp',
             // 'inventoryImageUrl' => $imageToWebp,
         ]);
@@ -303,7 +303,7 @@ class ProductsData extends Component
 
     public function detailInventory($id)
     {
-        $detailProductInventory = ProductInventory::with(['products'])->findOrFail($id);
+        $detailProductInventory = ProductInventory::with(['products','supplier'])->findOrFail($id);
         // dd($detailProductInventory);
         $this->productId = $detailProductInventory->productId;
         $this->productName = $detailProductInventory->products->productName;
@@ -315,7 +315,7 @@ class ProductsData extends Component
         $this->serialNumber = $detailProductInventory->serialNumber;
         $this->yearOfEnd = $detailProductInventory->yearOfEnd;
         $this->sertificateNumber = $detailProductInventory->sertificateNumber;
-        $this->productOrigin = $detailProductInventory->productOrigin;
+        $this->productOrigin = $detailProductInventory->supplier->supplierName;
         $this->productPrice = $detailProductInventory->productPrice;
         $this->productDescription2 = $detailProductInventory->productDescription;
         $this->inventoryImageUrl = $detailProductInventory->inventoryImageUrl;

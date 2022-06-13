@@ -9,8 +9,7 @@ use App\Http\Livewire\Product\ProductCategoryData;
 use App\Http\Livewire\Product\ProductInventariesData;
 use App\Http\Livewire\Supplier\SuppliersData;
 use App\Http\Livewire\Procurement\ProcurementData;
-use App\Http\Livewire\TestingComponent\TestingDynamicForm;
-use App\Http\Livewire\TestingComponent\UserAccount;
+use App\Http\Livewire\Placement\PlacementData;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,8 +37,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('categories', ProductCategoryData::class)->name('categories');
     Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
     Route::get('procurements', ProcurementData::class)->name('procurements');
-    Route::get('addProcurement', ProcurementData::class, 'addProcurement')->name('addProcurement');
-    Route::get('testing', UserAccount::class)->name('testing');
+    Route::get('placements', PlacementData::class)->name('placements');
 
     // Route::get('addProcurement', function () {
     //     return view('livewire.procurement.form-procurement-data');

@@ -19,6 +19,8 @@
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                 @if($isModalOpen)
                     @include('livewire.procurement.form-procurement-data')
+                @elseif($isDetailProcurement)
+                    @include('livewire.procurement.detail-procurement')
                 @endif
                 <table class="table-auto w-full">
                     <thead>
@@ -51,13 +53,13 @@
                                 {{ $procurement->status == 0 ? 'PENDING' : 'DONE' }}
                             </td>
                             <td class="border px-4 py-2">
-                                <button wire:click="editProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
+                                <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                 {{-- <button wire:click="deleteProcurement({{ $procurement->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">Delete</button> --}}
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="3" class="border px-4 py-2">No data</td>
+                            <td colspan="7" class="border px-4 py-2"><p class="text-justify-center hover:font-bold">No Data</p></td>
                         </tr>
                         @endforelse
                     </tbody>

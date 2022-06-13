@@ -31,7 +31,7 @@ class InventoryProcurement extends Model
     }
 
     public function products() {
-        return $this->hasMany(Products::class, 'productId', 'id');
+        return $this->hasMany(Products::class, 'id', 'productId');
     }
 
     public function supplier() {

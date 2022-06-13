@@ -37,6 +37,10 @@ class ProductInventory extends Model
     {
         return $this->belongsTo(Products::class, 'productId', 'id');
     }
+
+    public function supplier() {
+        return $this->belongsTo(Suppliers::class, 'productOrigin', 'id');
+    }
     
     public function getAutoNumberOptions()
     {

@@ -2362,6 +2362,12 @@ select {
 .hover\:bg-opacity-20:hover {
   --tw-bg-opacity: 0.2;
 }
+.hover\:font-bold:hover {
+  font-weight: 700;
+}
+.hover\:font-semibold:hover {
+  font-weight: 600;
+}
 .hover\:text-gray-500:hover {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
