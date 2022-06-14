@@ -16,8 +16,8 @@ class CreateInventoryPlacementDetailsTable extends Migration
         Schema::create('inventory_placement_details', function (Blueprint $table) {
             $table->id();
             $table->string('placementId');
-            $table->string('productInventaryId');
-            $table->enum('status',['Active','Inactive']);
+            $table->string('productInventoryId');
+            $table->enum('status',['Active','Inactive'])->default('Active');
             $table->softDeletes();
             $table->timestamps();
         });

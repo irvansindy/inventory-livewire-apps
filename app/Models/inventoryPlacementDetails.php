@@ -14,9 +14,14 @@ class InventoryPlacementDetails extends Model
 
     protected $fillable = [
         'placementId',
-        'productInventaryId',
+        'productInventoryId',
         'status',
     ];
 
     protected $hidden = [];
+
+    public function placement()
+    {
+        return $this->hasOne(InventoryPlacement::class, 'id', 'placementId');
+    }
 }

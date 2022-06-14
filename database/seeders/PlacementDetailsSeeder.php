@@ -18,7 +18,7 @@ class PlacementDetailsSeeder extends Seeder
     {
         DB::table('inventory_placement_details')->insert([
             'placementId' => 1,
-            'productInventaryId' => 1,
+            'productInventoryId' => 1,
             'status' => 'Active',
         ]);
     }

@@ -32,7 +32,7 @@ class PlacementData extends Component
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
-        'InventoryPlacement' => 'placementPostData'
+        'inventoryPlacement' => 'placementPostData'
     ];
 
     public function placementPostData()
@@ -40,11 +40,11 @@ class PlacementData extends Component
         $this->limitPerPage = $this->limitPerPage+6;
     }
 
-    public function mount()
-    {
-        $this->allDataInventory = ProductInventory::with(['products'])->where('productStatus', '=', 'AVAILABLE')->get();
-        $this->allDataLocation = Locations::all();
-    }
+    // public function mount()
+    // {
+    //     $this->allDataInventory = ProductInventory::with(['products'])->where('productStatus', '=', 'AVAILABLE')->get();
+    //     $this->allDataLocation = Locations::all();
+    // }
 
     public function openCreatePlacementModal() 
     {
@@ -58,7 +58,8 @@ class PlacementData extends Component
 
     public function createPlacement()
     {
-        // $this->allDataInventory = ProductInventory::with(['products'])->where('productStatus', '=', 'AVAILABLE')->get();
+        $this->allDataInventory = ProductInventory::with(['products'])->where('productStatus', '=', 'AVAILABLE')->get();
+        $this->allDataLocation = Locations::all();
         $this->openCreatePlacementModal();
     }
 
@@ -121,7 +122,7 @@ class PlacementData extends Component
     public function storePlacementInventory()
     {
         $this->validate([
-            'placementDate' => 'required|date',
+            'placementDate' => 'required',
             'locationId' => 'required',
             'placementDescription' => 'required',
             'placementType' => 'required',
@@ -134,19 +135,30 @@ class PlacementData extends Component
             'placementDescription' => $this->placementDescription,
             'placementType' => $this->placementType,
         ]);
+        // dd($placement);
+        // foreach ($placement as $items) {
+        //     dd($placement);
+        ProductInventory::findOrFail($this->getInventoryId)->update([
+            'productStatus' => 'PLACED',
+        ]);
+        
+        InventoryPlacementDetails::create([
+            'placementId' => $placement->id,
+            'productInventoryId' => $this->getInventoryId,
+            'status' => 'PLACED',
+            // $this->placementId = $placement->id,
+            // $this->productInventaryId = $this->getInventoryId,
+            // $this->status = 'Active',
+        ]);
+        // }
 
-        foreach ($placement as $key => $value) {
-            InventoryPlacementDetails::create([
-                $this->placementId = $value->id,
-                $this->productInventaryId = $this->getInventoryId,
-                $this->status = 'Active',
-            ]);
-        }
+        
 
         session()->flash('message', 'Placement has been created successfully.');
 
         $this->closeFormPlacement();
-        $this->resetFormPlacement();
+        $this->closeModal();
+        // $this->resetFormPlacement();
     }
 
 }

@@ -8,6 +8,7 @@
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-screen-lg sm:w-full"
             role="dialog" aria-modal="true" aria-labelledby="modal-headline">
             <form>
+                @csrf
                 <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
                     <h2 class="text-2xl font-bold leading-tight text-gray-900">
                     Form Inventory Placement
@@ -28,7 +29,7 @@
                             <select class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="locationId" wire:model="locationId">
                                 <option value="hidden">Select Location</option>
                                 @foreach ($this->allDataLocation as $location)
-                                <option value="{{ $location->id }}">{{ $location->locationName }}</option>
+                                <option value="{{ $location->id }}">{{ $location->id }} - {{ $location->locationName }}</option>
                                 @endforeach
                             </select>
                             @error('locationId') <span class="text-red-500">{{ $message }}</span>@enderror
@@ -61,6 +62,11 @@
                 </div>
                 <div class="border-t border-gray-100"></div>
                 <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                        <button wire:click.prevent="storePlacementInventory()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-blue-800 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            Save
+                        </button>
+                    </span>
                     <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
                         <button wire:click="closeFormPlacement()" type="button" class="inline-flex justify-center w-full rounded-md border border-red-300 px-4 py-2 bg-white text-base leading-6 font-bold text-red-500 shadow-sm hover:text-red-800 focus:outline-none focus:border-red-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                             Close
