@@ -18,11 +18,7 @@
                 {{-- <button wire:click="createProduct()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Add Inventory</button> --}}
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                 @if($isModalOpen)
-                    @include('livewire.product.form-products')
-                @elseif ($isEditModalOpen)
-                    @include('livewire.product.form-edit-products')
-                @elseif ($isDeleteModalOpen)
-                    @include('livewire.product.form-delete-products')
+                    @include('livewire.product.detail-inventaries-data')
                 @endif
                 <table class="table-auto w-full">
                     <thead>
@@ -36,23 +32,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($inventaries as $product)  
+                        @forelse($inventaries as $inventory)  
                         <tr>
-                            <td class="border px-4 py-2">{{ $product->inventoryCode }}</td>
-                            <td class="border px-4 py-2">{{ $product->products->productName }}</td>
-                            <td class="border px-4 py-2">{{ $product->products->merk }}</td>
-                            <td class="border px-4 py-2">Rp.{{ number_format($product->productPrice, 2, ',','.') }}</td>
-                            <td class="border px-4 py-2">{{ $product->productStatus }}</td>
+                            <td class="border px-4 py-2">{{ $inventory->inventoryCode }}</td>
+                            <td class="border px-4 py-2">{{ $inventory->products->productName }}</td>
+                            <td class="border px-4 py-2">{{ $inventory->products->merk }}</td>
+                            <td class="border px-4 py-2">Rp.{{ number_format($inventory->productPrice, 2, ',','.') }}</td>
+                            <td class="border px-4 py-2">{{ $inventory->productStatus }}</td>
                             <td class="border px-4 py-2">
-                                <button wire:click="editProduct({{ $product->id }})"
-                                    class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 rounded">
-                                    Edit</button>
-                                {{-- <button wire:click="editProduct({{ $product->id }})"
+                                <button wire:click="detailInventory({{ $inventory->id }})"
                                     class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
-                                    View</button> --}}
-                                <button wire:click="confirmDeleteProduct({{ $product->id }})"
-                                    class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">
-                                    Delete</button>
+                                    Detail</button>
                             </td>
                         </tr>
                         @empty

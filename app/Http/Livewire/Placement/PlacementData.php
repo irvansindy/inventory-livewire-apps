@@ -145,7 +145,7 @@ class PlacementData extends Component
         InventoryPlacementDetails::create([
             'placementId' => $placement->id,
             'productInventoryId' => $this->getInventoryId,
-            'status' => 'PLACED',
+            // 'status' => 'PLACED',
             // $this->placementId = $placement->id,
             // $this->productInventaryId = $this->getInventoryId,
             // $this->status = 'Active',

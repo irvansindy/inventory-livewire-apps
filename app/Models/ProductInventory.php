@@ -38,6 +38,11 @@ class ProductInventory extends Model
         return $this->belongsTo(Products::class, 'productId', 'id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'sertificateMaker', 'id');
+    }
+
     public function supplier() {
         return $this->belongsTo(Suppliers::class, 'productOrigin', 'id');
     }

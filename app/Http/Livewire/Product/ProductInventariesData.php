@@ -7,7 +7,7 @@ use App\Models\ProductInventory;
 
 class ProductInventariesData extends Component
 {
-    public $allDataProductInventory, $inventoryId, $inventoryCode, $productId, $purchasingNumber, $registeredDate, $yearOfEntry, $yearOfUse, $serialNumber, $yearOfEnd, $sertificateNumber, $sertificateMaker, $productOrigin, $productPrice, $productDescription, $productStatus;
+    public $allDataProductInventory, $inventoryId, $inventoryCode, $productId, $purchasingNumber, $registeredDate, $yearOfEntry, $yearOfUse, $serialNumber, $yearOfEnd, $sertificateNumber, $sertificateMaker, $productOrigin, $productPrice, $productDescription, $productStatus, $inventoryImageUrl;
 
     public $search;
     public $isModalOpen = 0;
@@ -75,6 +75,26 @@ class ProductInventariesData extends Component
         $this->productDescription = null;
         $this->productStatus = null;
     }
-
+    
+    public function detailInventory($id) {
+        $this->allDataProductInventory = ProductInventory::with(['products', 'user'])->findOrFail($id);
+        // dd($this->allDataProductInventory);
+        $this->inventoryCode = $this->allDataProductInventory->inventoryCode;
+        $this->productId = $this->allDataProductInventory->products->productName;
+        $this->purchasingNumber = $this->allDataProductInventory->purchasingNumber;
+        $this->registeredDate = $this->allDataProductInventory->registeredDate;
+        $this->yearOfEntry = $this->allDataProductInventory->yearOfEntry;
+        $this->yearOfUse = $this->allDataProductInventory->yearOfUse;
+        $this->serialNumber = $this->allDataProductInventory->serialNumber;
+        $this->yearOfEnd = $this->allDataProductInventory->yearOfEnd;
+        $this->sertificateNumber = $this->allDataProductInventory->sertificateNumber;
+        $this->sertificateMaker = $this->allDataProductInventory->sertificateMaker;
+        $this->productOrigin = $this->allDataProductInventory->supplier->supplierName;
+        $this->productPrice = $this->allDataProductInventory->productPrice;
+        $this->productDescription = $this->allDataProductInventory->productDescription;
+        $this->productStatus = $this->allDataProductInventory->productStatus;
+        $this->inventoryImageUrl = $this->allDataProductInventory->inventoryImageUrl;
+        $this->openModal();
+    }
     
 }
