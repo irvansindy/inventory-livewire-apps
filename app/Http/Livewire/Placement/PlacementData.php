@@ -85,7 +85,8 @@ class PlacementData extends Component
                 $query->where('name', 'like', '%'.$this->search.'%');
             })->orWhereHas('location', function($query) {
                 $query->where('locationName', 'like', '%'.$this->search.'%');
-            })->orWhere('placementName', 'like', '%'.$this->search.'%')
+            })
+            ->orWhere('placementNumber', 'like', '%'.$this->search.'%')
             ->orWhere('placementDate', 'like', '%'.$this->search.'%')
             ->orWhere('placementType', 'like', '%'.$this->search.'%')
             ->paginate($this->limitPerPage);
@@ -135,9 +136,7 @@ class PlacementData extends Component
             'placementDescription' => $this->placementDescription,
             'placementType' => $this->placementType,
         ]);
-        // dd($placement);
-        // foreach ($placement as $items) {
-        //     dd($placement);
+
         ProductInventory::findOrFail($this->getInventoryId)->update([
             'productStatus' => 'PLACED',
         ]);
@@ -145,10 +144,6 @@ class PlacementData extends Component
         InventoryPlacementDetails::create([
             'placementId' => $placement->id,
             'productInventoryId' => $this->getInventoryId,
-            // 'status' => 'PLACED',
-            // $this->placementId = $placement->id,
-            // $this->productInventaryId = $this->getInventoryId,
-            // $this->status = 'Active',
         ]);
         // }
 

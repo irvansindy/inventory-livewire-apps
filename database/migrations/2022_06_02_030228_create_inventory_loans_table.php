@@ -15,7 +15,7 @@ class CreateInventoryLoansTable extends Migration
     {
         Schema::create('inventory_loans', function (Blueprint $table) {
             $table->id();
-            $table->string('loanId');
+            $table->string('loanCode');
             $table->date('loanStartDate');
             $table->date('loanEndDate');
             $table->string('loanerUserId');

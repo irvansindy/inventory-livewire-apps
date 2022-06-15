@@ -10,6 +10,8 @@ use App\Http\Livewire\Product\ProductInventariesData;
 use App\Http\Livewire\Supplier\SuppliersData;
 use App\Http\Livewire\Procurement\ProcurementData;
 use App\Http\Livewire\Placement\PlacementData;
+use App\Http\Livewire\Loan\LoanData;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,6 +40,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
     Route::get('procurements', ProcurementData::class)->name('procurements');
     Route::get('placements', PlacementData::class)->name('placements');
+    Route::get('loans', LoanData::class)->name('loans');
 
     // Route::get('addProcurement', function () {
     //     return view('livewire.procurement.form-procurement-data');

@@ -291,7 +291,6 @@ class ProductsData extends Component
 
         session()->flash('message', 'Product Inventory has been created successfully.');
 
-        // $this->closeInventory();
         $this->closeModal();
         $this->resetCreateInventoryForm();
     }

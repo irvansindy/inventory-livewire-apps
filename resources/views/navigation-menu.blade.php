@@ -91,7 +91,7 @@
                                 {{ __('Placement') }}
                             </x-jet-dropdown-link>
                             
-                            <x-jet-dropdown-link href="">
+                            <x-jet-dropdown-link href="{{ route('loans') }}">
                                 {{ __('Loan') }}
                             </x-jet-dropdown-link>
 

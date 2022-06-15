@@ -1,0 +1,59 @@
+<div>
+    <x-slot name="header">
+        <h2 class="text-left">List Data Loan</h2>
+    </x-slot>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
+                @if (session()->has('message'))
+                <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                    role="alert">
+                    <div class="flex">
+                        <div>
+                            <p class="text-sm">{{ session('message') }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                <button wire:click="createModalLoan()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Create Loan</button>
+                <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
+                @if($isModalLoanOpen)
+                    @include('livewire.loan.modal-loan-data')
+                @elseif($isformCreateModalOpen)
+                    @include('livewire.loan.form-loan-data')
+                @endif
+                <table class="table-auto w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Loan Code</th>
+                            <th class="px-4 py-2">User</th>
+                            <th class="px-4 py-2">Location</th>
+                            <th class="px-4 py-2">Status</th>
+                            <th class="px-4 py-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($loans as $loan)
+                            <tr>
+                                <td class="border px-4 py-2">{{ $loan->loanCode }}</td>
+                                <td class="border px-4 py-2">{{ $loan->user->name }}</td>
+                                <td class="border px-4 py-2">{{ $loan->location->locationName }}</td>
+                                <td class="border px-4 py-2">{{ $loan->status }}</td>
+                                <td class="border px-4 py-2">
+                                    <button wire:click="editModalLoan({{ $loan->id }})" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Edit</button>
+                                    <button wire:click="deleteModalLoan({{ $loan->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 mb-4 rounded">Delete</button>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td class="border px-4 py-2" colspan="5">No Data</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+                <div class="px-4 mt-4">
+                    {{-- {{$users->links()}} --}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
