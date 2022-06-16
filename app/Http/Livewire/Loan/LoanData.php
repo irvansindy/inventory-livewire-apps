@@ -12,7 +12,7 @@ use App\Models\Locations;
 class LoanData extends Component
 {
     // master loans
-    public $getInventoryId, $loanStartDate, $loanEndDate, $loanerUserId, $officerUserId, $locationId, $loanDescription, $status;
+    public $getInventoryId, $loanCode, $loanStartDate, $loanEndDate, $loanerUserId, $officerUserId, $locationId, $loanDescription, $status;
 
     // detail loans
     public $loanId, $productInventaryId;
@@ -21,6 +21,8 @@ class LoanData extends Component
     public $search;
     public $isModalLoanOpen = 0;
     public $isformCreateModalOpen = 0;
+    public $isDetailLoanOpen = 0;
+    public $isReturnLoanOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -39,6 +41,11 @@ class LoanData extends Component
     {
         $this->allDataInventory = ProductInventory::with(['products'])->where('productStatus', '=', 'AVAILABLE')->get();
         $this->allDataLocation = Locations::all();
+    }
+
+    public function resetLoan()
+    {
+        
     }
 
     public function openModal()
@@ -126,5 +133,31 @@ class LoanData extends Component
         $this->emit('loanPostData');
 
         return view('livewire.loan.loan-data', ['loans' => $loans]);
+    }
+
+    public function detailLoan($id)
+    {
+        $loan = InventoryLoan::with([
+            'inventoryLoanDetails',
+            'user',
+            'location',
+        ])->findOrFail($id);
+
+        // dd($loan);
+        $this->getInventoryId = $loan->inventoryLoanDetails[0]->productInventory->inventoryCode;
+        $this->loanCode = $loan->loanCode;
+        $this->loanStartDate = $loan->loanStartDate;
+        $this->loanEndDate = $loan->loanEndDate;
+        $this->status = $loan->status;
+        $this->loanDescription = $loan->loanDescription;
+        $this->loanerUserId = $loan->user->name;
+        $this->locationId = $loan->location->locationName;
+        // dd($this->getInventoryId);
+        $this->isDetailLoanOpen = true;
+    }
+
+    public function closeDetailLoan()
+    {
+        $this->isDetailLoanOpen = false;
     }
 }

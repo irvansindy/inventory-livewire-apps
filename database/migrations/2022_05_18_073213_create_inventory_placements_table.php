@@ -20,7 +20,7 @@ class CreateInventoryPlacementsTable extends Migration
             $table->string('userId');
             $table->string('locationId');
             $table->text('placementDescription');
-            $table->enum('placementType', ['New', 'Mutation']);
+            $table->enum('placementType', ['NEW', 'MUTATION']);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -24,4 +24,9 @@ class InventoryPlacementDetails extends Model
     {
         return $this->hasOne(InventoryPlacement::class, 'id', 'placementId');
     }
+
+    public function productInventory()
+    {
+        return $this->hasOne(ProductInventory::class, 'id', 'productInventoryId');
+    }
 }

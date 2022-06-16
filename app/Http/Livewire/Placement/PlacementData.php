@@ -14,10 +14,10 @@ class PlacementData extends Component
     // public $placement;
 
     // data master placement
-    public $getInventoryId, $placementDate, $userId, $locationId, $placementDescription, $placementType;
+    public $getInventoryId, $placementNumber, $placementDate, $userId, $locationId, $placementDescription, $placementType;
 
     // data detail placement
-    public $placementId, $productInventaryId, $status;
+    public $placementId, $productInventaryId, $status, $inventoryCode;
 
     // data product inventory
     public $allDataInventory = [];
@@ -29,6 +29,8 @@ class PlacementData extends Component
     public $search;
     public $isModalPlacementOpen = 0;
     public $isformCreateModalOpen = 0; 
+    public $isDetailPlacementOpen = 0;
+    public $isReturnPlacementOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -91,6 +93,7 @@ class PlacementData extends Component
             ->orWhere('placementType', 'like', '%'.$this->search.'%')
             ->paginate($this->limitPerPage);
         }
+        // $this->status = $detailPlacement->placementDetails[0]->status;
 
         return view('livewire.placement.placement-data', ['placements' => $placements]);
     }
@@ -154,6 +157,62 @@ class PlacementData extends Component
         $this->closeFormPlacement();
         $this->closeModal();
         // $this->resetFormPlacement();
+    }
+
+    public function detailPlacement($id)
+    {
+        $detailPlacement = InventoryPlacement::with([
+            'placementDetails',
+            'user',
+            'location'
+        ])->findOrFail($id);
+
+        // dd($detailPlacement);
+        $this->placementNumber = $detailPlacement->placementNumber;
+        $this->placementDate = $detailPlacement->placementDate;
+        $this->userId = $detailPlacement->user->name;
+        $this->locationId = $detailPlacement->location->locationName;
+        $this->placementDescription = $detailPlacement->placementDescription;
+        $this->placementType = $detailPlacement->placementType;
+        $this->getInventoryId = $detailPlacement->placementDetails[0]->productInventory->inventoryCode;
+        $this->status = $detailPlacement->placementDetails[0]->status;
+        $this->isDetailPlacementOpen = true;
+    }
+
+    public function closeDetail()
+    {
+        $this->isDetailPlacementOpen = false;
+    }
+    
+    public function closeReturn()
+    {
+        $this->isReturnPlacementOpen = false;
+    }
+
+    public function confirmReturn($id)
+    {
+        $placement = InventoryPlacement::with(['placementDetails'])->findOrFail($id);
+        $this->placementId = $placement->id;
+        $this->getInventoryId = $placement->placementDetails[0]->productInventory->id;
+        $this->inventoryCode = $placement->placementDetails[0]->productInventory->inventoryCode;
+        $this->isReturnPlacementOpen = true;
+    }
+
+    public function returnPlacementInventory()
+    {
+        InventoryPlacementDetails::where('productInventoryId', '=', $this->getInventoryId)
+        ->where('placementId', '=', $this->placementId)
+        ->update([
+            'status' => 'INACTIVE',
+        ]);
+
+        ProductInventory::findOrFail($this->getInventoryId)->update([
+            'productStatus' => 'AVAILABLE',
+        ]);
+
+        $this->isReturnPlacementOpen = false;
+
+        session()->flash('message', 'Placement has been returned successfully.');
     }
 
 }

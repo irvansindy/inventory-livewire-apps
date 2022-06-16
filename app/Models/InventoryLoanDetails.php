@@ -23,4 +23,9 @@ class InventoryLoanDetails extends Model
     {
         return $this->hasOne(InventoryLoan::class, 'id', 'loanId');
     }
+
+    public function productInventory()
+    {
+        return $this->hasOne(ProductInventory::class, 'id', 'productInventaryId');
+    }
 }

@@ -17,8 +17,10 @@ class ProductsData extends Component
 {
     use WithFileUploads;
 
+    // data master product
     public $allDataProduct, $productId, $productCode, $productName, $categoryId, $productDescription, $merk, $qty, $minimumStock;
 
+    // data master product inventory
     public $allDataProductInventory, $inventoryId, $inventoryCode, $purchasingNumber, $registeredDate, $yearOfEntry, $yearOfUse, $serialNumber, $yearOfEnd, $sertificateNumber, $sertificateMaker, $productOrigin, $productPrice, $productDescription2, $productStatus, $inventoryImageUrl;
     
     public $search;
@@ -287,6 +289,10 @@ class ProductsData extends Component
             'productDescription' => $this->productDescription2,
             'inventoryImageUrl' => $images.'.webp',
             // 'inventoryImageUrl' => $imageToWebp,
+        ]);
+
+        Products::findOrFail($this->productId)->update([
+            'qty' => $this->qty + 1,
         ]);
 
         session()->flash('message', 'Product Inventory has been created successfully.');

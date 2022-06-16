@@ -17,7 +17,7 @@ class CreateInventoryPlacementDetailsTable extends Migration
             $table->id();
             $table->string('placementId');
             $table->string('productInventoryId');
-            $table->enum('status',['Active','Inactive'])->default('Active');
+            $table->enum('status',['ACTIVE','INACTIVE'])->default('ACTIVE');
             $table->softDeletes();
             $table->timestamps();
         });

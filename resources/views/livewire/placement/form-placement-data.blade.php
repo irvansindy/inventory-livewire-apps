@@ -48,11 +48,11 @@
                                 class="block text-gray-700 text-sm font-bold mb-2">placement Type</label>
                             <div class="flex justify-start mr-2">
                                 <div class="form-check form-check-inline mr-2">
-                                    <input class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="New" wire:model="placementType">
+                                    <input class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="NEW" wire:model="placementType">
                                     <label class="form-check-label inline-block text-gray-800" for="inlineRadio10">New</label>
                                 </div>
                                 <div class="form-check form-check-inline mr-2">
-                                    <input class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Mutation" wire:model="placementType">
+                                    <input class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="MUTATION" wire:model="placementType">
                                     <label class="form-check-label inline-block text-gray-800" for="inlineRadio20">Mutation</label>
                                 </div>
                             </div>

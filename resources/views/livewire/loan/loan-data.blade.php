@@ -21,9 +21,11 @@
                     @include('livewire.loan.modal-loan-data')
                 @elseif($isformCreateModalOpen)
                     @include('livewire.loan.form-loan-data')
+                @elseif ($isDetailLoanOpen)
+                    @include('livewire.loan.detail-loan-data')
                 @endif
                 <table class="table-auto w-full">
-                    <thead>
+                    <thead class="bg-gray-100">
                         <tr>
                             <th class="px-4 py-2">Loan Code</th>
                             <th class="px-4 py-2">User</th>
@@ -40,8 +42,9 @@
                                 <td class="border px-4 py-2">{{ $loan->location->locationName }}</td>
                                 <td class="border px-4 py-2">{{ $loan->status }}</td>
                                 <td class="border px-4 py-2">
-                                    <button wire:click="editModalLoan({{ $loan->id }})" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Edit</button>
-                                    <button wire:click="deleteModalLoan({{ $loan->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 mb-4 rounded">Delete</button>
+                                    <button wire:click="detailLoan({{ $loan->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 mb-4 rounded">Detail</button>
+                                    <button wire:click="" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 mb-4 rounded">Return</button>
+                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -51,7 +54,7 @@
                     </tbody>
                 </table>
                 <div class="px-4 mt-4">
-                    {{-- {{$users->links()}} --}}
+                    {{$loans->links()}}
                 </div>
             </div>
         </div>
