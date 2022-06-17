@@ -163,7 +163,7 @@ class LoanData extends Component
 
     public function confirmReturn($id)
     {
-        $loan = InventoryLoan([
+        $loan = InventoryLoan::with([
             'inventoryLoanDetails'
         ])->findOrFail($id);
 

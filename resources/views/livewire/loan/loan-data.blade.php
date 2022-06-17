@@ -23,6 +23,8 @@
                     @include('livewire.loan.form-loan-data')
                 @elseif ($isDetailLoanOpen)
                     @include('livewire.loan.detail-loan-data')
+                @elseif ($isReturnLoanOpen)
+                    @include('livewire.loan.modal-return-loan-data')
                 @endif
                 <table class="table-auto w-full">
                     <thead class="bg-gray-100">
@@ -43,7 +45,7 @@
                                 <td class="border px-4 py-2">{{ $loan->status }}</td>
                                 <td class="border px-4 py-2">
                                     <button wire:click="detailLoan({{ $loan->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 mb-4 rounded">Detail</button>
-                                    <button wire:click="" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 mb-4 rounded">Return</button>
+                                    <button wire:click="confirmReturn({{ $loan->id }})" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 mb-4 rounded">Return</button>
                                 </td>
                             </tr>
                         @empty
