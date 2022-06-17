@@ -43,10 +43,17 @@
                                 <td class="border px-4 py-2">{{ $loan->user->name }}</td>
                                 <td class="border px-4 py-2">{{ $loan->location->locationName }}</td>
                                 <td class="border px-4 py-2">{{ $loan->status }}</td>
-                                <td class="border px-4 py-2">
-                                    <button wire:click="detailLoan({{ $loan->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 mb-4 rounded">Detail</button>
-                                    <button wire:click="confirmReturn({{ $loan->id }})" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 mb-4 rounded">Return</button>
-                                </td>
+
+                                @if ($loan->status == 'LOANED')
+                                    <td class="border px-4 py-2">
+                                        <button wire:click="detailLoan({{ $loan->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 mb-4 rounded">Detail</button>
+                                        <button wire:click="confirmReturn({{ $loan->id }})" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 mb-4 rounded">Return</button>
+                                    </td>
+                                @else
+                                    <td class="border px-4 py-2">
+                                        <button wire:click="detailLoan({{ $loan->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 mb-4 rounded">Detail</button>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
