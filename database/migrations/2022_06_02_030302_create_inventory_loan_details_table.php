@@ -16,7 +16,7 @@ class CreateInventoryLoanDetailsTable extends Migration
         Schema::create('inventory_loan_details', function (Blueprint $table) {
             $table->id();
             $table->string('loanId');
-            $table->string('productInventaryId');
+            $table->string('productInventoryId');
             $table->softDeletes();
             $table->timestamps();
         });

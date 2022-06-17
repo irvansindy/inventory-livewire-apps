@@ -15,7 +15,7 @@ class LoanData extends Component
     public $getInventoryId, $loanCode, $loanStartDate, $loanEndDate, $loanerUserId, $officerUserId, $locationId, $loanDescription, $status;
 
     // detail loans
-    public $loanId, $productInventaryId;
+    public $loanId, $productInventoryId;
 
     // data binding system
     public $search;
@@ -45,7 +45,7 @@ class LoanData extends Component
 
     public function resetLoan()
     {
-        
+
     }
 
     public function openModal()
@@ -102,7 +102,7 @@ class LoanData extends Component
 
         InventoryLoanDetails::create([
             'loanId' => $loan->id,
-            'productInventaryId' => $this->getInventoryId,
+            'productInventoryId' => $this->getInventoryId,
         ]);
 
         ProductInventory::findOrFail($this->getInventoryId)->update([
@@ -159,5 +159,36 @@ class LoanData extends Component
     public function closeDetailLoan()
     {
         $this->isDetailLoanOpen = false;
+    }
+
+    public function confirmReturn($id)
+    {
+        $loan = InventoryLoan([
+            'inventoryLoanDetails'
+        ])->findOrFail($id);
+
+        $this->loanId = $loan->id;
+        $this->getInventoryId = $loan->inventoryLoanDetails[0]->productInventory->id;
+        $this->inventoryCode = $loan->inventoryLoanDetails[0]->productInventory->inventoryCode;
+
+        $this->isReturnLoanOpen = true;
+    }
+
+    public function returnLoanInventory()
+    {
+        // InventoryLoanDetails::where('loanId', '=', $this->loanId)
+        // ->where('productInventoryId', '=', $this->getInventoryId)
+        // ->update('')
+        InventoryLoan::findOrFail($this->loanId)->update([
+            'status' => 'RETURNED'
+        ]);
+
+        ProductInventory::findOrFail($this->getInventoryId)->update([
+            'productStatus' => 'AVAILABLE'
+        ]);
+
+        $this->isReturnLoanOpen = false;
+
+        session()->flash('message', 'Loan has been returned successfully.');
     }
 }

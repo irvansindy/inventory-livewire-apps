@@ -14,7 +14,7 @@ class InventoryLoanDetails extends Model
 
     protected $fillable = [
         'loanId',
-        'productInventaryId',
+        'productInventoryId',
     ];
 
     protected $hidden = [];
