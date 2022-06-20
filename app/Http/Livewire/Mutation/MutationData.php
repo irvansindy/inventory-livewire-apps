@@ -13,10 +13,86 @@ use App\Models\Locations;
 
 class MutationData extends Component
 {
-    public $mutationId;
+    // data binding master mutations
+    public $mutationId, $mutationNumber, $mutationDate, $mutationDescription, $userId, $inventoryId;
+
+    // data binding mutation from
+    public $mutationFromId, $mutationFromLocationId;
+
+    // data binding mutation to
+    public $mutationToId, $mutationToLocationId;
+
+    // data binding product inventory
+    public $productInventoryId, $productInventoryName;
+
+    // data binding locations
+    public $locationId, $locationName;
+
+    // data binding global
+    public $search;
+    public $isModalMutationsOpen = 0;
+    public $isModalCreateMutationsOpen = 0;
+    public $isModalEditMutationsOpen = 0;
+    public $limitPerPage = 10;
+
+    protected $queryString = ['search'=> ['except' => '']];
+    protected $listeners = [
+        'mutations' => 'mutationPostData'
+    ];
+
+    // public $allDataMutations = [];
+    public $allDataInventory = [];
+
+    public function mutationPostData()
+    {
+        $this->limitPerPage = $this->limitPerPage+6;
+    }
+
+    public function mount()
+    {
+        $this->allDataInventory = ProductInventory::where('productStatus' ,'!=', 'AVAILABLE')->get();
+    }
+
+    public function openModal()
+    {
+        $this->isModalMutationsOpen = true;
+    }
+    
+    public function closeModal()
+    {
+        $this->isModalMutationsOpen = false;
+    }
 
     public function render()
     {
-        return view('livewire.mutation.mutation-data');
+        $mutations = Mutations::with(['user', 'inventory'])->latest()->paginate($this->limitPerPage);
+
+        if($this->search !== NULL) {
+            $mutations = Mutations::with(['user', 'inventory'])
+            ->where('user', function($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->orWhere('inventory', function($query) {
+                $query->where('inventoryCode', 'like', '%' . $this->search . '%');
+            })
+            ->orWhere('mutationNumber', 'LIKE', '%'.$this->search.'%')
+            ->orWhere('mutationDate', 'LIKE', '%'.$this->search.'%')
+            ->latest()
+            ->paginate($this->limitPerPage);
+        }
+        $this->emit('mutationPostData');
+        return view('livewire.mutation.mutation-data', ['mutations' => $mutations]);
     }
+
+    // public function formCreateMutation($id)
+    // {
+    //     $mutationInventory = ProductInventory::findOrFail($id);
+
+    //     if($mutationInventory->productStatus == 'PLACED') {
+
+    //     }
+    //     dd($mutationInventory);
+
+    //     $this->isModalCreateMutationsOpen = true;
+    // }
 }

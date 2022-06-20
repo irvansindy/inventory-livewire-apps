@@ -16,9 +16,22 @@ class Location extends Seeder
      */
     public function run()
     {
-        DB::table('locations')->insert([
-            'locationName' => 'HO',
-            'departmentId' => 1,
-        ]);
+        DB::table('locations')->insert(
+            [
+                [
+                'locationName' => 'HO',
+                'departmentId' => 1,
+                ],
+                [
+                'locationName' => 'CIMG',
+                'departmentId' => 2,
+                ],
+                [
+                'locationName' => 'KRW',
+                'departmentId' => 3,
+                ]
+            ]
+
+        );
     }
 }

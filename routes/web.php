@@ -11,6 +11,7 @@ use App\Http\Livewire\Supplier\SuppliersData;
 use App\Http\Livewire\Procurement\ProcurementData;
 use App\Http\Livewire\Placement\PlacementData;
 use App\Http\Livewire\Loan\LoanData;
+use App\Http\Livewire\Mutation\MutationData;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ use App\Http\Livewire\Loan\LoanData;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 // Route::get('/dashboard', function () {
@@ -41,7 +42,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('procurements', ProcurementData::class)->name('procurements');
     Route::get('placements', PlacementData::class)->name('placements');
     Route::get('loans', LoanData::class)->name('loans');
-
+    
+    Route::get('mutations', MutationData::class)->name('mutations');
     // Route::get('addProcurement', function () {
     //     return view('livewire.procurement.form-procurement-data');
     // })->name('addProcurement');

@@ -47,13 +47,11 @@
                             <td class="border px-4 py-2">{{ $placement->placementDetails[0]->status }}</td>
                             <td class="border px-4 py-2">
                                 @if ($placement->placementDetails[0]->status == 'INACTIVE')
-                                    <button wire:click="detailPlacement({{ $placement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-2 rounded" disabled>Detail</button>
+                                    <button wire:click="detailPlacement({{ $placement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-2 rounded">Detail</button>
                                 @else
-                                    <button wire:click="detailPlacement({{ $placement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-2 rounded" disabled>Detail</button>
+                                    <button wire:click="detailPlacement({{ $placement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-2 rounded">Detail</button>
                                     <button wire:click="confirmReturn({{ $placement->id }})" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-2 rounded">Return</button>
-
                                 @endif
-
                             </td>
                         </tr>
                         @empty

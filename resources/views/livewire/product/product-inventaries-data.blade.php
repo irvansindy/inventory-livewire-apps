@@ -19,6 +19,9 @@
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                 @if($isModalOpen)
                     @include('livewire.product.detail-inventaries-data')
+                    @elseif($isMutationOpen)
+                    @include('livewire.product.mutation.form-mutation-inventory')
+
                 @endif
                 <table class="table-auto w-full">
                     <thead>
@@ -40,9 +43,18 @@
                             <td class="border px-4 py-2">Rp.{{ number_format($inventory->productPrice, 2, ',','.') }}</td>
                             <td class="border px-4 py-2">{{ $inventory->productStatus }}</td>
                             <td class="border px-4 py-2">
+                                @if ($inventory->productStatus == 'AVAILABLE')
                                 <button wire:click="detailInventory({{ $inventory->id }})"
                                     class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
                                     Detail</button>
+                                @else
+                                    <button wire:click="detailInventory({{ $inventory->id }})"
+                                        class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
+                                        Detail</button>
+                                    <button wire:click="openMutation({{ $inventory->id }})"
+                                        class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">
+                                        Mutations</button>
+                                @endif
                             </td>
                         </tr>
                         @empty

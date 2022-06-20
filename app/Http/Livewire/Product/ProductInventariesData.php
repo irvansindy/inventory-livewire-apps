@@ -4,21 +4,40 @@ namespace App\Http\Livewire\Product;
 
 use Livewire\Component;
 use App\Models\ProductInventory;
+use App\Models\Mutations;
+use App\Models\MutationFroms;
+use App\Models\MutationTo;
+use App\Models\InventoryPlacement;
+use App\Models\InventoryPlacementDetails;
+use App\Models\Locations;
+use Illuminate\Support\Facades\Auth;
 
 class ProductInventariesData extends Component
 {
+    // data master inventory
     public $allDataProductInventory, $inventoryId, $inventoryCode, $productId, $purchasingNumber, $registeredDate, $yearOfEntry, $yearOfUse, $serialNumber, $yearOfEnd, $sertificateNumber, $sertificateMaker, $productOrigin, $productPrice, $productDescription, $productStatus, $inventoryImageUrl;
+
+    // data binding mutations
+    public $mutationId, $mutationNumber, $mutationDate, $mutationDescription, $userIdMutation, $inventoryIdMutation, $mutationFromId, $mutationFromLocationId, $mutationToId, $mutationToLocationId, $locationInventoryIdNow, $locationInventoryNameNow;
 
     public $search;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isDeleteModalOpen = 0;
+    public $isMutationOpen = 0;
     public $limitPerPage = 10;
 
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
         'productInventary' => 'productInventariesPostData'
     ];
+
+    public $allDataLocation = [];
+
+    public function mount()
+    {
+        $this->allDataLocation = Locations::all();
+    }
 
     public function productInventariesPostData() {
         $this->limitPerPage = $this->limitPerPage + 1;  
@@ -96,5 +115,79 @@ class ProductInventariesData extends Component
         $this->inventoryImageUrl = $this->allDataProductInventory->inventoryImageUrl;
         $this->openModal();
     }
+
+    public function detailInventoryByStatus($id)
+    {
+        $checkInventoryDetail = ProductInventory::findOrFail($id);
+
+        if($checkInventoryDetail->productStatus == 'PLACED') {
+            $this->allDataProductInventory = ProductInventory::with([
+                'products',
+                'user',
+                
+            ]);
+        } 
+    }
     
+    public function openMutation($id)
+    {
+        $this->inventoryId = $id;
+        $inventory = InventoryPlacementDetails::with(['placement', 'productInventory'])
+        ->where('productInventoryId', $id)->get();
+
+        $this->inventoryCode = $inventory[0]->productInventory->inventoryCode;
+        $this->inventoryIdMutation = $inventory[0]->productInventory->id;
+        $this->locationInventoryIdNow = $inventory[0]->placement->location->id;
+        $this->locationInventoryNameNow = $inventory[0]->placement->location->locationName;
+        // dd($this->locationInventoryNow);
+
+        $this->isMutationOpen = true;
+    }
+
+    public function storeMutation()
+    {
+        $this->validate([
+            'mutationDate' => 'required',
+            'mutationDescription' => 'required',
+            // 'inventoryIdMutation' => 'required',
+            // 'mutationFromId' => 'required',
+            // 'mutationFromLocationId' => 'required',
+            // 'mutationToId' => 'required',
+            // 'mutationToLocationId' => 'required',
+        ]);
+
+        $mutation = Mutations::create([
+            'mutationDate' => $this->mutationDate,
+            'mutationDescription' => $this->mutationDescription,
+            'userId' => Auth::user()->id,
+            'inventoryId' => $this->inventoryIdMutation,
+        ]);
+        
+        MutationFroms::create([
+            'mutationId' => $mutation->id,
+            'locationId' => $this->locationInventoryIdNow,
+        ]);
+
+        MutationTo::create([
+            'mutationId' => $mutation->id,
+            'locationId' => $this->mutationToLocationId,
+        ]);
+
+        $inventory = InventoryPlacementDetails::with(['placement', 'productInventory'])
+        ->where('productInventoryId', $this->inventoryIdMutation)->get();
+
+        $inventory[0]->placement->update([
+            'locationId' => $this->mutationToLocationId,
+        ]);
+
+        session()->flash('message', 'Product Inventory has been Mutation successfully.');
+
+        $this->isMutationOpen = false;
+
+    }
+    
+    public function closeMutation()
+    {
+        $this->isMutationOpen = false;
+    }
 }

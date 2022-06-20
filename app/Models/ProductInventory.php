@@ -46,6 +46,11 @@ class ProductInventory extends Model
     public function supplier() {
         return $this->belongsTo(Suppliers::class, 'productOrigin', 'id');
     }
+
+    // public function inventoryPlacement()
+    // {
+    //     return $this->hasMany(InventoryPlacement::class, 'inventoryCode', 'inventoryCode');
+    // }
     
     public function getAutoNumberOptions()
     {

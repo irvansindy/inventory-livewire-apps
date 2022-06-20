@@ -77,10 +77,10 @@ class PlacementData extends Component
 
     public function render()
     {
-        $placements = InventoryPlacement::with(['user', 'location'])
+        $placements = InventoryPlacement::with(['user', 'location', 'placementDetails'])
         ->latest()
         ->paginate($this->limitPerPage);
-
+        // dd($placements);
         if($this->search !== NULL) {
             $placements = InventoryPlacement::with(['user', 'location'])
             ->whereHas('user', function($query) {

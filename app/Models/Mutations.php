@@ -23,6 +23,26 @@ class Mutations extends Model
 
     protected $hidden = [];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+
+    public function inventory()
+    {
+        return $this->belongsTo(ProductInventory::class, 'inventoryId');
+    }
+
+    public function mutationFrom()
+    {
+        return $this->hasOne(MutationFroms::class, 'mutationId');
+    }
+
+    public function mutationTo()
+    {
+        return $this->hasOne(MutationTo::class, 'mutationId');
+    }
+
     public function getAutoNumberOptions()
     {
         return [

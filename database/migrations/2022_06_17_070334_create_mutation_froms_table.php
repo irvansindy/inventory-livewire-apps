@@ -13,7 +13,7 @@ class CreateMutationFromsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mutations_froms', function (Blueprint $table) {
+        Schema::create('mutation_froms', function (Blueprint $table) {
             $table->id();
             $table->string('mutationId');
             $table->string('locationId');

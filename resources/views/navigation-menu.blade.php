@@ -57,6 +57,10 @@
                             <x-jet-dropdown-link href="{{ route('inventaries') }}" :active="request()->routeIs('inventaries')">
                                 {{ __('Product Inventories') }}
                             </x-jet-dropdown-link>
+
+                            <x-jet-dropdown-link href="{{ route('mutations') }}">
+                                {{ __('Product Inventory Mutations') }}
+                            </x-jet-dropdown-link>
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
@@ -95,13 +99,13 @@
                                 {{ __('Loan') }}
                             </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="">
+                            {{-- <x-jet-dropdown-link href="">
                                 {{ __('Maintenance') }}
                             </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="">
+                            <x-jet-dropdown-link href="{{ route('mutations') }}">
                                 {{ __('Mutations') }}
-                            </x-jet-dropdown-link>
+                            </x-jet-dropdown-link> --}}
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
