@@ -1147,6 +1147,9 @@ select {
 .-mt-px {
   margin-top: -1px;
 }
+.mr-1 {
+  margin-right: 0.25rem;
+}
 .mr-8 {
   margin-right: 2rem;
 }
@@ -1407,9 +1410,6 @@ select {
 }
 .grid-cols-8 {
   grid-template-columns: repeat(8, minmax(0, 1fr));
-}
-.grid-cols-5 {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 .flex-row {
   flex-direction: row;

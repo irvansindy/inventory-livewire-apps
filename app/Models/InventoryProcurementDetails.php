@@ -18,6 +18,7 @@ class InventoryProcurementDetails extends Model
         'description',
         'quantity',
         'unitPrice',
+        'imageUrl',
     ];
 
     protected $hidden = [];

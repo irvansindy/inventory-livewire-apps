@@ -65,8 +65,8 @@
                 </div>
                 {{-- add dynamic form --}}
                 @foreach ($orderProcurements as $index => $orderProcurement)
-                <div class="grid grid-cols-5 gap-4 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="mb-4 mr-2">
+                <div class="grid grid-cols-6 gap-4 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="mr-1">
                         <select class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="productId" name="orderProcurements[{{ $index }}][productId]" wire:model="orderProcurements.{{ $index }}.productId">
                             <option value="hidden">Select Product</option>
                             @foreach ($allProducts as $product)
@@ -75,24 +75,32 @@
                         </select>
                         @error('orderProcurements.{{ $index }}.productId') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
-                    <div class="mb-4 mr-2">
+                    <div class="mr-1">
                         <input type="text"
                             class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter Description" name="orderProcurements[{{ $index }}][description]"  wire:model="orderProcurements.{{ $index }}.description">
                         @error('orderProcurements.{{ $index }}.description') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                     
-                    <div class="mb-4 mr-2">
+                    <div class="mr-1">
                         <input type="number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Enter Price" name="orderProcurements[{{ $index }}][unitPrice]" wire:model="orderProcurements.{{ $index }}.unitPrice">
                         @error('orderProcurements.{{ $index }}.unitPrice') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                     
-                    <div class="mb-4 mr-2">
+                    <div class="mr-1">
                         <input type="number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Enter Quantity" name="orderProcurements[{{ $index }}][quantity]" wire:model="orderProcurements.{{ $index }}.quantity">
                         @error('orderProcurements.{{ $index }}.quantity') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
 
-                    <div class="mb-4 mr-2 justify-end">
-                        <button class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" wire:click.prevent="removeProductProcurement({{ $index }})">Delete</button>
+                    <div class="mr-1">
+                        {{-- <label for="inventoryImageUrl" class="block text-gray-700 text-sm font-bold mb-2">Upload Product Image</label> --}}
+                        <input type="file"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="orderProcurements.{{ $index }}.inventoryImageUrl" name="orderProcurements.{{ $index }}.inventoryImageUrl" wire:model="orderProcurements.{{ $index }}.inventoryImageUrl">
+                        @error('inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
+                    </div>
+
+                    <div class="mr-1 justify-end sm:flex sm:flex-row-reverse">
+                        <button class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150" wire:click.prevent="removeProductProcurement({{ $index }})">Delete</button>
                     </div>
                 </div>
                 @endforeach

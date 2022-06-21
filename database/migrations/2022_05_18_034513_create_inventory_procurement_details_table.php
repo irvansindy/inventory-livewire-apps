@@ -20,6 +20,7 @@ class CreateInventoryProcurementDetailsTable extends Migration
             $table->string('description');
             $table->string('quantity');
             $table->string('unitPrice');
+            $table->string('imageUrl');
             $table->softDeletes();
             $table->timestamps();
         });

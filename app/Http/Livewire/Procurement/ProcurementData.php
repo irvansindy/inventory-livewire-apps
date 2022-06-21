@@ -10,6 +10,8 @@ use App\Models\Products;
 use App\Models\InventoryProcurement;
 use App\Models\InventoryProcurementDetails;
 use App\Models\ProcurementType;
+use App\Models\ProductInventory;
+use Carbon\Carbon;
 
 class ProcurementData extends Component
 {
@@ -22,11 +24,12 @@ class ProcurementData extends Component
     public $dataSupplier, $dataProcurementType;
 
     // data details
-    public $productName, $supplierName, $procurementTypeName, $userName;
+    public $productName, $supplierName, $procurementTypeName, $userName, $inventoryImageUrl;
 
     // for view procurement
     public $search;
     public $isModalOpen = 0;
+    public $isDoneModalOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -44,6 +47,7 @@ class ProcurementData extends Component
                 'description' => '',
                 'unitPrice' => 0,
                 'quantity' => 1,
+                'inventoryImageUrl' => ''
             ]
         ];
     }
@@ -59,6 +63,7 @@ class ProcurementData extends Component
                 'description' => '',
                 'unitPrice' => 0,
                 'quantity' => 1,
+                'inventoryImageUrl' => ''
             ]
         ];
     }
@@ -150,12 +155,22 @@ class ProcurementData extends Component
 
         foreach ($this->orderProcurements as $procurementDetail => $value)
         {
+            $images = rand().".".$value['inventoryImageUrl']->getClientOriginalExtension();
+
+            // for real images
+            $value['inventoryImageUrl']->storeAs('real_images', $images, 'path');
+            
+            // for webp images
+            $imageToWebp = Image::make($value['inventoryImageUrl'])->encode('webp', 80)
+            ->save("upload/images/webp/$images.webp", 80);
+
             InventoryProcurementDetails::create([
                 'procurementId' => $procurementMaster->id,
                 'productId' => $value['productId'],
                 'description' => $value['description'],
                 'unitPrice' => $value['unitPrice'],
                 'quantity' => $value['quantity'],
+                'imageUrl' => $images.'.webp',
             ]);
         }
 
@@ -216,6 +231,7 @@ class ProcurementData extends Component
         $this->procurementCode = $procurementDetails->procurementCode;
         $this->userName = $procurementDetails->user->name;
         $this->supplierName = $procurementDetails->supplier->supplierName;
+        $this->supplierId = $procurementDetails->supplier->id;
         $this->procurementTypeName = $procurementDetails->procurementType->procurementTypeName;
         $this->procurementDescription = $procurementDetails->procurementDescription;
         $this->procurementDate = $procurementDetails->procurementDate;
@@ -227,5 +243,87 @@ class ProcurementData extends Component
 
         $this->procurementDetails = [$procurementDetails->procurementDetails];
         $this->openDetailModal();
+    }
+
+    public function doneProcurement($id)
+    {
+        $procurementDetails = InventoryProcurement::with([
+            'user',
+            'products',
+            'supplier',
+            'procurementType',
+            'procurementDetails'
+        ])->findOrFail($id);
+
+        $this->procurementId = $procurementDetails->id;
+        $this->procurementCode = $procurementDetails->procurementCode;
+        $this->userName = $procurementDetails->user->name;
+        $this->supplierName = $procurementDetails->supplier->supplierName;
+        $this->procurementTypeName = $procurementDetails->procurementType->procurementTypeName;
+        $this->procurementDescription = $procurementDetails->procurementDescription;
+        $this->procurementDate = $procurementDetails->procurementDate;
+        $this->totalPrice = $procurementDetails->totalPrice;
+        $this->status = $procurementDetails->status;
+
+        // join product and procurement detail
+        $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
+
+        $this->procurementDetails = [$procurementDetails->procurementDetails];
+        $this->isDoneModalOpen = true;
+    }
+
+    public function cancelProcurement()
+    {
+        $this->isDoneModalOpen = false;
+    }
+
+    public function storeProcurementProductToInventory()
+    {
+        $this->validate([
+            'productId' => 'required',
+            'purchasingNumber' => 'required|string',
+            'registeredDate' => 'required|date',
+            'yearOfEntry' => 'required|date',
+            'yearOfUse' => 'required|date',
+            'serialNumber' => 'required|string',
+            'yearOfEnd' => 'required|date',
+            'sertificateNumber' => 'required|string',
+            'productOrigin' => 'required|string',
+            'productPrice' => 'required',
+            'productDescription' => 'required|string',
+            'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
+        ]);
+
+        $procurement = InventoryProcurement::findOrFail($this->procurementId);
+
+        $procurement->update([
+            'status' => 1,
+        ]);
+
+        foreach ($this->procurementDetails as $key => $value) {
+            ProductInventory::create([
+                'productId' => $value['productId'],
+                'purchasingNumber' => $this->procurementCode,
+                'registeredDate' => $this->procurementDate,
+                'yearOfEntry' => Carbon::now()->parse()->format('Y-m-d'),
+                'yearOfUse' => Carbon::now()->parse()->format('Y-m-d'),
+                'serialNumber' => $value['description'],
+                'yearOfEnd' => Carbon::now()->addYears(5)->parse()->format('Y-m-d'),
+                'sertificateNumber' => $value['description'].'-'.Carbon::now()->parse()->format('Y-m-d'),
+                'productOrigin' => $this->supplierId,
+                'productPrice' => $value['unitPrice'],
+                'productDescription' => $this->procurementDescription,
+                'inventoryImageUrl' => $value['inventoryImageUrl'],
+                // 'inventoryImageUrl' => $images.'.webp',
+            ]);
+
+            $productData = Products::findOrFail($value['productId'])->update([
+                'qty' => $productData + $value['quantity'],
+            ]);
+        }
+
+        session()->flash('message', 'Product Inventory has been claimed successfully.');
+
+        $this->isDoneModalOpen = false;
     }
 }
