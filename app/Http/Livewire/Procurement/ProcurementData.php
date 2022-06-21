@@ -12,9 +12,13 @@ use App\Models\InventoryProcurementDetails;
 use App\Models\ProcurementType;
 use App\Models\ProductInventory;
 use Carbon\Carbon;
+use Image;
+use Livewire\WithFileUploads;
 
 class ProcurementData extends Component
 {
+    use WithFileUploads;
+
     // table procurement
     public $procurementCode, $userId, $supplierId, $procurementTypeId, $procurementDescription, $procurementDate, $totalPrice, $status;
     // table procurement details
