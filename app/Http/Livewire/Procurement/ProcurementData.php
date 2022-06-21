@@ -263,6 +263,7 @@ class ProcurementData extends Component
         $this->procurementCode = $procurementDetails->procurementCode;
         $this->userName = $procurementDetails->user->name;
         $this->supplierName = $procurementDetails->supplier->supplierName;
+        $this->supplierId = $procurementDetails->supplier->id;
         $this->procurementTypeName = $procurementDetails->procurementType->procurementTypeName;
         $this->procurementDescription = $procurementDetails->procurementDescription;
         $this->procurementDate = $procurementDetails->procurementDate;
@@ -283,20 +284,20 @@ class ProcurementData extends Component
 
     public function storeProcurementProductToInventory()
     {
-        $this->validate([
-            'productId' => 'required',
-            'purchasingNumber' => 'required|string',
-            'registeredDate' => 'required|date',
-            'yearOfEntry' => 'required|date',
-            'yearOfUse' => 'required|date',
-            'serialNumber' => 'required|string',
-            'yearOfEnd' => 'required|date',
-            'sertificateNumber' => 'required|string',
-            'productOrigin' => 'required|string',
-            'productPrice' => 'required',
-            'productDescription' => 'required|string',
-            'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
-        ]);
+        // $this->validate([
+        //     'productId' => 'required',
+        //     'purchasingNumber' => 'required|string',
+        //     'registeredDate' => 'required|date',
+        //     'yearOfEntry' => 'required|date',
+        //     'yearOfUse' => 'required|date',
+        //     'serialNumber' => 'required|string',
+        //     'yearOfEnd' => 'required|date',
+        //     'sertificateNumber' => 'required|string',
+        //     'productOrigin' => 'required|string',
+        //     'productPrice' => 'required',
+        //     'productDescription' => 'required|string',
+        //     'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
+        // ]);
 
         $procurement = InventoryProcurement::findOrFail($this->procurementId);
 
@@ -305,24 +306,29 @@ class ProcurementData extends Component
         ]);
 
         foreach ($this->procurementDetails as $key => $value) {
+            // dd($value[0]);
+            // dd($this->supplierId);
             ProductInventory::create([
-                'productId' => $value['productId'],
+                'productId' => $value[0]['productId'],
                 'purchasingNumber' => $this->procurementCode,
                 'registeredDate' => $this->procurementDate,
                 'yearOfEntry' => Carbon::now()->parse()->format('Y-m-d'),
                 'yearOfUse' => Carbon::now()->parse()->format('Y-m-d'),
-                'serialNumber' => $value['description'],
+                'serialNumber' => $value[0]['description'],
                 'yearOfEnd' => Carbon::now()->addYears(5)->parse()->format('Y-m-d'),
-                'sertificateNumber' => $value['description'].'-'.Carbon::now()->parse()->format('Y-m-d'),
+                'sertificateNumber' => $value[0]['description'].'-'.Carbon::now()->parse()->format('Y-m-d'),
+                'sertificateMaker' => Auth::user()->id,
                 'productOrigin' => $this->supplierId,
-                'productPrice' => $value['unitPrice'],
+                'productPrice' => $value[0]['unitPrice'],
                 'productDescription' => $this->procurementDescription,
-                'inventoryImageUrl' => $value['inventoryImageUrl'],
+                'inventoryImageUrl' => $value[0]['imageUrl'],
                 // 'inventoryImageUrl' => $images.'.webp',
             ]);
 
-            $productData = Products::findOrFail($value['productId'])->update([
-                'qty' => $productData + $value['quantity'],
+            $productData = Products::findOrFail($value[0]['productId']);
+            // dd($productData['qty']);
+            $productData->update([
+                'qty' => $productData['qty'] + $value[0]['quantity'],
             ]);
         }
 
