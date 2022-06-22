@@ -164,6 +164,7 @@ return [
         Wuwx\LaravelAutoNumber\AutoNumberServiceProvider::class,
         Buglinjo\LaravelWebp\WebpServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -236,6 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Webp' => Buglinjo\LaravelWebp\Facades\Webp::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

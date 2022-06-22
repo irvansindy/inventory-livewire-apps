@@ -6,11 +6,12 @@ use Livewire\Component;
 use App\Models\User;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
-
+use PDF;
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 class UsersData extends Component
 {
-    public $allDataUser, $userId, $name, $email, $username, $roles;
+    public $allDataUser, $userId, $name, $email, $username, $roles, $nik;
     public $search;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
@@ -64,6 +65,7 @@ class UsersData extends Component
         $this->email = '';
         $this->username = '';
         $this->roles = '';
+        $this->nik = '';
     }
 
     public function storeUser() {
@@ -72,6 +74,7 @@ class UsersData extends Component
             'email' => 'required|email',
             'username' => 'required|unique:users',
             'roles' => 'required',
+            'nik' => 'required',
         ]);
 
         User::Create([
@@ -79,6 +82,7 @@ class UsersData extends Component
             'email' => $this->email,
             'username' => $this->username,
             'roles' => $this->roles,
+            'nik' => $this->nik,
             'password' => Hash::make('123456789'),
         ]);
 
@@ -95,6 +99,7 @@ class UsersData extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->username = $user->username;
+        $this->nik = $user->nik;
     
         $this->openEditModal();
     }
@@ -104,12 +109,14 @@ class UsersData extends Component
             'name' => 'required',
             'email' => 'required|email',
             'username' => 'required',
+            'nik' => 'required',
         ]);
 
         User::findOrFail($this->userId)->update([
             'name' => $this->name,
-                'email' => $this->email,
-                'username' => $this->username,
+            'email' => $this->email,
+            'username' => $this->username,
+            'nik' => $this->nik,
         ]);
 
         session()->flash('message', 'Data updated successfully.');
@@ -124,9 +131,22 @@ class UsersData extends Component
         $this->openModal();
     }
 
-    public function deleteUser($id) {
+    public function deleteUser($id)
+    {
         User::findOrFail($id)->delete();
         session()->flash('message', 'Data deleted successfully.');
+    }
+
+    public function exportPDF()
+    {
+        // $data = [];
+        $data = User::all();
+
+        $pdf = PDF::loadView('livewire.user.report-users', ['data' => $data])->setPaper('a4', 'landscape')->output(); //
+        return response()->streamDownload(
+            fn() => print($pdf), 'user.pdf'
+        );
+
     }
 
 }

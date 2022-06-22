@@ -16,6 +16,8 @@
                 </div>
                 @endif
                 <button wire:click="create()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Create User</button>
+                <button wire:click="exportPDF()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded ">Export PDF</button>
+
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                 @if($isModalOpen)
                     @include('livewire.form-users')
@@ -26,6 +28,7 @@
                     <thead>
                         <tr class="bg-gray-100">
                             <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">NIK</th>
                             <th class="px-4 py-2">Email</th>
                             <th class="px-4 py-2">Username</th>
                             <th class="px-4 py-2">Role</th>
@@ -36,16 +39,17 @@
                         @foreach($users as $user)
                             <tr>
                                 <td class="border px-4 py-2">{{ $user->name }}</td>
+                                <td class="border px-4 py-2">{{ $user->nik }}</td>
                                 <td class="border px-4 py-2">{{ $user->email }}</td>
                                 <td class="border px-4 py-2">{{ $user->username }}</td>
                                 <td class="border px-4 py-2">{{ $user->roles }}</td>
                                 <td class="border px-4 py-2">
                                     <button wire:click="editUser({{ $user->id }})"
-                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
                                         Edit</button>
-                                    <button wire:click="deleteUser({{ $user->id }})"
+                                    {{-- <button wire:click="deleteUser({{ $user->id }})"
                                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                        Delete</button>
+                                        Delete</button> --}}
                                 </td>
                             </tr>
                         @endforeach
