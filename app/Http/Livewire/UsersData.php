@@ -8,14 +8,20 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
 use PDF;
 use App\Exports\UserExport;
+use App\Imports\UserImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Livewire\WithFileUploads;
 
 class UsersData extends Component
 {
+    use WithFileUploads;
+
     public $allDataUser, $userId, $name, $email, $username, $roles, $nik;
     public $search;
+    public $importExportFile;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
+    public $isModalImportOpen = 0;
     public $limitPerPage = 10;
     protected $querySearchString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -151,7 +157,20 @@ class UsersData extends Component
 
     public function exportCSV()
     {
-        return Excel::download(new UserExport, 'users.xlsx');
+        // return Excel::download(new UserExport, 'users.xlsx');
+        return Excel::download(new UserExport, 'users.csv');
+    }
+
+    public function modalImport()
+    {
+        $this->isModalImportOpen = true;
+    }
+
+    public function importCSV()
+    {
+        // Excel::import(new UserImport, request()->file('file'));
+        Excel::import(new UserImport, $this->importExportFile);
+        return redirect()->back()->with('message','Data Imported Successfully');
     }
 
 }

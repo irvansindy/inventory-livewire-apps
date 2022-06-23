@@ -21,15 +21,18 @@
                         <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                     </div>
                     <div class="flex flex-row-reverse">
-                        <button wire:click="exportPDF()" class="bg-lime-600 hover:bg-lime-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end">Export PDF</button>
-                        <button wire:click="exportCSV()" class="bg-lime-600 hover:bg-lime-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end mr-2">Export CSV</button>
+                        <button wire:click="exportPDF()" class="bg-cyan-600 hover:bg-cyan-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end">Export PDF</button>
+                        <button wire:click="exportCSV()" class="bg-cyan-600 hover:bg-cyan-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end mr-2">Export CSV</button>
+                        <button wire:click="modalImport()" class="bg-emerald-600 hover:bg-emerald-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end mr-2">Import CSV</button>
                     </div>
                 </div>
 
-                @if($isModalOpen)
+                @if ($isModalOpen)
                     @include('livewire.form-users')
                 @elseif ($isEditModalOpen)
                     @include('livewire.form-edit-users')
+                @elseif ($isModalImportOpen)
+                    @include('livewire.user.modal-import-user-data')
                 @endif
                 <table class="table-auto w-full">
                     <thead>
