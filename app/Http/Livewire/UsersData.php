@@ -171,6 +171,7 @@ class UsersData extends Component
         // Excel::import(new UserImport, request()->file('file'));
         Excel::import(new UserImport, $this->importExportFile);
         return redirect()->back()->with('message','Data Imported Successfully');
+        $this->isModalImportOpen = false;
     }
 
 }
