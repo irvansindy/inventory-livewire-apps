@@ -16,6 +16,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
+        "maatwebsite/excel": "^3.1",
         "mediconesystems/livewire-datatables": "^0.9.4",
         "wuwx/laravel-autonumber": "^4.0"
     },

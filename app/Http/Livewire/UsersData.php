@@ -7,7 +7,8 @@ use App\Models\User;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
 use PDF;
-// use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\UserExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UsersData extends Component
 {
@@ -142,11 +143,15 @@ class UsersData extends Component
         // $data = [];
         $data = User::all();
 
-        $pdf = PDF::loadView('livewire.user.report-users', ['data' => $data])->setPaper('a4', 'landscape')->output(); //
+        $pdf = PDF::loadView('livewire.user.report-users', ['data' => $data])->setPaper('a4', 'portrait')->output(); //
         return response()->streamDownload(
             fn() => print($pdf), 'user.pdf'
         );
+    }
 
+    public function exportCSV()
+    {
+        return Excel::download(new UserExport, 'users.xlsx');
     }
 
 }

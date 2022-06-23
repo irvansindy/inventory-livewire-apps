@@ -15,10 +15,17 @@
                     </div>
                 </div>
                 @endif
-                <button wire:click="create()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Create User</button>
-                <button wire:click="exportPDF()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded ">Export PDF</button>
+                <div class="grid grid-cols-2">
+                    <div>
+                        <button wire:click="create()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Create User</button>
+                        <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
+                    </div>
+                    <div class="flex flex-row-reverse">
+                        <button wire:click="exportPDF()" class="bg-lime-600 hover:bg-lime-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end">Export PDF</button>
+                        <button wire:click="exportCSV()" class="bg-lime-600 hover:bg-lime-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end mr-2">Export CSV</button>
+                    </div>
+                </div>
 
-                <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                 @if($isModalOpen)
                     @include('livewire.form-users')
                 @elseif ($isEditModalOpen)

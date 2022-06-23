@@ -13,6 +13,7 @@ use App\Http\Livewire\Placement\PlacementData;
 use App\Http\Livewire\Loan\LoanData;
 use App\Http\Livewire\Mutation\MutationData;
 
+use App\Exports\UserExport;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,11 +43,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('procurements', ProcurementData::class)->name('procurements');
     Route::get('placements', PlacementData::class)->name('placements');
     Route::get('loans', LoanData::class)->name('loans');
-    
     Route::get('mutations', MutationData::class)->name('mutations');
-    // Route::get('addProcurement', function () {
-    //     return view('livewire.procurement.form-procurement-data');
-    // })->name('addProcurement');
+    
+    // for export and import data
+    // Route::get('userExport', function() {
+    //     return Excel::download(new UserExport, 'user.csv');
+    // });
+    
 
     Route::get('/dashboard', function () {
         return view('dashboard');
