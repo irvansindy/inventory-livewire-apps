@@ -12,6 +12,8 @@ use App\Models\Suppliers;
 use Buglinjo\LaravelWebp\Facades\Webp;
 use Image;
 use Intervention\Image\Exception\NotReadableException;
+Use Alert;
+
 
 class ProductsData extends Component
 {
@@ -197,7 +199,8 @@ class ProductsData extends Component
             'minimumStock' => $this->minimumStock,
         ]);
 
-        session()->flash('message', 'Product has been updated successfully.');
+        // session()->flash('message', 'Product has been updated successfully.');
+        alert()->success('SuccessAlert','Product has been updated successfully.');
 
         $this->closeModal();
         $this->resetCreateProductForm();
