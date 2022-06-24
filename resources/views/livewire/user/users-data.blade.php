@@ -18,6 +18,12 @@
                 <div class="grid grid-cols-2">
                     <div>
                         <button wire:click="create()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Create User</button>
+                        {{-- <button wire:click="dummyLoading()" wire:loading.class="bg-gray" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Dummy Loading</button> --}}
+                        {{-- <div wire:loading.flex wire:delay.longest wire:target="dummyLoading()">
+                            @if ($isLoadingIndicator)
+                                @include('livewire.user.modal-loading-indicator');
+                            @endif
+                        </div> --}}
                         <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                     </div>
                     <div class="flex flex-row-reverse">
@@ -28,11 +34,13 @@
                 </div>
 
                 @if ($isModalOpen)
-                    @include('livewire.form-users')
+                    @include('livewire.user.form-users')
                 @elseif ($isEditModalOpen)
-                    @include('livewire.form-edit-users')
+                    @include('livewire.user.form-edit-users')
                 @elseif ($isModalImportOpen)
                     @include('livewire.user.modal-import-user-data')
+                {{-- @elseif ($isLoadingIndicator)
+                    @include('livewire.user.modal-loading-indicator'); --}}
                 @endif
                 <table class="table-auto w-full">
                     <thead>

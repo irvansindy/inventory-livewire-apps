@@ -22,7 +22,7 @@ class UsersData extends Component
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isModalImportOpen = 0;
-    public $limitPerPage = 10;
+    public $limitPerPage = 3;
     protected $querySearchString = ['search'=> ['except' => '']];
     protected $listeners = [
         'users' => 'userPostData'
@@ -43,7 +43,7 @@ class UsersData extends Component
         }
 
         $this->emit('userPostData');
-        return view('livewire.users-data', ['users' => $user]);
+        return view('livewire.user.users-data', ['users' => $user]);
     }
 
     public function create() {
@@ -168,10 +168,20 @@ class UsersData extends Component
 
     public function importCSV()
     {
+        $this->validate([
+            'importExportFile' => 'required|mimes:csv,xls,xlsx'
+        ]);
         // Excel::import(new UserImport, request()->file('file'));
         Excel::import(new UserImport, $this->importExportFile);
         return redirect()->back()->with('message','Data Imported Successfully');
         $this->isModalImportOpen = false;
     }
 
+    public $isLoadingIndicator = 0;
+
+    public function dummyLoading()
+    {
+        $this->isLoadingIndicator = true;
+        // session()->flash('loading', 'Dummy Loading.');
+    }
 }

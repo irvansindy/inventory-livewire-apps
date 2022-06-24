@@ -15,6 +15,11 @@
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="importExportFile" placeholder="upload File" wire:model="importExportFile">
                             @error('importExportFile') <span class="text-red-500">{{ $message }}</span>@enderror
+                            <div wire:loading.delay wire:target="importExportFile">
+                                <span class="text-blue-400">
+                                    Processing Upload Data Import...
+                                </span>
+                            </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
