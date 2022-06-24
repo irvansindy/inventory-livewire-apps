@@ -50,7 +50,7 @@
                             type="submit" wire:click="updateUser"
                             class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-sky-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-sky-800 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                             <svg
-                                wire:loading wire:target="updateUser"
+                                wire:loading.delay wire:target="updateUser"
                                 class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
