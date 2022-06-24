@@ -18,6 +18,7 @@
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1",
         "mediconesystems/livewire-datatables": "^0.9.4",
+        "realrashid/sweet-alert": "^5.1",
         "wuwx/laravel-autonumber": "^4.0"
     },
     "require-dev": {

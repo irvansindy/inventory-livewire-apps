@@ -165,6 +165,12 @@ class UsersData extends Component
     {
         $this->isModalImportOpen = true;
     }
+    
+    public function closeModalImport()
+    {
+        $this->importExportFile = '';
+        $this->isModalImportOpen = false;
+    }
 
     public function importCSV()
     {

@@ -17,7 +17,7 @@ class ProductCategoriesSeeder extends Seeder
     public function run()
     {
         DB::table('product_categories')->insert([
-            'categoryName' => 'Laptop',
+            'categoryName' => 'Electronic',
         ]);
     }
 }

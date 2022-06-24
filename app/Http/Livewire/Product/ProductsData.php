@@ -142,7 +142,7 @@ class ProductsData extends Component
             'categoryId' => 'required|string',
             'productDescription' => 'required|string',
             'merk' => 'required|string',
-            'qty' => 'required|numeric',
+            // 'qty' => 'required|numeric',
             'minimumStock' => 'required|numeric',
         ]);
 
@@ -151,7 +151,8 @@ class ProductsData extends Component
             'categoryId' => $this->categoryId,
             'productDescription' => $this->productDescription,
             'merk' => $this->merk,
-            'qty' => $this->qty,
+            'qty' => 0,
+            // 'qty' => $this->qty,
             'minimumStock' => $this->minimumStock,
         ]);
 
@@ -259,7 +260,7 @@ class ProductsData extends Component
             'sertificateNumber' => 'required|string',
             'productOrigin' => 'required|string',
             'productPrice' => 'required',
-            'productDescription' => 'required|string',
+            'productDescription2' => 'required|string',
             'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
         ]);
 

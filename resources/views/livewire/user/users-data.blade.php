@@ -12,18 +12,13 @@
                         <div>
                             <p class="text-sm">{{ session('message') }}</p>
                         </div>
+                        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
                     </div>
                 </div>
                 @endif
                 <div class="grid grid-cols-2">
                     <div>
                         <button wire:click="create()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Create User</button>
-                        {{-- <button wire:click="dummyLoading()" wire:loading.class="bg-gray" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Dummy Loading</button> --}}
-                        {{-- <div wire:loading.flex wire:delay.longest wire:target="dummyLoading()">
-                            @if ($isLoadingIndicator)
-                                @include('livewire.user.modal-loading-indicator');
-                            @endif
-                        </div> --}}
                         <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                     </div>
                     <div class="flex flex-row-reverse">
@@ -39,8 +34,6 @@
                     @include('livewire.user.form-edit-users')
                 @elseif ($isModalImportOpen)
                     @include('livewire.user.modal-import-user-data')
-                {{-- @elseif ($isLoadingIndicator)
-                    @include('livewire.user.modal-loading-indicator'); --}}
                 @endif
                 <table class="table-auto w-full">
                     <thead>
