@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Product;
 
 use Livewire\Component;
 use App\Models\ProductCategories;
-
+Use Alert;
 
 class ProductCategoryData extends Component
 {
@@ -74,7 +74,7 @@ class ProductCategoryData extends Component
             'categoryName' => $this->categoryName,
         ]);
 
-        session()->flash('message', 'Category has been created');
+        alert()->success('SuccessAlert','Product category has been created successfully.');
 
         $this->closeModal();
         $this->resetCreateProductCategoryForm();
@@ -97,7 +97,7 @@ class ProductCategoryData extends Component
             'categoryName' => $this->categoryName,
         ]);
 
-        session()->flash('message', 'Category has been updated');
+        alert()->success('SuccessAlert','Product category has been updated successfully.');
 
         $this->closeModal();
         $this->resetCreateProductCategoryForm();
@@ -114,7 +114,7 @@ class ProductCategoryData extends Component
         $productCategory = ProductCategories::findOrFail($this->categoryId);
         $productCategory->delete();
 
-        session()->flash('message', 'Category has been deleted');
+        alert()->success('SuccessAlert','Product category has been deleted successfully.');
 
         $this->closeModal();
         $this->resetCreateProductCategoryForm();

@@ -16,7 +16,7 @@
                                 id="importExportFile" placeholder="upload File" wire:model="importExportFile">
                             @error('importExportFile') <span class="text-red-500">{{ $message }}</span>@enderror
                             <div wire:loading.delay wire:target="importExportFile">
-                                <span class="text-blue-400">
+                                <span class="text-blue-400 font-light">
                                     Processing Upload Data Import...
                                 </span>
                             </div>

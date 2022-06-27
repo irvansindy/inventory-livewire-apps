@@ -83,7 +83,7 @@
                                     dd($detailItem);
                                 @endphp --}}
                                 <tr>
-                                    <td class="px-2 py-1">{{ $detailItem->product->productName }}</td>
+                                    <td class="px-2 py-1">{{ $detailItem->product[0]->productName }}</td>
                                     <td class="px-2 py-1">{{ $detailItem->description }}</td>
                                     <td class="px-2 py-1">{{ $detailItem->quantity }}</td>
                                     <td class="px-2 py-1">{{ number_format($detailItem->unitPrice, 2, ',','.') }}</td>

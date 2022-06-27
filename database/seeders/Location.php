@@ -23,7 +23,7 @@ class Location extends Seeder
                 'departmentId' => 1,
                 ],
                 [
-                'locationName' => 'CIMG',
+                'locationName' => 'CMG',
                 'departmentId' => 2,
                 ],
                 [

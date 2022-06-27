@@ -14,6 +14,7 @@ use App\Models\ProductInventory;
 use Carbon\Carbon;
 use Image;
 use Livewire\WithFileUploads;
+use Alert;
 
 class ProcurementData extends Component
 {
@@ -28,7 +29,7 @@ class ProcurementData extends Component
     public $dataSupplier, $dataProcurementType;
 
     // data details
-    public $productName, $supplierName, $procurementTypeName, $userName, $inventoryImageUrl;
+    public $productName, $supplierName, $procurementTypeName, $userName, $quantity, $inventoryImageUrl;
 
     // for view procurement
     public $search;
@@ -131,19 +132,35 @@ class ProcurementData extends Component
 
     public function storeProcurement()
     {
-        // dd($this->allProducts);
+        // dd($this->orderProcurements[0]['quantity']);
         $this->validate([
             'supplierId' => 'required',
             'procurementTypeId' => 'required',
             'procurementDescription' => 'required',
             'procurementDate' => 'required',
-            'productId.*' => 'required',
-            'description.*' => 'required',
-            'unitPrice.*' => 'required',
-            'orderProcurements.*.productId' => 'required',
-            'orderProcurements.*.description' => 'required',
-            'orderProcurements.*.unitPrice' => 'required',
+
+            // 'productId.0' => 'required',
+            // 'description.0' => 'required',
+            // 'unitPrice.0' => 'required|numeric|gt:0',
+            // 'quantity.0' => 'required|numeric|gt:0',
+
+            // 'productId.*' => 'required',
+            // 'description.*' => 'required',
+            // 'unitPrice.*' => 'required|numeric|gt:0',
+            // 'quantity.*' => 'required|numeric|gt:0',
+
+            // 'orderProcurements.0.productId' => 'required',
+            // 'orderProcurements.0.description' => 'required',
+            // 'orderProcurements.0.unitPrice' => 'required|numeric|gt:0',
+            // 'orderProcurements.0.quantity' => 'required|numeric|gt:0',
+            // for next data detail product procurement
+            // 'orderProcurements.*.productId' => 'required',
+            // 'orderProcurements.*.description' => 'required',
+            // 'orderProcurements.*.unitPrice' => 'required|numeric|gt:0',
+            // 'orderProcurements.*.quantity' => 'required|numeric|gt:0',
         ]);
+
+        
         
         $this->totalPrice = $this->orderProcurements[0]['unitPrice'] * $this->orderProcurements[0]['quantity'];
 
@@ -178,7 +195,7 @@ class ProcurementData extends Component
             ]);
         }
 
-        session()->flash('message', 'Procurement has been created successfully.');
+        alert()->success('SuccessAlert','Procurement has been created successfully.');
 
         $this->closeModal();
         // $this->resetProcurementForm();
@@ -285,18 +302,10 @@ class ProcurementData extends Component
     public function storeProcurementProductToInventory()
     {
         // $this->validate([
-        //     'productId' => 'required',
-        //     'purchasingNumber' => 'required|string',
-        //     'registeredDate' => 'required|date',
-        //     'yearOfEntry' => 'required|date',
-        //     'yearOfUse' => 'required|date',
-        //     'serialNumber' => 'required|string',
-        //     'yearOfEnd' => 'required|date',
-        //     'sertificateNumber' => 'required|string',
-        //     'productOrigin' => 'required|string',
-        //     'productPrice' => 'required',
-        //     'productDescription' => 'required|string',
-        //     'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
+        //     'supplierId' => 'required',
+        //     'procurementTypeId' => 'required',
+        //     'procurementDescription' => 'required',
+        //     'procurementDate' => 'required'
         // ]);
 
         $procurement = InventoryProcurement::findOrFail($this->procurementId);
@@ -332,7 +341,7 @@ class ProcurementData extends Component
             ]);
         }
 
-        session()->flash('message', 'Product Inventory has been claimed successfully.');
+        alert()->success('SuccessAlert','Product inventory has been claimed successfully.');
 
         $this->isDoneModalOpen = false;
     }

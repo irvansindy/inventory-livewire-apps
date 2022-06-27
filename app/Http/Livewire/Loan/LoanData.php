@@ -8,6 +8,7 @@ use App\Models\InventoryLoan;
 use App\Models\InventoryLoanDetails;
 use App\Models\ProductInventory;
 use App\Models\Locations;
+use Alert;
 
 class LoanData extends Component
 {
@@ -66,7 +67,7 @@ class LoanData extends Component
     public function closeFormLoanModal()
     {
         $this->isformCreateModalOpen = false;
-        $this->openModal();
+        $this->isModalLoanOpen = false;
     }
 
     public function createModalLoan()
@@ -109,7 +110,7 @@ class LoanData extends Component
             'productStatus' => 'LOANED',
         ]);
 
-        session()->flash('message', 'Loan has been created successfully.');
+        alert()->success('SuccessAlert','Product inventory loan has been created successfully.');
 
         $this->closeFormLoanModal();
     }
@@ -174,6 +175,11 @@ class LoanData extends Component
         $this->isReturnLoanOpen = true;
     }
 
+    public function closeReturn()
+    {
+        $this->isReturnLoanOpen = false;
+    }
+
     public function returnLoanInventory()
     {
         // InventoryLoanDetails::where('loanId', '=', $this->loanId)
@@ -189,6 +195,6 @@ class LoanData extends Component
 
         $this->isReturnLoanOpen = false;
 
-        session()->flash('message', 'Loan has been returned successfully.');
+        alert()->success('SuccessAlert','Product inventory loan has been returned successfully.');
     }
 }

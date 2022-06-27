@@ -8,6 +8,7 @@ use App\Models\InventoryPlacement;
 use App\Models\InventoryPlacementDetails;
 use App\Models\ProductInventory;
 use App\Models\Locations;
+use Alert;
 
 class PlacementData extends Component
 {
@@ -150,9 +151,9 @@ class PlacementData extends Component
         ]);
         // }
 
-        
+        alert()->success('SuccessAlert','Product inventory has been placed successfully.');
 
-        session()->flash('message', 'Placement has been created successfully.');
+        // session()->flash('message', 'Placement has been created successfully.');
 
         $this->closeFormPlacement();
         $this->closeModal();
@@ -212,7 +213,7 @@ class PlacementData extends Component
 
         $this->isReturnPlacementOpen = false;
 
-        session()->flash('message', 'Placement has been returned successfully.');
+        alert()->success('SuccessAlert','Product inventory has been returned successfully.');
     }
 
 }

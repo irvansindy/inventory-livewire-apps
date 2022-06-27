@@ -11,6 +11,7 @@ use App\Models\InventoryPlacement;
 use App\Models\InventoryPlacementDetails;
 use App\Models\Locations;
 use Illuminate\Support\Facades\Auth;
+use Alert;
 
 class ProductInventariesData extends Component
 {
@@ -20,6 +21,7 @@ class ProductInventariesData extends Component
     // data binding mutations
     public $mutationId, $mutationNumber, $mutationDate, $mutationDescription, $userIdMutation, $inventoryIdMutation, $mutationFromId, $mutationFromLocationId, $mutationToId, $mutationToLocationId, $locationInventoryIdNow, $locationInventoryNameNow;
 
+    public $placementId;
     public $search;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
@@ -134,7 +136,8 @@ class ProductInventariesData extends Component
         $this->inventoryId = $id;
         $inventory = InventoryPlacementDetails::with(['placement', 'productInventory'])
         ->where('productInventoryId', $id)->get();
-
+        // dd($inventory);
+        $this->placementId = $inventory[0]->placement->id;
         $this->inventoryCode = $inventory[0]->productInventory->inventoryCode;
         $this->inventoryIdMutation = $inventory[0]->productInventory->id;
         $this->locationInventoryIdNow = $inventory[0]->placement->location->id;
@@ -173,6 +176,10 @@ class ProductInventariesData extends Component
             'locationId' => $this->mutationToLocationId,
         ]);
 
+        InventoryPlacement::findOrfail($this->placementId)->update([
+            'placementType' => 'MUTATION'
+        ]);
+
         $inventory = InventoryPlacementDetails::with(['placement', 'productInventory'])
         ->where('productInventoryId', $this->inventoryIdMutation)->get();
 
@@ -180,7 +187,7 @@ class ProductInventariesData extends Component
             'locationId' => $this->mutationToLocationId,
         ]);
 
-        session()->flash('message', 'Product Inventory has been Mutation successfully.');
+        alert()->success('SuccessAlert','Product inventory has been claimed successfully.');;
 
         $this->isMutationOpen = false;
 

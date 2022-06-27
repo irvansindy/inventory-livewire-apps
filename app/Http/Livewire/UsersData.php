@@ -11,6 +11,7 @@ use App\Exports\UserExport;
 use App\Imports\UserImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Livewire\WithFileUploads;
+Use Alert;
 
 class UsersData extends Component
 {
@@ -92,8 +93,7 @@ class UsersData extends Component
             'nik' => $this->nik,
             'password' => Hash::make('123456789'),
         ]);
-
-        session()->flash('message', 'Data added successfully.');
+        alert()->success('SuccessAlert', 'Data created successfully.');
 
         $this->closeModal();
         $this->resetCreateUserForm();
@@ -126,7 +126,7 @@ class UsersData extends Component
             'nik' => $this->nik,
         ]);
 
-        session()->flash('message', 'Data updated successfully.');
+        alert()->success('SuccessAlert', 'Data updated successfully.');
 
         $this->closeEditModal();
         $this->resetCreateUserForm();
@@ -141,7 +141,8 @@ class UsersData extends Component
     public function deleteUser($id)
     {
         User::findOrFail($id)->delete();
-        session()->flash('message', 'Data deleted successfully.');
+        // session()->flash('message', 'Data deleted successfully.');
+        alert()->success('SuccessAlert', 'Data deleted Successfully.');
     }
 
     public function exportPDF()
@@ -179,15 +180,9 @@ class UsersData extends Component
         ]);
         // Excel::import(new UserImport, request()->file('file'));
         Excel::import(new UserImport, $this->importExportFile);
-        return redirect()->back()->with('message','Data Imported Successfully');
+        // return redirect()->back()->with('message','Data Imported Successfully');
+        return alert()->success('SuccessAlert', 'Data Imported Successfully.');
         $this->isModalImportOpen = false;
     }
 
-    public $isLoadingIndicator = 0;
-
-    public function dummyLoading()
-    {
-        $this->isLoadingIndicator = true;
-        // session()->flash('loading', 'Dummy Loading.');
-    }
 }

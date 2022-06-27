@@ -59,7 +59,7 @@
                         <div class="mb-4">
                             <label for="productPrice"
                                 class="block text-gray-700 text-sm font-bold mb-2">Product Price</label>
-                            <input type="number"
+                            <input type="number" min="1"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="productPrice" placeholder="Enter Product Price" wire:model="productPrice">
                             @error('productPrice') <span class="text-red-500">{{ $message }}</span>@enderror
@@ -81,7 +81,7 @@
                             @error('inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
                             <div wire:loading.delay wire:target="inventoryImageUrl">
                                 <span class="text-blue-400">
-                                    Processing Upload Data...
+                                    Processing upload image...
                                 </span>
                             </div>
                         </div>

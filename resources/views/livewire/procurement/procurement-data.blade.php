@@ -5,16 +5,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
-                @if (session()->has('message'))
-                <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
-                    role="alert">
-                    <div class="flex">
-                        <div>
-                            <p class="text-sm">{{ session('message') }}</p>
-                        </div>
-                    </div>
-                </div>
-                @endif
+                @include('sweetalert::alert')
                 <button wire:click="addProcurement()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Procurement</button>
                 <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                 @if($isModalOpen)

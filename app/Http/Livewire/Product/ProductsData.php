@@ -145,7 +145,7 @@ class ProductsData extends Component
             'productDescription' => 'required|string',
             'merk' => 'required|string',
             // 'qty' => 'required|numeric',
-            'minimumStock' => 'required|numeric',
+            'minimumStock' => 'required|numeric|gt:0',
         ]);
 
         Products::create([
@@ -154,11 +154,11 @@ class ProductsData extends Component
             'productDescription' => $this->productDescription,
             'merk' => $this->merk,
             'qty' => 0,
-            // 'qty' => $this->qty,
             'minimumStock' => $this->minimumStock,
-        ]);
+        ]
+    );
 
-        session()->flash('message', 'Product has been created successfully.');
+        alert()->success('SuccessAlert','Product has been created successfully.');
 
         $this->closeModal();
         $this->resetCreateProductForm();
@@ -185,8 +185,7 @@ class ProductsData extends Component
             'categoryId' => 'required|numeric',
             'productDescription' => 'required|string',
             'merk' => 'required|string',
-            'qty' => 'required|numeric',
-            'minimumStock' => 'required|numeric',
+            'minimumStock' => 'required|numeric|gt:0',
         ]);
 
         $product = Products::findOrFail($this->productId);
@@ -195,11 +194,10 @@ class ProductsData extends Component
             'categoryId' => $this->categoryId,
             'productDescription' => $this->productDescription,
             'merk' => $this->merk,
-            'qty' => $this->qty,
+            // 'qty' => $this->qty,
             'minimumStock' => $this->minimumStock,
         ]);
 
-        // session()->flash('message', 'Product has been updated successfully.');
         alert()->success('SuccessAlert','Product has been updated successfully.');
 
         $this->closeModal();
@@ -262,7 +260,7 @@ class ProductsData extends Component
             'yearOfEnd' => 'required|date',
             'sertificateNumber' => 'required|string',
             'productOrigin' => 'required|string',
-            'productPrice' => 'required',
+            'productPrice' => 'required|numeric|gt:1',
             'productDescription2' => 'required|string',
             'inventoryImageUrl' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
         ]);
@@ -299,7 +297,7 @@ class ProductsData extends Component
             'qty' => $this->qty + 1,
         ]);
 
-        session()->flash('message', 'Product Inventory has been created successfully.');
+        alert()->success('SuccessAlert','Product Inventory has been created successfully.');
 
         $this->closeModal();
         $this->resetCreateInventoryForm();
