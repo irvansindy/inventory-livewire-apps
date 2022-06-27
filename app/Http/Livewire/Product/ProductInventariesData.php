@@ -12,6 +12,8 @@ use App\Models\InventoryPlacementDetails;
 use App\Models\Locations;
 use Illuminate\Support\Facades\Auth;
 use Alert;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductInventoryExport;
 
 class ProductInventariesData extends Component
 {
@@ -196,5 +198,11 @@ class ProductInventariesData extends Component
     public function closeMutation()
     {
         $this->isMutationOpen = false;
+    }
+
+    public function exportCSV()
+    {
+        // return Excel::download(new ProductInventoryExport, 'product-inventory.csv');
+        return Excel::download(new ProductInventoryExport, 'product-inventory.xlsx');
     }
 }
