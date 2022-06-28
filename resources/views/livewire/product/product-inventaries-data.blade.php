@@ -11,7 +11,7 @@
                         <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                     </div>
                     <div class="flex flex-row-reverse">
-                        {{-- <button wire:click="" class="bg-cyan-600 hover:bg-cyan-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end">Export PDF</button> --}}
+                        <button wire:click="exportPDF" class="bg-cyan-600 hover:bg-cyan-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end">Export PDF</button>
                         <button wire:click="exportCSV" class="bg-cyan-600 hover:bg-cyan-800 text-white font-bold py-2 px-4 mb-4 rounded place-items-end mr-2">Export CSV</button>
                     </div>
                 </div>

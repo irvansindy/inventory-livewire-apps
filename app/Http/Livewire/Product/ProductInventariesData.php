@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Alert;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductInventoryExport;
+use PDF;
 
 class ProductInventariesData extends Component
 {
@@ -128,7 +129,6 @@ class ProductInventariesData extends Component
             $this->allDataProductInventory = ProductInventory::with([
                 'products',
                 'user',
-                
             ]);
         } 
     }
@@ -144,8 +144,6 @@ class ProductInventariesData extends Component
         $this->inventoryIdMutation = $inventory[0]->productInventory->id;
         $this->locationInventoryIdNow = $inventory[0]->placement->location->id;
         $this->locationInventoryNameNow = $inventory[0]->placement->location->locationName;
-        // dd($this->locationInventoryNow);
-
         $this->isMutationOpen = true;
     }
 
@@ -154,11 +152,6 @@ class ProductInventariesData extends Component
         $this->validate([
             'mutationDate' => 'required',
             'mutationDescription' => 'required',
-            // 'inventoryIdMutation' => 'required',
-            // 'mutationFromId' => 'required',
-            // 'mutationFromLocationId' => 'required',
-            // 'mutationToId' => 'required',
-            // 'mutationToLocationId' => 'required',
         ]);
 
         $mutation = Mutations::create([
@@ -204,5 +197,35 @@ class ProductInventariesData extends Component
     {
         // return Excel::download(new ProductInventoryExport, 'product-inventory.csv');
         return Excel::download(new ProductInventoryExport, 'product-inventory.xlsx');
+    }
+
+    public function exportPDF()
+    {
+        // $inventaries = ProductInventory::with(['products', 'user'])->get();
+        $inventaries = ProductInventory::join(
+            'products', 'products.id', '=', 'product_inventories.productId',
+            )->join(
+                'suppliers', 'suppliers.id', '=', 'product_inventories.productOrigin',
+            )->join(
+                'users', 'users.id', '=', 'product_inventories.sertificateMaker',
+            )
+            ->get([
+            'product_inventories.inventoryCode', 
+            'products.productName',
+            'products.merk',
+            'product_inventories.serialNumber', 
+            'product_inventories.purchasingNumber', 
+            'suppliers.supplierName',
+            'product_inventories.productPrice', 
+            'product_inventories.registeredDate', 
+            'product_inventories.yearOfEntry', 
+            'product_inventories.yearOfUse', 
+            'product_inventories.productStatus', 
+            'users.name'
+        ]);
+
+        $pdf = PDF::loadView('livewire.product.report-inventory', ['inventaries' => $inventaries])->setPaper('a4', 'portrait')->output();
+        // return $pdf->download('product-inventory.pdf');
+        return response()->streamDownload(fn() => print($pdf), 'inventory.pdf');
     }
 }
