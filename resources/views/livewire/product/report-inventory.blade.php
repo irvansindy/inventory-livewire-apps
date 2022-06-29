@@ -86,7 +86,7 @@
     <br/>
 
     <div class="invoice">
-        <h3>Invoice specification #123</h3>
+        <h3>List Data Inventory</h3>
         <table class="table-auto w-full">
             <thead>
                 <tr class="bg-gray-100">

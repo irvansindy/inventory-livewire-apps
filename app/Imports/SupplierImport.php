@@ -2,12 +2,12 @@
 
 namespace App\Imports;
 
-use App\Models\User;
+use App\Models\Suppliers;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class UserImport implements ToModel, WithStartRow
+
+class SupplierImport implements ToModel, WithStartRow
 {
     /**
     * @param array $row
@@ -16,13 +16,10 @@ class UserImport implements ToModel, WithStartRow
     */
     public function model(array $row)
     {
-        return new User([
-            'name' => $row[0],
-            'nik' => $row[1],
-            'email' => $row[2],
-            'username' => $row[3],
-            'password' => \Hash::make($row[4]),
-            'roles' => $row[5],
+        return new Suppliers([
+            'supplierName' => $row[0],
+            'supplierAddress' => $row[1],
+            'supplierNumber' => $row[2],
         ]);
     }
 
@@ -30,6 +27,11 @@ class UserImport implements ToModel, WithStartRow
     {
         return 2;
     }
+
+    // public function headingRow(): int
+    // {
+    //     return 2;
+    // }
 
     public function getCsvSettings(): array
     {

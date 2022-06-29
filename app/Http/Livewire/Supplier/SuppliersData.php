@@ -4,20 +4,26 @@ namespace App\Http\Livewire\Supplier;
 
 use Livewire\Component;
 use App\Models\Suppliers;
-
+use Maatwebsite\Excel\Facades\Excel;
+use Livewire\WithFileUploads;
+use App\Imports\SupplierImport;
 
 class SuppliersData extends Component
 {
+    use WithFileUploads;
     public $supplierId, $supplierName, $supplierAddress, $supplierNumber;
     public $search;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isDeleteModalOpen = 0;
+    public $isModalImportOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
         'suppliers' => 'supplierPostData'
     ];
+
+    public $importExportFile;
 
     public function supplierPostData() {
         $this->limitPerPage = $this->limitPerPage+6;
@@ -80,7 +86,7 @@ class SuppliersData extends Component
             'supplierNumber' => $this->supplierNumber,
         ]);
 
-        session()->flash('message', 'Supplier has been created successfully.');
+        alert()->success('SuccessAlert', 'Supplier has been created successfully.');
 
         $this->closeModal();
         $this->resetSupplierForm();
@@ -111,7 +117,7 @@ class SuppliersData extends Component
             'supplierNumber' => $this->supplierNumber,
         ]);
 
-        session()->flash('message', 'Supplier has been updated successfully.');
+        alert()->success('SuccessAlert', 'Supplier has been updated successfully.');
 
         $this->closeModal();
         $this->resetSupplierForm();
@@ -132,10 +138,32 @@ class SuppliersData extends Component
         $supplier = Suppliers::findOrFail($this->supplierId);
         $supplier->delete();
 
-        session()->flash('message', 'Supplier has been deleted successfully.');
+        alert()->success('SuccessAlert', 'Supplier has been deleted successfully.');
 
         $this->closeModal();
         $this->resetSupplierForm();
+    }
+
+    public function openModalImport()
+    {
+        $this->isModalImportOpen = true;
+    }
+
+    public function closeModalImport()
+    {
+        $this->importExportFile = '';
+        $this->isModalImportOpen = false;
+    }
+
+    public function importSupplier()
+    {
+        $this->validate([
+            'importExportFile' => 'required|mimes:csv,xls,xlsx',
+        ]);
+
+        Excel::import(new SupplierImport, $this->importExportFile);
+        $this->closeModalImport();
+        alert()->success('SuccessAlert', 'Data Imported Successfully.');
     }
 
 }
