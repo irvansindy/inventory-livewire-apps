@@ -10,6 +10,10 @@
             <div class="mb-4 font-medium text-sm text-green-600">
                 {{ session('status') }}
             </div>
+        @elseif(session('error'))
+            <div class="mb-4 font-medium text-sm text-red-600">
+                {{ session('error') }}
+            </div>
         @endif
 
         <form method="POST" action="{{ route('login') }}">
