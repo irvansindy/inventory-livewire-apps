@@ -17,6 +17,7 @@ class AddUsernameAndRolesToUsers extends Migration
             $table->string('nik')->after('email')->nullable();
             $table->string('username')->after('email')->nullable();
             $table->string('roles')->after('email')->default('USER');
+            $table->string('signature')->after('email')->nullable();
         });
     }
 

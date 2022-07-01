@@ -11,6 +11,7 @@ class SignaturePad extends Component
      *
      * @return void
      */
+    
     public function __construct()
     {
         //

@@ -16,8 +16,8 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
-        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        {{-- <script src="https://gist.github.com/irfanm96/f449861b6388f26abe5b0eab781e9cd9.js"></script> --}}
+
+        {{-- <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script> --}}
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />

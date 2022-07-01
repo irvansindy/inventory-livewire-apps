@@ -17,12 +17,13 @@ class UsersData extends Component
 {
     use WithFileUploads;
 
-    public $allDataUser, $userId, $name, $email, $username, $roles, $nik;
+    public $allDataUser, $userId, $name, $email, $username, $roles, $nik, $signature;
     public $search;
     public $importExportFile;
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isModalImportOpen = 0;
+    public $isSignatureOpen = 0;
     public $limitPerPage = 3;
     protected $querySearchString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -183,6 +184,11 @@ class UsersData extends Component
         // return redirect()->back()->with('message','Data Imported Successfully');
         $this->closeModalImport();
         return alert()->success('SuccessAlert', 'Data Imported Successfully.');
+    }
+
+    public function signature()
+    {
+        $this->isSignatureOpen = true;
     }
 
 }
