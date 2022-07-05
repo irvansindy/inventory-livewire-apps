@@ -22,9 +22,9 @@
                     <x-jet-nav-link href="{{ route('suppliers') }}" :active="request()->routeIs('suppliers')">
                         {{ __('Suppliers') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('testingAlpin') }}" :active="request()->routeIs('testingAlpin')">
+                    {{-- <x-jet-nav-link href="{{ route('testingAlpin') }}" :active="request()->routeIs('testingAlpin')">
                         {{ __('testingAlpin') }}
-                    </x-jet-nav-link>
+                    </x-jet-nav-link> --}}
                 </div>
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-jet-dropdown align="left" width="48">
@@ -314,7 +314,7 @@
                     @csrf
 
                     <x-jet-responsive-nav-link href="{{ route('logout') }}"
-                                   @click.prevent="$root.submit();">
+                            @click.prevent="$root.submit();">
                         {{ __('Log Out') }}
                     </x-jet-responsive-nav-link>
                 </form>

@@ -7,6 +7,7 @@
             <canvas x-ref="signature_canvas" class="border rounded shadow">
     
             </canvas>
+            <a href="#" x-on:click.prevent="clear()" class="text-sm text-red-700 my-2">Clear</a>
         </div>
     </div>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -23,6 +24,10 @@
                     this.signaturePadInstance.addEventListener("endStroke", ()=>{
                     this.value = this.signaturePadInstance.toDataURL('image/png');
                     });
+                },
+                clear() {
+                    this.signaturePadInstance.clear();
+                    this.value = null;
                 },
             }))
         })

@@ -15,13 +15,15 @@ use Carbon\Carbon;
 use Image;
 use Livewire\WithFileUploads;
 use Alert;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProcurementData extends Component
 {
     use WithFileUploads;
 
     // table procurement
-    public $procurementCode, $userId, $supplierId, $procurementTypeId, $procurementDescription, $procurementDate, $totalPrice, $status;
+    public $procurementCode, $userId, $supplierId, $procurementTypeId, $procurementDescription, $procurementSignatureUser, $procurementDate, $totalPrice, $status;
     // table procurement details
     public $procurementId, $productId, $description, $unitPrice, $procurementDetails;
 
@@ -133,35 +135,33 @@ class ProcurementData extends Component
     public function storeProcurement()
     {
         // dd($this->orderProcurements[0]['quantity']);
+        // $images = rand().".".$this->inventoryImageUrl->getClientOriginalExtension();
+        // $images->storeAs('signature', $images, 'path');
+        // Storage::put('signatures/signature.png', base64_decode(Str::of($this->procurementSignatureUser)->after(',')));
+        // dd($this->procurementSignatureUser);
+
         $this->validate([
             'supplierId' => 'required',
             'procurementTypeId' => 'required',
             'procurementDescription' => 'required',
             'procurementDate' => 'required',
-
-            // 'productId.0' => 'required',
-            // 'description.0' => 'required',
-            // 'unitPrice.0' => 'required|numeric|gt:0',
-            // 'quantity.0' => 'required|numeric|gt:0',
-
-            // 'productId.*' => 'required',
-            // 'description.*' => 'required',
-            // 'unitPrice.*' => 'required|numeric|gt:0',
-            // 'quantity.*' => 'required|numeric|gt:0',
-
-            // 'orderProcurements.0.productId' => 'required',
-            // 'orderProcurements.0.description' => 'required',
-            // 'orderProcurements.0.unitPrice' => 'required|numeric|gt:0',
-            // 'orderProcurements.0.quantity' => 'required|numeric|gt:0',
-            // for next data detail product procurement
-            // 'orderProcurements.*.productId' => 'required',
-            // 'orderProcurements.*.description' => 'required',
-            // 'orderProcurements.*.unitPrice' => 'required|numeric|gt:0',
-            // 'orderProcurements.*.quantity' => 'required|numeric|gt:0',
+            'procurementSignatureUser' => 'required'
         ]);
 
+        // store signature
+        $folderPath = public_path('upload/');
         
-        
+        $image_parts = explode(";base64,", $this->procurementSignatureUser);
+
+        $image_type_aux = explode("image/", $image_parts[0]);
+
+        $image_type = $image_type_aux[1];
+
+        $image_base64 = base64_decode($image_parts[1]);
+
+        $file = $folderPath . uniqid() . '.'.$image_type;
+        file_put_contents($file, $image_base64);
+
         $this->totalPrice = $this->orderProcurements[0]['unitPrice'] * $this->orderProcurements[0]['quantity'];
 
         $procurementMaster = InventoryProcurement::create([
@@ -169,6 +169,7 @@ class ProcurementData extends Component
             'supplierId' => $this->supplierId,
             'procurementTypeId' => $this->procurementTypeId,
             'procurementDescription' => $this->procurementDescription,
+            'procurementSignatureUser' => $file,
             'procurementDate' => $this->procurementDate,
             'totalPrice' => $this->totalPrice,
             'status' => 0,

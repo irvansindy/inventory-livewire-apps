@@ -19,6 +19,7 @@ class InventoryProcurement extends Model
         'supplierId',
         'procurementTypeId',
         'procurementDescription',
+        'procurementSignatureUser',
         'procurementDate',
         'totalPrice',
         'status',

@@ -167,7 +167,7 @@
                         <div class="mb-4 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <button class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" wire:click.prevent="addProductProcurement">Add Another Product</button>
                         </div>
-                        <x-signature-pad wire:model.defer="signature"/>
+                        <x-signature-pad wire:model.defer="procurementSignatureUser"/>
                         <div class="border-t border-gray-100"></div>
                         <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
