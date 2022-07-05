@@ -21,6 +21,7 @@ class isAdmin
             return $next($request);
         }
 
-        return back()->with('error','Opps, You\'re not Admin');
+        // return back()->with('error','Opps, You\'re not Admin');
+        return redirect('/');
     }
 }

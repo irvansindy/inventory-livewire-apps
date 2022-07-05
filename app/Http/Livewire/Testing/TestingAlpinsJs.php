@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Testing;
 
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Illuminate\Support\Facades\Storage;
 
 class TestingAlpinsJs extends Component
 {
@@ -16,11 +17,13 @@ class TestingAlpinsJs extends Component
 
     public function submit()
     {
-        dd($this->signature);
-        $this->validate([
-            'signature' => 'required',
-        ]);
+        // dd($this->signature);
+        // $this->validate([
+        //     'signature' => 'required',
+        // ]);
 
-        \Storage::put('signatures/signature.png', base64_decode(Str::of($this->signature)->after(',')));
+        Storage::put('signatures/signature.png', base64_decode(Str::of($this->signature)->after(',')));
+
+        // dd($storePNG);
     }
 }

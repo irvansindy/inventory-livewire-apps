@@ -23,6 +23,7 @@ class UsersData extends Component
     public $isModalOpen = 0;
     public $isEditModalOpen = 0;
     public $isModalImportOpen = 0;
+    public $isDeleteModalOpen = 0;
     public $isSignatureOpen = 0;
     public $limitPerPage = 3;
     protected $querySearchString = ['search'=> ['except' => '']];
@@ -135,15 +136,23 @@ class UsersData extends Component
 
     public function deleteConfirm($id)
     {
+
         $this->userId = $id;
-        $this->openModal();
+        $this->name = User::findOrFail($id)->name;
+        $this->isDeleteModalOpen = true;
     }
 
-    public function deleteUser($id)
+    public function deleteUser()
     {
-        User::findOrFail($id)->delete();
+        User::findOrFail($this->userId)->delete();
         // session()->flash('message', 'Data deleted successfully.');
         alert()->success('SuccessAlert', 'Data deleted Successfully.');
+        $this->isDeleteModalOpen = false;
+    }
+
+    public function cancelDelete()
+    {
+        $this->isDeleteModalOpen = false;
     }
 
     public function exportPDF()
@@ -188,6 +197,7 @@ class UsersData extends Component
 
     public function signature()
     {
+        $this->signature = true; 
         $this->isSignatureOpen = true;
     }
 

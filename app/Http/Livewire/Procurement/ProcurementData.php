@@ -230,9 +230,11 @@ class ProcurementData extends Component
 
             $procurements = $procurements->paginate($this->limitPerPage);
         }
-
+        
         $this->emit('procurementPostData');
-
+        $this->dataSupplier = Suppliers::all();
+        $this->dataProcurementType = ProcurementType::all();
+        
         return view('livewire.procurement.procurement-data', [
             'procurements' => $procurements
         ]);

@@ -14,7 +14,6 @@ use App\Http\Livewire\Loan\LoanData;
 use App\Http\Livewire\Mutation\MutationData;
 use App\Http\Livewire\Testing\TestingAlpinsJs;
 
-use App\Exports\UserExport;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,6 +34,7 @@ Route::get('/', function () {
 // })->middleware(['auth'])->name('dashboard');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
+
     Route::middleware(['admin'])->group(function() {
         Route::get('users', UsersData::class)->name('users');
         Route::get('suppliers', SuppliersData::class)->name('suppliers');
@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
             return view('dashboard');
         })->name('dashboard');
     });
+
 });
 
 // Route::middleware(['auth:sanctum', 'verified'])->group(function () {
