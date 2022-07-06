@@ -206,7 +206,6 @@ class ProcurementData extends Component
                 ]);
             } else {
                 $cekUser = User::findOrFail(Auth::user()->parentUserId);
-                // dd($cekUser);
                 $dataUserApproval = [
                     [
                         'procurementId' => $procurementMaster->id,
@@ -221,6 +220,41 @@ class ProcurementData extends Component
                     [
                         'procurementId' => $procurementMaster->id,
                         'userId' => $cekUser->parentUserId,
+                        'status' => 'WAITING',
+                        'comment' => null,
+                        'signature' => null,
+                        'deleted_at' => null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ]
+                ];
+
+                InventoryProcurementApproval::insert($dataUserApproval);
+            }
+        } elseif(Auth::user()->roles == 'ADMIN') {
+            if ($this->totalPrice <= 5000000) {
+                InventoryProcurementApproval::create([
+                    'procurementId' => $procurementMaster->id,
+                    'userId' => Auth::user()->id,
+                    'status' => 'PROGRESS',
+                    'comment' => null,
+                    'signature' => null,
+                ]);
+            } else {
+                $dataUserApproval = [
+                    [
+                        'procurementId' => $procurementMaster->id,
+                        'userId' => Auth::user()->id,
+                        'status' => 'FORWARD',
+                        'comment' => null,
+                        'signature' => null,
+                        'deleted_at' => null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ],
+                    [
+                        'procurementId' => $procurementMaster->id,
+                        'userId' => Auth::user()->parentUserId,
                         'status' => 'WAITING',
                         'comment' => null,
                         'signature' => null,

@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                     'roles' => 'SUPERADMIN',
                     'username' => 'super_admin',
                     'nik' => '876678986',
-                    'parentUserId' => null,
+                    'parentUserId' => 1,
                     'password' => Hash::make('superadmin123'),
                 ],
                 [
