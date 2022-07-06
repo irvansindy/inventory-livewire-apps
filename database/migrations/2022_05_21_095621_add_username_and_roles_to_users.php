@@ -16,6 +16,7 @@ class AddUsernameAndRolesToUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('nik')->after('email')->nullable();
             $table->string('username')->after('email')->nullable();
+            $table->string('parentUserId')->after('email')->nullable();
             $table->string('roles')->after('email')->default('USER');
             $table->string('signature')->after('email')->nullable();
         });

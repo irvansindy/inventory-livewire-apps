@@ -28,7 +28,7 @@ class InventoryProcurement extends Model
     protected $hidden = [];
 
     public function user() {
-        return $this->belongsTO(User::class, 'userId', 'id');
+        return $this->belongsTo(User::class, 'userId', 'id');
     }
 
     public function products() {
@@ -45,6 +45,10 @@ class InventoryProcurement extends Model
 
     public function procurementDetails() {
         return $this->hasMany(InventoryProcurementDetails::class, 'procurementId', 'id');
+    }
+    
+    public function procurementApprovals() {
+        return $this->hasMany(InventoryProcurementApproval::class, 'procurementId', 'id');
     }
 
     public function getAutoNumberOptions()

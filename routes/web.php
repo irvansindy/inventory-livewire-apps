@@ -33,42 +33,43 @@ Route::get('/', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
 
-Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
+// Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
 
-    Route::middleware(['admin'])->group(function() {
-        Route::get('users', UsersData::class)->name('users');
-        Route::get('suppliers', SuppliersData::class)->name('suppliers');
-        Route::get('products', ProductsData::class)->name('products');
-        Route::get('productsDataTable', ProductsDataTable::class)->name('productsDataTable');
-        Route::get('categories', ProductCategoryData::class)->name('categories');
-        Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
-        Route::get('procurements', ProcurementData::class)->name('procurements');
-        Route::get('placements', PlacementData::class)->name('placements');
-        Route::get('loans', LoanData::class)->name('loans');
-        Route::get('mutations', MutationData::class)->name('mutations');
-        Route::get('testingAlpin', TestingAlpinsJs::class)->name('testingAlpin');
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
-    });
+//     Route::middleware(['admin'])->group(function() {
+//         Route::get('users', UsersData::class)->name('users');
+//         Route::get('suppliers', SuppliersData::class)->name('suppliers');
+//         Route::get('products', ProductsData::class)->name('products');
+//         Route::get('productsDataTable', ProductsDataTable::class)->name('productsDataTable');
+//         Route::get('categories', ProductCategoryData::class)->name('categories');
+//         Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
+//         Route::get('procurements', ProcurementData::class)->name('procurements');
+//         Route::get('placements', PlacementData::class)->name('placements');
+//         Route::get('loans', LoanData::class)->name('loans');
+//         Route::get('mutations', MutationData::class)->name('mutations');
+//         Route::get('testingAlpin', TestingAlpinsJs::class)->name('testingAlpin');
+//         Route::get('/dashboard', function () {
+//             return view('dashboard');
+//         })->name('dashboard');
+//     });
 
-});
-
-// Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-//     Route::get('users', UsersData::class)->name('users');
-//     Route::get('suppliers', SuppliersData::class)->name('suppliers');
-//     Route::get('products', ProductsData::class)->name('products');
-//     Route::get('productsDataTable', ProductsDataTable::class)->name('productsDataTable');
-//     Route::get('categories', ProductCategoryData::class)->name('categories');
-//     Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
-//     Route::get('procurements', ProcurementData::class)->name('procurements');
-//     Route::get('placements', PlacementData::class)->name('placements');
-//     Route::get('loans', LoanData::class)->name('loans');
-//     Route::get('mutations', MutationData::class)->name('mutations');
-//     Route::get('/dashboard', function () {
-//         return view('dashboard');
-//     })->name('dashboard');
 // });
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('users', UsersData::class)->name('users');
+    Route::get('suppliers', SuppliersData::class)->name('suppliers');
+    Route::get('products', ProductsData::class)->name('products');
+    Route::get('productsDataTable', ProductsDataTable::class)->name('productsDataTable');
+    Route::get('categories', ProductCategoryData::class)->name('categories');
+    Route::get('inventaries', ProductInventariesData::class)->name('inventaries');
+    Route::get('procurements', ProcurementData::class)->name('procurements');
+    Route::get('placements', PlacementData::class)->name('placements');
+    Route::get('loans', LoanData::class)->name('loans');
+    Route::get('mutations', MutationData::class)->name('mutations');
+    Route::get('testingAlpin', TestingAlpinsJs::class)->name('testingAlpin');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
 
 require __DIR__.'/auth.php';

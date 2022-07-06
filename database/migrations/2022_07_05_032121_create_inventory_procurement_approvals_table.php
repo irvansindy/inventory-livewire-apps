@@ -15,6 +15,12 @@ class CreateInventoryProcurementApprovalsTable extends Migration
     {
         Schema::create('inventory_procurement_approvals', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('procurementId');
+            $table->unsignedBigInteger('userId');
+            $table->string('status');
+            $table->string('comment')->nullable();
+            $table->text('signature')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

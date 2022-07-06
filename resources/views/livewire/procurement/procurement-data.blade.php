@@ -49,9 +49,13 @@
                                     {{ $procurement->status == 0 ? 'PENDING' : 'DONE' }}
                                 </td>
                                 <td class="border px-4 py-2">
+                                    @if ($procurement->status == 0)
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                     <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Done</button>
-                                    {{-- <button wire:click="deleteProcurement({{ $procurement->id }})" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">Delete</button> --}}
+                                    
+                                    @else
+                                    <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
+                                    @endif
                                 </td>
                             </tr>
                             @empty
@@ -138,17 +142,17 @@
                             </div>
                             <div class="mr-1">
                                 <input type="text"
-                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter Description" name="orderProcurements[{{ $index }}][description]"  wire:model="orderProcurements.{{ $index }}.description">
+                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Product Name" name="orderProcurements[{{ $index }}][description]"  wire:model="orderProcurements.{{ $index }}.description">
                                 @error('orderProcurements.{{ $index }}.description') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             
                             <div class="mr-1">
-                                <input type="number" min="1" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Enter Price" name="orderProcurements[{{ $index }}][unitPrice]" wire:model="orderProcurements.{{ $index }}.unitPrice">
+                                <input type="number" min="1" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Price" name="orderProcurements[{{ $index }}][unitPrice]" wire:model="orderProcurements.{{ $index }}.unitPrice">
                                 @error('orderProcurements.{{ $index }}.unitPrice') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             
                             <div class="mr-1">
-                                <input type="number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Enter Quantity" name="orderProcurements[{{ $index }}][quantity]" wire:model="orderProcurements.{{ $index }}.quantity">
+                                <input type="number" min="1" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Quantity" name="orderProcurements[{{ $index }}][quantity]" wire:model="orderProcurements.{{ $index }}.quantity">
                                 @error('orderProcurements.{{ $index }}.quantity') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
         
@@ -167,7 +171,9 @@
                         <div class="mb-4 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <button class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" wire:click.prevent="addProductProcurement">Add Another Product</button>
                         </div>
+                        {{-- component signature pad --}}
                         <x-signature-pad wire:model.defer="procurementSignatureUser"/>
+                        {{-- component signature pad --}}
                         <div class="border-t border-gray-100"></div>
                         <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">

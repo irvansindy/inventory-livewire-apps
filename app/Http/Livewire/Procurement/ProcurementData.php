@@ -4,11 +4,12 @@ namespace App\Http\Livewire\Procurement;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use App\Models\Users;
+use App\Models\User;
 use App\Models\Suppliers;
 use App\Models\Products;
 use App\Models\InventoryProcurement;
 use App\Models\InventoryProcurementDetails;
+use App\Models\InventoryProcurementApproval;
 use App\Models\ProcurementType;
 use App\Models\ProductInventory;
 use Carbon\Carbon;
@@ -52,8 +53,8 @@ class ProcurementData extends Component
             [
                 'productId' => '',
                 'description' => '',
-                'unitPrice' => 0,
-                'quantity' => 1,
+                'unitPrice' => '',
+                'quantity' => '',
                 'inventoryImageUrl' => ''
             ]
         ];
@@ -68,8 +69,8 @@ class ProcurementData extends Component
             [
                 'productId' => '',
                 'description' => '',
-                'unitPrice' => 0,
-                'quantity' => 1,
+                'unitPrice' => '',
+                'quantity' => '',
                 'inventoryImageUrl' => ''
             ]
         ];
@@ -134,12 +135,6 @@ class ProcurementData extends Component
 
     public function storeProcurement()
     {
-        // dd($this->orderProcurements[0]['quantity']);
-        // $images = rand().".".$this->inventoryImageUrl->getClientOriginalExtension();
-        // $images->storeAs('signature', $images, 'path');
-        // Storage::put('signatures/signature.png', base64_decode(Str::of($this->procurementSignatureUser)->after(',')));
-        // dd($this->procurementSignatureUser);
-
         $this->validate([
             'supplierId' => 'required',
             'procurementTypeId' => 'required',
@@ -148,9 +143,10 @@ class ProcurementData extends Component
             'procurementSignatureUser' => 'required'
         ]);
 
-        // store signature
-        $folderPath = public_path('upload/');
         
+        // store signature
+        $folderPath = public_path('upload/images/signature/');
+
         $image_parts = explode(";base64,", $this->procurementSignatureUser);
 
         $image_type_aux = explode("image/", $image_parts[0]);
@@ -159,9 +155,12 @@ class ProcurementData extends Component
 
         $image_base64 = base64_decode($image_parts[1]);
 
-        $file = $folderPath . uniqid() . '.'.$image_type;
-        file_put_contents($file, $image_base64);
+        $fileToFolder = $folderPath . date('ymd-hi') . '.'.$image_type;
 
+        $fileToDatabase = date('ymd-hi') . '.'.$image_type;
+        
+        file_put_contents($fileToFolder, $image_base64);
+        
         $this->totalPrice = $this->orderProcurements[0]['unitPrice'] * $this->orderProcurements[0]['quantity'];
 
         $procurementMaster = InventoryProcurement::create([
@@ -169,7 +168,7 @@ class ProcurementData extends Component
             'supplierId' => $this->supplierId,
             'procurementTypeId' => $this->procurementTypeId,
             'procurementDescription' => $this->procurementDescription,
-            'procurementSignatureUser' => $file,
+            'procurementSignatureUser' => $fileToDatabase,
             'procurementDate' => $this->procurementDate,
             'totalPrice' => $this->totalPrice,
             'status' => 0,
@@ -194,6 +193,45 @@ class ProcurementData extends Component
                 'quantity' => $value['quantity'],
                 'imageUrl' => $images.'.webp',
             ]);
+        }
+
+        if (Auth::user()->roles == 'USER') {
+            if ($this->totalPrice <= 5000000) {
+                InventoryProcurementApproval::create([
+                    'procurementId' => $procurementMaster->id,
+                    'userId' => Auth::user()->parentUserId,
+                    'status' => 'WAITING',
+                    'comment' => null,
+                    'signature' => null,
+                ]);
+            } else {
+                $cekUser = User::findOrFail(Auth::user()->parentUserId);
+                // dd($cekUser);
+                $dataUserApproval = [
+                    [
+                        'procurementId' => $procurementMaster->id,
+                        'userId' => $cekUser->id,
+                        'status' => 'WAITING',
+                        'comment' => null,
+                        'signature' => null,
+                        'deleted_at' => null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ],
+                    [
+                        'procurementId' => $procurementMaster->id,
+                        'userId' => $cekUser->parentUserId,
+                        'status' => 'WAITING',
+                        'comment' => null,
+                        'signature' => null,
+                        'deleted_at' => null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ]
+                ];
+
+                InventoryProcurementApproval::insert($dataUserApproval);
+            }
         }
 
         alert()->success('SuccessAlert','Procurement has been created successfully.');
@@ -258,6 +296,7 @@ class ProcurementData extends Component
         $this->supplierId = $procurementDetails->supplier->id;
         $this->procurementTypeName = $procurementDetails->procurementType->procurementTypeName;
         $this->procurementDescription = $procurementDetails->procurementDescription;
+        $this->procurementSignatureUser = $procurementDetails->procurementSignatureUser;
         $this->procurementDate = $procurementDetails->procurementDate;
         $this->totalPrice = $procurementDetails->totalPrice;
         $this->status = $procurementDetails->status;

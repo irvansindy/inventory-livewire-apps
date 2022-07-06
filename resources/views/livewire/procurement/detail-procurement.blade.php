@@ -62,6 +62,11 @@
                                     <td class="px-4 py-2">:</td>
                                     <td class="px-4 py-2">{{ $this->procurementDescription }}</td>
                                 </tr>
+                                <tr>
+                                    <td class="px-4 py-2">Signature</td>
+                                    <td class="px-4 py-2">:</td>
+                                    <td class="px-4 py-2"><img class="object-scale-down h-28 w-36" alt="signature" src="upload/images/signature/{{$this->procurementSignatureUser }}"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
