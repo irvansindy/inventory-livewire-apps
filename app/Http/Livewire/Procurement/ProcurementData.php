@@ -18,6 +18,7 @@ use Livewire\WithFileUploads;
 use Alert;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 
 class ProcurementData extends Component
 {
@@ -344,6 +345,7 @@ class ProcurementData extends Component
 
     public function doneProcurement($id)
     {
+        Gate::authorize('admin');
         $procurementDetails = InventoryProcurement::with([
             'user',
             'products',
@@ -420,5 +422,10 @@ class ProcurementData extends Component
         alert()->success('SuccessAlert','Product inventory has been claimed successfully.');
 
         $this->isDoneModalOpen = false;
+    }
+
+    public function approveProcurement($id)
+    {
+
     }
 }

@@ -17,11 +17,16 @@ class isAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user() && Auth::user()->roles == 'ADMIN') {
-            return $next($request);
+        // if (Auth::user() && Auth::user()->roles == 'ADMIN') {
+        //     return $next($request);
+        // }
+        if (!Auth::check() && Auth::user()->roles != 'ADMIN' || Auth::user()->roles != 'SUPERADMIN') {
+            # code...
+            abort(403);
         }
+        return $next($request);
 
         // return back()->with('error','Opps, You\'re not Admin');
-        return redirect('/');
+        // return redirect('/');
     }
 }

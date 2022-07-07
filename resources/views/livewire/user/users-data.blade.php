@@ -48,7 +48,17 @@
                                     <td class="border px-4 py-2">{{ $user->username }}</td>
                                     <td class="border px-4 py-2">{{ $user->roles }}</td>
                                     <td class="border px-4 py-2">
-                                        @if ($user->roles == 'ADMIN')
+                                        @can('admin')
+                                            <button wire:click="editUser({{ $user->id }})"
+                                                class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
+                                                Edit</button>
+                                            <button wire:click="deleteConfirm({{ $user->id }})"
+                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                                Non-Active</button>
+                                        @else
+                                            No Action
+                                        @endcan
+                                        {{-- @if ($user->roles == 'ADMIN')
                                             <button wire:click="editUser({{ $user->id }})"
                                                 class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
                                                 Edit</button>
@@ -59,7 +69,7 @@
                                             <button wire:click="deleteConfirm({{ $user->id }})"
                                                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                                 Non-Active</button>
-                                        @endif
+                                        @endif --}}
                                     </td>
                                 </tr>
                             @endforeach

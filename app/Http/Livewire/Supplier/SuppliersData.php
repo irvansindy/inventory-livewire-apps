@@ -7,6 +7,7 @@ use App\Models\Suppliers;
 use Maatwebsite\Excel\Facades\Excel;
 use Livewire\WithFileUploads;
 use App\Imports\SupplierImport;
+use Illuminate\Support\Facades\Gate;
 
 class SuppliersData extends Component
 {
@@ -31,6 +32,9 @@ class SuppliersData extends Component
 
     public function render()
     {
+        // if (! Gate::allows('admin')) {
+        //     abort(403);
+        // }
         $suppliers = Suppliers::where('supplierName', 'like', '%'.$this->search.'%')
                 ->orWhere('supplierAddress', 'like', '%'.$this->search.'%')
                 ->orWhere('supplierNumber', 'like', '%'.$this->search.'%')

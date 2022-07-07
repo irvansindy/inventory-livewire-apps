@@ -50,9 +50,9 @@
                                 </td>
                                 <td class="border px-4 py-2">
                                     @if ($procurement->status == 0)
+                                    {{-- && Auth::user()->roles != 'USER' --}}
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                     <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Done</button>
-                                    
                                     @else
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                     @endif
