@@ -35,10 +35,14 @@ class ProcurementData extends Component
     // data details
     public $productName, $supplierName, $procurementTypeName, $userName, $quantity, $inventoryImageUrl;
 
+    // data approval
+    public $commentApproval, $statusApproval, $dataApproval;
+
     // for view procurement
     public $search;
     public $isModalOpen = 0;
     public $isDoneModalOpen = 0;
+    public $isApproveModalOpen = 0;
     public $limitPerPage = 10;
     protected $queryString = ['search'=> ['except' => '']];
     protected $listeners = [
@@ -337,7 +341,7 @@ class ProcurementData extends Component
         $this->status = $procurementDetails->status;
 
         // join product and procurement detail
-        $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
+        // $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
 
         $this->procurementDetails = [$procurementDetails->procurementDetails];
         $this->openDetailModal();
@@ -366,7 +370,7 @@ class ProcurementData extends Component
         $this->status = $procurementDetails->status;
 
         // join product and procurement detail
-        $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
+        // $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
 
         $this->procurementDetails = [$procurementDetails->procurementDetails];
         $this->isDoneModalOpen = true;
@@ -426,6 +430,94 @@ class ProcurementData extends Component
 
     public function approveProcurement($id)
     {
+        Gate::authorize('admin');
+        // dd($id);
+        $procurementApprovalDetails = InventoryProcurement::with([
+            'user',
+            'products',
+            'supplier',
+            'procurementType',
+            'procurementDetails',
+            'procurementApprovals'
+        ])->findOrFail($id);
 
+        $listProcurementDetails = InventoryProcurementDetails::with([
+            'procurement',
+            'product'
+        ])->where('procurementId', $id)->get();
+
+        $listApproval = InventoryProcurementApproval::with([
+            'procurement',
+            'user',
+        ])->where('procurementId', $id)->get();
+
+        // dd([
+        //     $listProcurementDetails,
+        //     $listApproval
+        // ]);
+
+        $this->procurementId = $procurementApprovalDetails->id;
+        $this->procurementCode = $procurementApprovalDetails->procurementCode;
+        $this->userName = $procurementApprovalDetails->user->name;
+        $this->supplierName = $procurementApprovalDetails->supplier->supplierName;
+        $this->supplierId = $procurementApprovalDetails->supplier->id;
+        $this->procurementTypeName = $procurementApprovalDetails->procurementType->procurementTypeName;
+        $this->procurementDescription = $procurementApprovalDetails->procurementDescription;
+        $this->procurementSignatureUser = $procurementApprovalDetails->procurementSignatureUser;
+        $this->procurementDate = $procurementApprovalDetails->procurementDate;
+        $this->totalPrice = $procurementApprovalDetails->totalPrice;
+        $this->status = $procurementApprovalDetails->status;
+
+        // data product and procurement detail
+        // ->join('products', 'products.id', '=', $procurementApprovalDetails->procurementDetails.'productId');
+        // $this->procurementDetails = [$procurementApprovalDetails->procurementDetails];
+        $this->procurementDetails = $listProcurementDetails;
+        
+        // data procurement master and procuremens approval
+        $this->dataApproval = $listApproval;
+
+        $this->isApproveModalOpen = true;
+    }
+
+    public function cancelApproval()
+    {
+        $this->isApproveModalOpen = false;
+    }
+
+    public function updateApprovalProcurement()
+    {
+        // $this->validate([
+        //     'commentApproval' => 'required',
+        //     'procurementSignatureUser.*' => 'required',
+        // ]);
+        // dd($this->dataApproval);
+        // dd($this->dataApproval[0]['user']);
+        // if (Auth::user()->id == $this->dataApproval->user->id) {
+        //     dd('success');
+        // }
+
+        foreach ($this->dataApproval as $key => $approvalList) {
+            if (Auth::user()->id = $approvalList->user->id && $approvalList->procurementId = $this->procurementId) {
+                if($approvalList->status == 'WAITING'){
+                    // dd('success');
+                    $approvalList->update([
+                        'commentApproval' => $this->commentApproval,
+                        'procurementSignatureUser' => $this->procurementSignatureUser,
+                        'status' => 'APPROVE',
+                    ]);
+
+                    alert()->success('SuccessAlert','Procurement has been approved successfully.');
+                } else {
+                    alert()->warning('WarningAlert','Procurement approval has been error.');
+                }
+            } else {
+                alert()->warning('WarningAlert','Procurement approval has been error.');
+            }
+        }
+
+        dd([
+            $this->commentApproval,
+            $this->procurementSignatureUser,
+        ]);
     }
 }

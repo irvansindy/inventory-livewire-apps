@@ -10,13 +10,16 @@
                 <div x-show="!open">
                     {{-- wire:click="addProcurement()" --}}
                     <button x-on:click="open = !open"  class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Procurement</button>
+                    {{-- <button wire:click="addProcurement"  class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Procurement</button> --}}
                     <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                     @if($isModalOpen)
                         @include('livewire.procurement.form-procurement-data')
                     @elseif($isDetailProcurement)
                         @include('livewire.procurement.detail-procurement')
-                    @elseif($isDoneModalOpen)
-                        @include('livewire.procurement.done-procurement-data')
+                    @elseif($isApproveModalOpen)
+                        @include('livewire.procurement.approve-procurement')
+                    {{-- @elseif($isDoneModalOpen)
+                        @include('livewire.procurement.done-procurement-data') --}}
                     @endif
                     <table class="table-auto w-full">
                         <thead>
@@ -49,10 +52,11 @@
                                     {{ $procurement->status == 0 ? 'PENDING' : 'DONE' }}
                                 </td>
                                 <td class="border px-4 py-2">
-                                    @if ($procurement->status == 0)
+                                    @if ($procurement->status == 0 && Auth::user()->roles != 'USER')
                                     {{-- && Auth::user()->roles != 'USER' --}}
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
-                                    <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Done</button>
+                                    {{-- <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Done</button> --}}
+                                    <button wire:click="approveProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button>
                                     @else
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                     @endif

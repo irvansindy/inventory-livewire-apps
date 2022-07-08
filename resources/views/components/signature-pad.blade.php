@@ -1,13 +1,13 @@
 <div>
     <div x-data="signaturePad(@entangle($attributes->wire('model')))">
-        <h1 class="text-xl font-semibold text-gray-700 flex items-center justify-between">
-            <span>Signature pad</span>
+        <h1 class="text-xl font-bold text-gray-700 flex items-center justify-between mb-2">
+            <span class="text-sm">Signature pad</span>
         </h1>
         <div>
             <canvas x-ref="signature_canvas" class="border rounded shadow">
     
             </canvas>
-            <a href="#" x-on:click.prevent="clear()" class="text-sm text-red-700 my-2">Clear</a>
+            <a href="#" x-on:click.prevent="clear()" class="text-sm text-red-700 my-2 reverse">Clear</a>
         </div>
     </div>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
