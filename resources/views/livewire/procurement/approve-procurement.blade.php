@@ -123,7 +123,7 @@
                             @if ($approval->user->id != Auth::user()->id)
                                 <h6 class="text-md font-bold leading-normal text-red-800 mb-2">waiting list</h6>
                             @else
-                                <x-signature-pad wire:model.defer="procurementSignatureUser.{{ $approval->user->id }}"/>
+                                <x-signature-pad wire:model.defer="procurementSignatureUser"/>
                             @endif
                             {{-- component signature pad --}}
                         </div>

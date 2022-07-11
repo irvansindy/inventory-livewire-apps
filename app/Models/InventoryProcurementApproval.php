@@ -31,4 +31,8 @@ class InventoryProcurementApproval extends Model
     {
         return $this->hasOne(InventoryProcurement::class, 'id', 'procurementId');
     }
+    // public function procurement()   
+    // {
+    //     return $this->belongsTo(InventoryProcurement::class, 'procurementId', 'id');
+    // }
 }

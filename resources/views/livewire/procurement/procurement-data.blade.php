@@ -18,6 +18,8 @@
                         @include('livewire.procurement.detail-procurement')
                     @elseif($isApproveModalOpen)
                         @include('livewire.procurement.approve-procurement')
+                    @elseif($isDetailApproveModalOpen)
+                        @include('livewire.procurement.form-approve-procurement')
                     {{-- @elseif($isDoneModalOpen)
                         @include('livewire.procurement.done-procurement-data') --}}
                     @endif
@@ -56,7 +58,8 @@
                                     {{-- && Auth::user()->roles != 'USER' --}}
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                     {{-- <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Done</button> --}}
-                                    <button wire:click="approveProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button>
+                                    {{-- <button wire:click="approveProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button> --}}
+                                    <button wire:click="detailApproval({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button>
                                     @else
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                     @endif
