@@ -31,9 +31,14 @@ class AppServiceProvider extends ServiceProvider
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
 
+        // gate 
         Gate::define('admin', function(User $user) {
             // return $user->id === $post->user_id;
             return $user->roles !== 'USER' ?  Response::allow() : Response::deny('You must be an administrator.');
+        });
+
+        Gate::define('onlyUser', function(User $user){
+            return $user->roles === 'USER' ?  Response::allow() : Response::deny('You must be an user.');
         });
     }
 }

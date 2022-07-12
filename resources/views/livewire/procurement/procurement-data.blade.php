@@ -9,9 +9,14 @@
                 {{-- list data table --}}
                 <div x-show="!open">
                     {{-- wire:click="addProcurement()" --}}
-                    <button x-on:click="open = !open"  class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Procurement</button>
+                    @if (Auth::user()->roles !== 'SUPERADMIN')
+                        <button x-on:click="open = !open"  class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Procurement</button>
+                        <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
+                    @else
+                        <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
+                    @endif
+
                     {{-- <button wire:click="addProcurement"  class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 mb-4 rounded">Make Procurement</button> --}}
-                    <input class="form-control mb-3 rounded" type="text" wire:model="search" placeholder="Search" aria-label="search">
                     @if($isModalOpen)
                         @include('livewire.procurement.form-procurement-data')
                     @elseif($isDetailProcurement)
@@ -20,8 +25,8 @@
                         @include('livewire.procurement.approve-procurement')
                     @elseif($isDetailApproveModalOpen)
                         @include('livewire.procurement.form-approve-procurement')
-                    {{-- @elseif($isDoneModalOpen)
-                        @include('livewire.procurement.done-procurement-data') --}}
+                    @elseif($isDoneModalOpen)
+                        @include('livewire.procurement.done-procurement-data')
                     @endif
                     <table class="table-auto w-full">
                         <thead>
@@ -50,16 +55,14 @@
                                 <td class="border px-4 py-2">{{ $procurement->supplier->supplierName }}</td>
                                 <td class="border px-4 py-2">{{ $procurement->procurementType->procurementTypeName }}</td>
                                 <td class="border px-4 py-2">Rp.{{ number_format($procurement->totalPrice, 2, ',','.') }}</td>
+                                <td class="border px-4 py-2">{{ $procurement->status }}</td>
                                 <td class="border px-4 py-2">
-                                    {{ $procurement->status == 0 ? 'PENDING' : 'DONE' }}
-                                </td>
-                                <td class="border px-4 py-2">
-                                    @if ($procurement->status == 0 && Auth::user()->roles != 'USER')
+                                    @if ($procurement->status !== 'CLAIM' && Auth::user()->roles != 'USER')
                                     {{-- && Auth::user()->roles != 'USER' --}}
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
-                                    {{-- <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Done</button> --}}
                                     {{-- <button wire:click="approveProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button> --}}
                                     <button wire:click="detailApproval({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button>
+                                    <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-emerald-600 hover:bg-emerald-800 text-white font-bold py-2 px-4 rounded">Done</button>
                                     @else
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
                                     @endif
@@ -145,32 +148,32 @@
                                     <option value="{{ $product->id }}">{{ $product->productName }}</option>
                                     @endforeach
                                 </select>
-                                @error('orderProcurements.{{ $index }}.productId') <span class="text-red-500">{{ $message }}</span>@enderror
+                                @error('productId') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             <div class="mr-1">
                                 <input type="text"
                                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Product Name" name="orderProcurements[{{ $index }}][description]"  wire:model="orderProcurements.{{ $index }}.description">
-                                @error('orderProcurements.{{ $index }}.description') <span class="text-red-500">{{ $message }}</span>@enderror
+                                @error('description') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             
                             <div class="mr-1">
                                 <input type="number" min="1" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Price" name="orderProcurements[{{ $index }}][unitPrice]" wire:model="orderProcurements.{{ $index }}.unitPrice">
-                                @error('orderProcurements.{{ $index }}.unitPrice') <span class="text-red-500">{{ $message }}</span>@enderror
+                                @error('unitPrice') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             
                             <div class="mr-1">
                                 <input type="number" min="1" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"placeholder="Quantity" name="orderProcurements[{{ $index }}][quantity]" wire:model="orderProcurements.{{ $index }}.quantity">
-                                @error('orderProcurements.{{ $index }}.quantity') <span class="text-red-500">{{ $message }}</span>@enderror
+                                @error('quantity') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
         
                             <div class="mr-1">
                                 <input type="file"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="orderProcurements.{{ $index }}.inventoryImageUrl" name="orderProcurements.{{ $index }}.inventoryImageUrl" wire:model="orderProcurements.{{ $index }}.inventoryImageUrl">
-                                @error('orderProcurements.{{ $index }}.inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
+                                @error('inventoryImageUrl') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
         
-                            <div class="mr-1 justify-end sm:flex sm:flex-row-reverse">
+                            <div class="mr-1">
                                 <button class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150" wire:click.prevent="removeProductProcurement({{ $index }})">Delete</button>
                             </div>
                         </div>

@@ -23,7 +23,7 @@ class CreateInventoryProcurementsTable extends Migration
             $table->text('procurementSignatureUser');
             $table->date('procurementDate');
             $table->string('totalPrice');
-            $table->boolean('status')->default(0);
+            $table->string('status')->default('PENDING');
             // $table->boolean('status')->default(0)->change();
             $table->softDeletes();
             $table->timestamps();

@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
+use PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProcurementData extends Component
 {
@@ -143,12 +145,29 @@ class ProcurementData extends Component
     public function storeProcurement()
     {
         $this->validate([
-            'supplierId' => 'required',
-            'procurementTypeId' => 'required',
-            'procurementDescription' => 'required',
-            'procurementDate' => 'required',
-            'procurementSignatureUser' => 'required'
-        ]);
+                'supplierId' => 'required',
+                'procurementTypeId' => 'required',
+                'procurementDescription' => 'required',
+                'procurementDate' => 'required',
+                'procurementSignatureUser' => 'required',
+                'productId.*' => 'required',
+                'description.*' => 'required',
+                'unitPrice.*' => 'required|numeric',
+                'quantity.*' => 'required|numeric',
+                'inventoryImageUrl.*' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
+            ], [
+                'supplierId.required' => 'Supplier is required',
+                'procurementTypeId.required' => 'Procurement Type is required',
+                'procurementDescription.required' => 'Description is required',
+                'procurementDate.required' => 'Date is required',
+                'procurementSignatureUser.required' => 'Signature User is required',
+                'productId.*.required' => 'Product is required',
+                'description.*.required' => 'Product Name is required',
+                'unitPrice.*.required' => 'Unit Price is required',
+                'quantity.*.required' => 'Quantity is required',
+                'inventoryImageUrl.*.required' => 'Image is required',
+            ]
+        );
 
         // store signature
         $folderPath = public_path('upload/images/signature/');
@@ -177,7 +196,7 @@ class ProcurementData extends Component
             'procurementSignatureUser' => $fileToDatabase,
             'procurementDate' => $this->procurementDate,
             'totalPrice' => $this->totalPrice,
-            'status' => 0,
+            'status' => 'PENDING',
         ]);
 
         foreach ($this->orderProcurements as $procurementDetail => $value)
@@ -218,83 +237,9 @@ class ProcurementData extends Component
                 'signature' => null,
             ]);
         }
-        // if (Auth::user()->roles == 'USER') {
-        //     if ($this->totalPrice <= 5000000) {
-        //         InventoryProcurementApproval::create([
-        //             'procurementId' => $procurementMaster->id,
-        //             'userId' => Auth::user()->parentUserId,
-        //             'status' => 'WAITING',
-        //             'comment' => null,
-        //             'signature' => null,
-        //         ]);
-        //     } else {
-        //         $cekUser = User::findOrFail(Auth::user()->parentUserId);
-        //         $dataUserApproval = [
-        //             [
-        //                 'procurementId' => $procurementMaster->id,
-        //                 'userId' => $cekUser->id,
-        //                 'status' => 'WAITING',
-        //                 'comment' => null,
-        //                 'signature' => null,
-        //                 'deleted_at' => null,
-        //                 'created_at' => date('Y-m-d H:i:s'),
-        //                 'updated_at' => date('Y-m-d H:i:s'),
-        //             ],
-        //             [
-        //                 'procurementId' => $procurementMaster->id,
-        //                 'userId' => $cekUser->parentUserId,
-        //                 'status' => 'WAITING',
-        //                 'comment' => null,
-        //                 'signature' => null,
-        //                 'deleted_at' => null,
-        //                 'created_at' => date('Y-m-d H:i:s'),
-        //                 'updated_at' => date('Y-m-d H:i:s'),
-        //             ]
-        //         ];
-
-        //         InventoryProcurementApproval::insert($dataUserApproval);
-        //     }
-        // } elseif(Auth::user()->roles == 'ADMIN') {
-        //     if ($this->totalPrice <= 5000000) {
-        //         InventoryProcurementApproval::create([
-        //             'procurementId' => $procurementMaster->id,
-        //             'userId' => Auth::user()->id,
-        //             'status' => 'PROGRESS',
-        //             'comment' => null,
-        //             'signature' => null,
-        //         ]);
-        //     } else {
-        //         $dataUserApproval = [
-        //             [
-        //                 'procurementId' => $procurementMaster->id,
-        //                 'userId' => Auth::user()->id,
-        //                 'status' => 'FORWARD',
-        //                 'comment' => null,
-        //                 'signature' => null,
-        //                 'deleted_at' => null,
-        //                 'created_at' => date('Y-m-d H:i:s'),
-        //                 'updated_at' => date('Y-m-d H:i:s'),
-        //             ],
-        //             [
-        //                 'procurementId' => $procurementMaster->id,
-        //                 'userId' => Auth::user()->parentUserId,
-        //                 'status' => 'WAITING',
-        //                 'comment' => null,
-        //                 'signature' => null,
-        //                 'deleted_at' => null,
-        //                 'created_at' => date('Y-m-d H:i:s'),
-        //                 'updated_at' => date('Y-m-d H:i:s'),
-        //             ]
-        //         ];
-
-        //         InventoryProcurementApproval::insert($dataUserApproval);
-        //     }
-        // }
-
         alert()->success('SuccessAlert','Procurement has been created successfully.');
 
         $this->closeModal();
-        // $this->resetProcurementForm();
     }
 
     public function render()
@@ -411,7 +356,7 @@ class ProcurementData extends Component
         $procurement = InventoryProcurement::findOrFail($this->procurementId);
 
         $procurement->update([
-            'status' => 1,
+            'status' => 'CLAIM',
         ]);
 
         foreach ($this->procurementDetails as $key => $value) {
@@ -527,7 +472,6 @@ class ProcurementData extends Component
             if (Auth::user()->id = $approvalList->user->id && $approvalList->procurementId = $this->procurementId) {
                 if($approvalList->status == 'WAITING')
                 {
-                    // dd('success');
                     $approvalList->where('userId', Auth::user()->id)
                     ->update([
                         'comment' => $this->commentApproval,
@@ -559,29 +503,30 @@ class ProcurementData extends Component
         ])
         ->where('userId', Auth::user()->id)
         ->where('procurementId', $id)
-        ->where('status', 'WAITING')
+        // ->where('status', 'WAITING')
         ->get();
-        
-        // dd($detailApprovalProcurement[0]->id);
-
-        // get product detail
-        $listProcurementDetails = InventoryProcurementDetails::with([
-            'procurement',
-            'product'
-        ])->where('procurementId', $id)->get();
-;
-        // data binding
-        $this->approvalId = $detailApprovalProcurement[0]->id;
-        $this->procurementDetails = $listProcurementDetails;
-        $this->procurementId = $detailApprovalProcurement[0]->procurement->id;
-        $this->procurementCode = $detailApprovalProcurement[0]->procurement->procurementCode;
-        $this->procurementDescription = $detailApprovalProcurement[0]->procurement->procurementDescription;
-        $this->procurementSignatureUser = $detailApprovalProcurement[0]->procurement->procurementSignatureUser;
-        $this->procurementDate = $detailApprovalProcurement[0]->procurement->procurementDate;
-        $this->totalPrice = $detailApprovalProcurement[0]->procurement->totalPrice;
-        $this->status = $detailApprovalProcurement[0]->procurement->status;
-        
-        $this->isDetailApproveModalOpen = true;
+        // dd($detailApprovalProcurement);
+        if($detailApprovalProcurement[0]->status === 'WAITING') {
+            // get product detail
+            $listProcurementDetails = InventoryProcurementDetails::with([
+                'procurement',
+                'product'
+            ])->where('procurementId', $id)->get();
+            // data binding
+            $this->approvalId = $detailApprovalProcurement[0]->id;
+            $this->procurementDetails = $listProcurementDetails;
+            $this->procurementId = $detailApprovalProcurement[0]->procurement->id;
+            $this->procurementCode = $detailApprovalProcurement[0]->procurement->procurementCode;
+            $this->procurementDescription = $detailApprovalProcurement[0]->procurement->procurementDescription;
+            $this->procurementSignatureUser = $detailApprovalProcurement[0]->procurement->procurementSignatureUser;
+            $this->procurementDate = $detailApprovalProcurement[0]->procurement->procurementDate;
+            $this->totalPrice = $detailApprovalProcurement[0]->procurement->totalPrice;
+            $this->status = $detailApprovalProcurement[0]->procurement->status;
+            
+            $this->isDetailApproveModalOpen = true;
+        } else {
+            alert()->warning('WarningAlert','Procurement has been approved.');
+        }
     }
 
     public function storeAndUpdateStaggingApprovalProcurement()
@@ -612,10 +557,10 @@ class ProcurementData extends Component
         $checkProcurement = InventoryProcurement::findOrfail($this->procurementId);
         $checkApproval = InventoryProcurementApproval::findOrfail($this->approvalId);
         // dd([$checkProcurement, $checkApproval]);
-        if($checkProcurement->status == 0 && $checkProcurement->totalPrice <= 5000000) {
+        if($checkProcurement->status == 'PENDING' && $checkProcurement->totalPrice <= 5000000) {
             // update in master procurement
             $checkProcurement->update([
-                'status' => 1,
+                'status' => 'ON PROGRESS',
             ]);
 
             // update in procurement approval
@@ -626,36 +571,94 @@ class ProcurementData extends Component
             ]);
 
             alert()->success('SuccessAlert','Procurement has been approved successfully.');
-            // dd([
-            //     $checkProcurement->status,
-            //     $checkProcurement->totalPrice,
-            //     'dibawah 5 juta'
-            // ]);
         } else {
-            // update in procurement approval
-            $checkApproval->update([
-                'comment' => $this->commentApproval,
-                'signature' => $fileToDatabase,
-                'status' => 'FORWARD',
-            ]);
+            if(Auth::user()->roles == 'ADMIN') {
+                // update in master procurement
+                $checkProcurement->update([
+                    'status' => 'ON PROGRESS',
+                ]);
 
-            // $checkUser = User::findOrfail($checkApproval->userId);
-            InventoryProcurementApproval::create([
-                'procurementId' => $this->procurementId,
-                'userId' => Auth::user()->parentUserId,
-                'status' => 'WAITING',
-                'comment' => null,
-                'signature' => null,
-            ]);
+                // update in procurement approval
+                $checkApproval->update([
+                    'comment' => $this->commentApproval,
+                    'signature' => $fileToDatabase,
+                    'status' => 'FORWARD',
+                ]);
+    
+                // $checkUser = User::findOrfail($checkApproval->userId);
+                InventoryProcurementApproval::create([
+                    'procurementId' => $this->procurementId,
+                    'userId' => Auth::user()->parentUserId,
+                    'status' => 'WAITING',
+                    'comment' => null,
+                    'signature' => null,
+                ]);
+    
+                alert()->success('SuccessAlert','Procurement has been forwarded successfully.');
+            } elseif(Auth::user()->roles == 'SUPERADMIN') {
+                // update in master procurement
+                $checkProcurement->update([
+                    'status' => 'ON PROGRESS',
+                ]);
 
-            alert()->success('SuccessAlert','Procurement has been forwarded successfully.');
-            // dd([
-            //     $checkProcurement->status,
-            //     $checkProcurement->totalPrice,
-            //     'diatas 5 juta'
-            // ]);
+                // update in procurement approval
+                $checkApproval->update([
+                    'comment' => $this->commentApproval,
+                    'signature' => $fileToDatabase,
+                    'status' => 'APPROVE',
+                ]);
+
+                alert()->success('SuccessAlert','Procurement has been approved successfully.');
+            }
         }
         $this->isDetailApproveModalOpen = false;
+    }
 
+    public function printProcurement()
+    {
+        Gate::authorize('admin');
+        
+        $printPocurement = InventoryProcurement::with([
+            'user',
+            'procurementDetails' => function($query) {
+                $query->with([
+                    'product'
+                ]);
+            },
+            'procurementApprovals' => function($query) {
+                $query->with([
+                    'user'
+                ]);
+            },
+        ])->get();
+
+        /*$pdf = PDF::loadView('inventory.procurement.report-procurement', ['printPocurement' => $printPocurement])->setPaper('a4', 'portrait')->output();
+
+        return response()->streamDownload(fn() => print($pdf), 'report-procurement.pdf');*/
+
+            // data binding to view
+        dd([
+            $printPocurement[0]->procurementCode,
+            $printPocurement[0]->procurementSignatureUser,
+            $printPocurement[0]->procurementDate,
+            $printPocurement[0]->totalPrice,
+            $printPocurement[0]->status,
+            $printPocurement[0]->user->name,
+            
+            $printPocurement[0]->procurementDetails[0]->description,
+            $printPocurement[0]->procurementDetails[0]->unitPrice,
+            $printPocurement[0]->procurementDetails[0]->imageUrl,
+            $printPocurement[0]->procurementDetails[0]->product->productCode,
+            $printPocurement[0]->procurementDetails[0]->product->productName,
+            $printPocurement[0]->procurementDetails[0]->product->merk,
+
+            $printPocurement[0]->procurementApprovals[0]->signature,
+            $printPocurement[0]->procurementApprovals[0]->user->name,
+            $printPocurement[0]->procurementApprovals[0]->created_at->format('d-m-Y H:i:s'),
+
+            $printPocurement[0]->procurementApprovals[1]->signature,
+            $printPocurement[0]->procurementApprovals[1]->user->name,
+            $printPocurement[0]->procurementApprovals[1]->created_at->format('d-m-Y H:i:s'),
+        ]);
     }
 }

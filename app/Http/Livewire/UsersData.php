@@ -195,10 +195,10 @@ class UsersData extends Component
         return alert()->success('SuccessAlert', 'Data Imported Successfully.');
     }
 
-    public function signature()
-    {
-        $this->signature = true; 
-        $this->isSignatureOpen = true;
-    }
+    // public function signature()
+    // {
+    //     $this->signature = true; 
+    //     $this->isSignatureOpen = true;
+    // }
 
 }
