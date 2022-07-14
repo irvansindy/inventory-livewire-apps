@@ -17,6 +17,8 @@ class CreateProductInventoriesTable extends Migration
             $table->id();
             $table->string('inventoryCode');
             $table->string('productId');
+            $table->string('inventoryName');
+            $table->text('specification');
             $table->string('purchasingNumber');
             $table->date('registeredDate');
             $table->date('yearOfEntry');

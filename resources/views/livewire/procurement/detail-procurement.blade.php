@@ -82,31 +82,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($this->procurementDetails as $detail => $value)
-                                @forelse ($value as $detailItem)
-                                {{-- @php
-                                    dd($detailItem);
-                                @endphp --}}
+                            @forelse ($this->procurementDetails as $detailItem)
+                            <tr>
+                                <td class="px-2 py-1">{{ $detailItem->product->productName }}</td>
+                                <td class="px-2 py-1">{{ $detailItem->description }}</td>
+                                <td class="px-2 py-1">{{ $detailItem->quantity }}</td>
+                                <td class="px-2 py-1">{{ number_format($detailItem->unitPrice, 2, ',','.') }}</td>
+                            </tr>
+                            @empty
                                 <tr>
-                                    <td class="px-2 py-1">{{ $detailItem->product->productName }}</td>
-                                    <td class="px-2 py-1">{{ $detailItem->description }}</td>
-                                    <td class="px-2 py-1">{{ $detailItem->quantity }}</td>
-                                    <td class="px-2 py-1">{{ number_format($detailItem->unitPrice, 2, ',','.') }}</td>
+                                    <td class="px-2 py-1 hover:font-semibold" colspan="4">No data</td>
                                 </tr>
-                                @empty
-                                    <tr>
-                                        <td class="px-2 py-1 hover:font-semibold" colspan="4">No data</td>
-                                    </tr>
-                                @endforelse
-                            @endforeach
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                    <button wire:click.prevent="printProcurement()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-fuchsia-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-fuchsia-800 focus:outline-none focus:border-fuchsia-700 focus:shadow-outline-fuchsia transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                        <svg wire:loading.delay wire:target="printProcurement()" class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <button wire:click.prevent="printProcurement({{ $this->procurementId }})" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-fuchsia-600 text-base leading-6 font-bold text-white shadow-sm hover:bg-fuchsia-800 focus:outline-none focus:border-fuchsia-700 focus:shadow-outline-fuchsia transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        <svg wire:loading.delay wire:target="printProcurement({{ $this->procurementId }})" class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>

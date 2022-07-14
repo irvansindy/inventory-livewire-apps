@@ -16,15 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             SupplierSeeder::class,
-            // ProductSeeder::class,
             ProductCategoriesSeeder::class,
             ProcurementTypesSeeder::class,
-            // PlacementSeeder::class,
-            // PlacementDetailsSeeder::class,
-            Location::class,
-            // InventoryProcurementSeeder::class,
-            // InventoryProcurementDetailsSeeder::class,
-            Department::class,
+            OfficeSeeder::class,
         ]);
     }
 }

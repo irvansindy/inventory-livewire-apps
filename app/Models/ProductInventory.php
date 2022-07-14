@@ -15,6 +15,8 @@ class ProductInventory extends Model
 
     protected $fillable = [
         'inventoryCode',
+        'inventoryName',
+        'specification',
         'productId',
         'purchasingNumber',
         'registeredDate',

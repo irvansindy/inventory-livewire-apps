@@ -49,7 +49,7 @@
                     </tbody>
                 </table>
                 <div class="px-4 mt-4">
-                    {{-- {{$loans->links()}} --}}
+                    {{$mutations->links()}}
                 </div>
             </div>
         </div>

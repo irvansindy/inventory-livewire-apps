@@ -15,7 +15,8 @@ class InventoryProcurementDetails extends Model
     protected $fillable = [
         'procurementId',
         'productId',
-        'description',
+        'inventoryName',
+        'specification',
         'quantity',
         'unitPrice',
         'imageUrl',

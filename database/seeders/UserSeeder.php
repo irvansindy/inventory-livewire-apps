@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
                 [
                     'name' => 'Super Admin',
                     'email' => 'superadmin@gmail.com',
+                    'officeId' => 1,
                     'roles' => 'SUPERADMIN',
                     'username' => 'super_admin',
                     'nik' => '876678986',
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
                 [
                     'name' => 'Admin',
                     'email' => 'admin@gmail.com',
+                    'officeId' => 2,
                     'roles' => 'ADMIN',
                     'username' => 'admin',
                     'nik' => '0123456789',
@@ -38,9 +40,10 @@ class UserSeeder extends Seeder
                 ],
                 [
                     'name' => 'Irvan Sindy',
-                    'email' => 'user1@gmail.com',
+                    'email' => 'user@gmail.com',
+                    'officeId' => 3,
                     'roles' => 'USER',
-                    'username' => 'user1',
+                    'username' => 'user irvan',
                     'nik' => '0123456789',
                     'parentUserId' => 2,
                     'password' => Hash::make('user12345'),

@@ -18,7 +18,7 @@ class CreateInventoryPlacementsTable extends Migration
             $table->string('placementNumber');
             $table->date('placementDate');
             $table->string('userId');
-            $table->string('locationId');
+            $table->bigInteger('officeId');
             $table->text('placementDescription');
             $table->enum('placementType', ['NEW', 'MUTATION']);
             $table->softDeletes();

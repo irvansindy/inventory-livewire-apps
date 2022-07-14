@@ -17,7 +17,8 @@ class CreateInventoryProcurementDetailsTable extends Migration
             $table->id();
             $table->string('procurementId');
             $table->string('productId');
-            $table->string('description');
+            $table->string('inventoryName');
+            $table->string('specification');
             $table->string('quantity');
             $table->string('unitPrice');
             $table->string('imageUrl');

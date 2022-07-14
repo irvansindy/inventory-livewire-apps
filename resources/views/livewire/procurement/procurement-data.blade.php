@@ -40,13 +40,6 @@
                                 <th class="px-4 py-2">Action</th>
                             </tr>
                         </thead>
-                        @if (empty($procurements))
-                        <tbody>
-                            <tr>
-                                <td colspan="6" class="text-center">No Data</td>
-                            </tr>
-                        </tbody>
-                        @else
                         <tbody>
                             @forelse ($procurements as $procurement)
                             <tr>
@@ -74,7 +67,6 @@
                             </tr>
                             @endforelse
                         </tbody>
-                        @endif
                     </table>
                     <div class="px-4 mt-4">
                         {{$procurements->links()}}
@@ -133,6 +125,7 @@
                         </div>
                         {{-- divider --}}
                         <div class="border-t border-gray-100"></div>
+                        {{-- end divider --}}
                         <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
                             <h5 class="text-xl font-bold leading-tight text-gray-900">
                                 Product Details
@@ -152,8 +145,18 @@
                             </div>
                             <div class="mr-1">
                                 <input type="text"
-                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Product Name" name="orderProcurements[{{ $index }}][description]"  wire:model="orderProcurements.{{ $index }}.description">
-                                @error('description') <span class="text-red-500">{{ $message }}</span>@enderror
+                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Product Name" name="orderProcurements[{{ $index }}][inventoryName]"  wire:model="orderProcurements.{{ $index }}.inventoryName">
+                                @error('inventoryName') <span class="text-red-500">{{ $message }}</span>@enderror
+                            </div>
+                            
+                            <div class="mr-1">
+                                {{-- <input type="text"
+                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Product Spesification" name="orderProcurements[{{ $index }}][spesification]"  wire:model="orderProcurements.{{ $index }}.spesification"> --}}
+                                    <textarea
+                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="orderProcurements.{{ $index }}.specification" wire:model="orderProcurements.{{ $index }}.specification"
+                                        placeholder="specification"></textarea>
+                                @error('specification') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             
                             <div class="mr-1">
@@ -201,6 +204,7 @@
                                 </button>
                             </span>
                         </div>
+                        {{-- end dynamic form --}}
                     </form>
                 </div>
             </div>

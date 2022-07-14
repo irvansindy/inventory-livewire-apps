@@ -16,7 +16,7 @@ class CreateMutationTosTable extends Migration
         Schema::create('mutation_tos', function (Blueprint $table) {
             $table->id();
             $table->string('mutationId');
-            $table->string('locationId');
+            $table->bigInteger('officeId');
             $table->softDeletes();
             $table->timestamps();
         });

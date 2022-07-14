@@ -30,7 +30,7 @@ class ProcurementData extends Component
     // table procurement
     public $procurementCode, $userId, $supplierId, $procurementTypeId, $procurementDescription, $procurementSignatureUser, $procurementDate, $totalPrice, $status;
     // table procurement details
-    public $procurementId, $productId, $description, $unitPrice, $procurementDetails;
+    public $procurementId, $productId, $description, $unitPrice, $procurementDetails, $inventoryName, $specification;
 
     // data supplier and procurement type
     public $dataSupplier, $dataProcurementType;
@@ -61,7 +61,8 @@ class ProcurementData extends Component
         $this->orderProcurements = [
             [
                 'productId' => '',
-                'description' => '',
+                'inventoryName' => '',
+                'specification' => '',
                 'unitPrice' => '',
                 'quantity' => '',
                 'inventoryImageUrl' => ''
@@ -77,7 +78,8 @@ class ProcurementData extends Component
         $this->orderProcurements[] = [
             [
                 'productId' => '',
-                'description' => '',
+                'inventoryName' => '',
+                'specification' => '',
                 'unitPrice' => '',
                 'quantity' => '',
                 'inventoryImageUrl' => ''
@@ -151,7 +153,8 @@ class ProcurementData extends Component
                 'procurementDate' => 'required',
                 'procurementSignatureUser' => 'required',
                 'productId.*' => 'required',
-                'description.*' => 'required',
+                'inventoryName.*' => 'required',
+                'specification.*' => 'required',
                 'unitPrice.*' => 'required|numeric',
                 'quantity.*' => 'required|numeric',
                 'inventoryImageUrl.*' => 'required|image|mimes:jpeg,png,jpg,svg|max:4096',
@@ -162,7 +165,8 @@ class ProcurementData extends Component
                 'procurementDate.required' => 'Date is required',
                 'procurementSignatureUser.required' => 'Signature User is required',
                 'productId.*.required' => 'Product is required',
-                'description.*.required' => 'Product Name is required',
+                'inventoryName.*.required' => 'Product Name is required',
+                'specification.*.required' => 'Product Name is required',
                 'unitPrice.*.required' => 'Unit Price is required',
                 'quantity.*.required' => 'Quantity is required',
                 'inventoryImageUrl.*.required' => 'Image is required',
@@ -213,7 +217,8 @@ class ProcurementData extends Component
             InventoryProcurementDetails::create([
                 'procurementId' => $procurementMaster->id,
                 'productId' => $value['productId'],
-                'description' => $value['description'],
+                'inventoryName' => $value['inventoryName'],
+                'specification' => $value['specification'],
                 'unitPrice' => $value['unitPrice'],
                 'quantity' => $value['quantity'],
                 'imageUrl' => $images.'.webp',
@@ -304,9 +309,12 @@ class ProcurementData extends Component
         $this->status = $procurementDetails->status;
 
         // join product and procurement detail
-        // $this->procurementDetails = $procurementDetails->procurementDetails->join('products', 'products.id', '=', $procurementDetails->procurementDetails.'productId');
+        $listProcurementDetails = InventoryProcurementDetails::with([
+            'procurement',
+            'product'
+        ])->where('procurementId', $id)->get();
 
-        $this->procurementDetails = [$procurementDetails->procurementDetails];
+        $this->procurementDetails = $listProcurementDetails;
         $this->openDetailModal();
     }
 
@@ -362,13 +370,15 @@ class ProcurementData extends Component
         foreach ($this->procurementDetails as $key => $value) {
             ProductInventory::create([
                 'productId' => $value[0]['productId'],
+                'inventoryName' => $value[0]['inventoryName'],
+                'specification' => $value[0]['specification'],
                 'purchasingNumber' => $this->procurementCode,
                 'registeredDate' => $this->procurementDate,
                 'yearOfEntry' => Carbon::now()->parse()->format('Y-m-d'),
                 'yearOfUse' => Carbon::now()->parse()->format('Y-m-d'),
-                'serialNumber' => $value[0]['description'],
+                'serialNumber' => $value[0]['inventoryName'],
                 'yearOfEnd' => Carbon::now()->addYears(5)->parse()->format('Y-m-d'),
-                'sertificateNumber' => $value[0]['description'].'-'.Carbon::now()->parse()->format('Y-m-d'),
+                'sertificateNumber' => $value[0]['inventoryName'].'-'.Carbon::now()->parse()->format('Y-m-d'),
                 'sertificateMaker' => Auth::user()->id,
                 'productOrigin' => $this->supplierId,
                 'productPrice' => $value[0]['unitPrice'],
@@ -614,51 +624,42 @@ class ProcurementData extends Component
         $this->isDetailApproveModalOpen = false;
     }
 
-    public function printProcurement()
+    public function printProcurement($id)
     {
         Gate::authorize('admin');
         
+        // 'procurementDetails' => function($query) {
+        //     $query->with([
+        //         'product'
+        //     ]);
+        // },
+        // 'procurementApprovals' => function($query) {
+        //     $query->with([
+        //         'user'
+        //     ]);
+        // },
         $printPocurement = InventoryProcurement::with([
             'user',
-            'procurementDetails' => function($query) {
-                $query->with([
-                    'product'
-                ]);
-            },
-            'procurementApprovals' => function($query) {
-                $query->with([
-                    'user'
-                ]);
-            },
-        ])->get();
+        ])->findOrFail($id);
 
-        /*$pdf = PDF::loadView('inventory.procurement.report-procurement', ['printPocurement' => $printPocurement])->setPaper('a4', 'portrait')->output();
+        $printPocurementDetails = InventoryProcurementDetails::with([
+            'procurement',
+            'product'
+        ])->where('procurementId', $id)->get();
 
-        return response()->streamDownload(fn() => print($pdf), 'report-procurement.pdf');*/
+        $printPocurementApproval = InventoryProcurementApproval::with([
+            'procurement',
+            'user'
+        ])->where('procurementId', $id)->get();
+        
+        $pdf = PDF::loadView('livewire.procurement.report-procurement', 
+        [
+            'printPocurement' => $printPocurement,
+            'printPocurementDetails' => $printPocurementDetails,
+            'printPocurementApproval' => $printPocurementApproval
+        ])->setPaper('a4', 'portrait')->output();
 
-            // data binding to view
-        dd([
-            $printPocurement[0]->procurementCode,
-            $printPocurement[0]->procurementSignatureUser,
-            $printPocurement[0]->procurementDate,
-            $printPocurement[0]->totalPrice,
-            $printPocurement[0]->status,
-            $printPocurement[0]->user->name,
-            
-            $printPocurement[0]->procurementDetails[0]->description,
-            $printPocurement[0]->procurementDetails[0]->unitPrice,
-            $printPocurement[0]->procurementDetails[0]->imageUrl,
-            $printPocurement[0]->procurementDetails[0]->product->productCode,
-            $printPocurement[0]->procurementDetails[0]->product->productName,
-            $printPocurement[0]->procurementDetails[0]->product->merk,
-
-            $printPocurement[0]->procurementApprovals[0]->signature,
-            $printPocurement[0]->procurementApprovals[0]->user->name,
-            $printPocurement[0]->procurementApprovals[0]->created_at->format('d-m-Y H:i:s'),
-
-            $printPocurement[0]->procurementApprovals[1]->signature,
-            $printPocurement[0]->procurementApprovals[1]->user->name,
-            $printPocurement[0]->procurementApprovals[1]->created_at->format('d-m-Y H:i:s'),
-        ]);
+        // return response()->streamDownload(fn() => print($pdf), 'report-procurement.pdf');
+        return response()->streamDownload(fn() => print($pdf), 'report-procurement.pdf', [], 'inline');
     }
 }

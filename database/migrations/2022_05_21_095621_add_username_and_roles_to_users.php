@@ -18,7 +18,7 @@ class AddUsernameAndRolesToUsers extends Migration
             $table->string('username')->after('email')->nullable();
             $table->string('parentUserId')->after('email')->nullable();
             $table->string('roles')->after('email')->default('USER');
-            $table->string('signature')->after('email')->nullable();
+            $table->bigInteger('officeId')->after('email')->nullable();
         });
     }
 

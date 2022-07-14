@@ -7,9 +7,11 @@ use App\Models\ProductInventory;
 use App\Models\Mutations;
 use App\Models\MutationFroms;
 use App\Models\MutationTo;
+
+use App\Models\Office;
+
 use App\Models\InventoryPlacement;
 use App\Models\InventoryPlacementDetails;
-use App\Models\Locations;
 use Illuminate\Support\Facades\Auth;
 use Alert;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,11 +39,11 @@ class ProductInventariesData extends Component
         'productInventary' => 'productInventariesPostData'
     ];
 
-    public $allDataLocation = [];
+    public $allDataOffice = [];
 
     public function mount()
     {
-        $this->allDataLocation = Locations::all();
+        $this->allDataOffice = Office::all();
     }
 
     public function productInventariesPostData() {

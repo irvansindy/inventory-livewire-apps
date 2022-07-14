@@ -17,7 +17,7 @@ class UsersData extends Component
 {
     use WithFileUploads;
 
-    public $allDataUser, $userId, $name, $email, $username, $roles, $nik, $signature;
+    public $allDataUser, $userId, $name, $email, $username, $roles, $nik, $officeId;
     public $search;
     public $importExportFile;
     public $isModalOpen = 0;
