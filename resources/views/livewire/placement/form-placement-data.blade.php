@@ -24,15 +24,15 @@
                             @error('placementDate') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
                         <div class="mb-4">
-                            <label for="locationId"
+                            <label for="officeId"
                                 class="block text-gray-700 text-sm font-bold mb-2">Location</label>
-                            <select class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="locationId" wire:model="locationId">
+                            <select class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="officeId" wire:model="officeId">
                                 <option value="hidden">Select Location</option>
                                 @foreach ($this->allDataLocation as $location)
-                                <option value="{{ $location->id }}">{{ $location->id }} - {{ $location->locationName }}</option>
+                                <option value="{{ $location->id }}">{{ $location->id }} - {{ $location->officeName }}</option>
                                 @endforeach
                             </select>
-                            @error('locationId') <span class="text-red-500">{{ $message }}</span>@enderror
+                            @error('officeId') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
                         <div class="mb-4">
                             <label for="placementDescription"

@@ -7,7 +7,8 @@ use Livewire\Component;
 use App\Models\InventoryPlacement;
 use App\Models\InventoryPlacementDetails;
 use App\Models\ProductInventory;
-use App\Models\Locations;
+// use App\Models\Locations;
+use App\Models\Office;
 use Alert;
 
 class PlacementData extends Component
@@ -15,7 +16,7 @@ class PlacementData extends Component
     // public $placement;
 
     // data master placement
-    public $getInventoryId, $placementNumber, $placementDate, $userId, $locationId, $placementDescription, $placementType;
+    public $getInventoryId, $placementNumber, $placementDate, $userId, $locationId, $officeId, $placementDescription, $placementType;
 
     // data detail placement
     public $placementId, $productInventaryId, $status, $inventoryCode;
@@ -62,7 +63,7 @@ class PlacementData extends Component
     public function createPlacement()
     {
         $this->allDataInventory = ProductInventory::with(['products'])->where('productStatus', '=', 'AVAILABLE')->get();
-        $this->allDataLocation = Locations::all();
+        $this->allDataLocation = Office::all();
         $this->openCreatePlacementModal();
     }
 
@@ -78,7 +79,7 @@ class PlacementData extends Component
 
     public function render()
     {
-        $placements = InventoryPlacement::with(['user', 'location', 'placementDetails'])
+        $placements = InventoryPlacement::with(['user', 'office', 'placementDetails'])
         ->latest()
         ->paginate($this->limitPerPage);
         // dd($placements);
@@ -86,8 +87,8 @@ class PlacementData extends Component
             $placements = InventoryPlacement::with(['user', 'location'])
             ->whereHas('user', function($query) {
                 $query->where('name', 'like', '%'.$this->search.'%');
-            })->orWhereHas('location', function($query) {
-                $query->where('locationName', 'like', '%'.$this->search.'%');
+            })->orWhereHas('office', function($query) {
+                $query->where('officeName', 'like', '%'.$this->search.'%');
             })
             ->orWhere('placementNumber', 'like', '%'.$this->search.'%')
             ->orWhere('placementDate', 'like', '%'.$this->search.'%')
@@ -104,7 +105,8 @@ class PlacementData extends Component
         // $this->getInventoryId = NULL;
         $this->placementDate = NULL;
         // $this->userId = NULL;
-        $this->locationId = NULL;
+        // $this->locationId = NULL;
+        $this->officeId = NULL;
         $this->placementDescription = NULL;
         $this->placementType = NULL;
     }
@@ -128,7 +130,7 @@ class PlacementData extends Component
     {
         $this->validate([
             'placementDate' => 'required',
-            'locationId' => 'required',
+            'officeId' => 'required',
             'placementDescription' => 'required',
             'placementType' => 'required',
         ]);
@@ -136,7 +138,7 @@ class PlacementData extends Component
         $placement = InventoryPlacement::create([
             'placementDate' => $this->placementDate,
             'userId' => Auth::user()->id,
-            'locationId' => $this->locationId,
+            'officeId' => $this->officeId,
             'placementDescription' => $this->placementDescription,
             'placementType' => $this->placementType,
         ]);
@@ -165,14 +167,14 @@ class PlacementData extends Component
         $detailPlacement = InventoryPlacement::with([
             'placementDetails',
             'user',
-            'location'
+            'office'
         ])->findOrFail($id);
 
         // dd($detailPlacement);
         $this->placementNumber = $detailPlacement->placementNumber;
         $this->placementDate = $detailPlacement->placementDate;
         $this->userId = $detailPlacement->user->name;
-        $this->locationId = $detailPlacement->location->locationName;
+        $this->officeId = $detailPlacement->office->officeName;
         $this->placementDescription = $detailPlacement->placementDescription;
         $this->placementType = $detailPlacement->placementType;
         $this->getInventoryId = $detailPlacement->placementDetails[0]->productInventory->inventoryCode;

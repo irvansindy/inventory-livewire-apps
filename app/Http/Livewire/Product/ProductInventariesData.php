@@ -144,8 +144,8 @@ class ProductInventariesData extends Component
         $this->placementId = $inventory[0]->placement->id;
         $this->inventoryCode = $inventory[0]->productInventory->inventoryCode;
         $this->inventoryIdMutation = $inventory[0]->productInventory->id;
-        $this->locationInventoryIdNow = $inventory[0]->placement->location->id;
-        $this->locationInventoryNameNow = $inventory[0]->placement->location->locationName;
+        $this->locationInventoryIdNow = $inventory[0]->placement->office->id;
+        $this->locationInventoryNameNow = $inventory[0]->placement->office->officeName;
         $this->isMutationOpen = true;
     }
 
@@ -165,12 +165,12 @@ class ProductInventariesData extends Component
         
         MutationFroms::create([
             'mutationId' => $mutation->id,
-            'locationId' => $this->locationInventoryIdNow,
+            'officeId' => $this->locationInventoryIdNow,
         ]);
 
         MutationTo::create([
             'mutationId' => $mutation->id,
-            'locationId' => $this->mutationToLocationId,
+            'officeId' => $this->mutationToLocationId,
         ]);
 
         InventoryPlacement::findOrfail($this->placementId)->update([
@@ -181,7 +181,7 @@ class ProductInventariesData extends Component
         ->where('productInventoryId', $this->inventoryIdMutation)->get();
 
         $inventory[0]->placement->update([
-            'locationId' => $this->mutationToLocationId,
+            'officeId' => $this->mutationToLocationId,
         ]);
 
         alert()->success('SuccessAlert','Product inventory has been claimed successfully.');;

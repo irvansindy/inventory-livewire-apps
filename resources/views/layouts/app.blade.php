@@ -17,7 +17,9 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
-
+        {{-- wire ui package --}}
+        {{-- <wireui:scripts /> --}}
+        <script src="//unpkg.com/alpinejs" defer></script>
         {{-- <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script> --}}
     </head>
     <body class="font-sans antialiased">

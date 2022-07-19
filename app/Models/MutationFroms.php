@@ -14,7 +14,7 @@ class MutationFroms extends Model
 
     protected $fillable = [
         'mutationId',
-        'locationId',
+        'officeId',
     ];
 
     protected $hidden = [];

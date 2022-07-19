@@ -38,7 +38,7 @@
                                 @else
                                     <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="locationInventoryNameNow" id="locationInventoryNameNow" wire:model="locationInventoryNameNow">
                                         @foreach ($allDataLocation as $location)
-                                            <option value="{{ $location->id }}">{{ $location->locationName }}</option>
+                                            <option value="{{ $location->id }}">{{ $location->officeName }}</option>
                                         @endforeach
                                     </select>
                                 @endif
@@ -48,8 +48,8 @@
                                 <label for="mutationToLocationId" class="block text-gray-700 text-sm font-bold mb-2">Mutation To</label>
                                 <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="mutationToLocationId" id="mutationToLocationId" wire:model="mutationToLocationId">
                                     <option value="hidden">Select Location</option>
-                                    @foreach ($allDataLocation as $location)
-                                    <option value="{{ $location->id }}">{{ $location->locationName }}</option>
+                                    @foreach ($allDataOffice as $location)
+                                    <option value="{{ $location->id }}">{{ $location->officeName }}</option>
                                     @endforeach
                                 </select>
                                 @error('mutationToLocationId') <span class="text-red-500">{{ $message }}</span>@enderror

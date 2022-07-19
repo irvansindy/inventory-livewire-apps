@@ -28,6 +28,10 @@ class MutationData extends Component
     // data binding locations
     public $locationId, $locationName;
 
+    // data binding product inventory
+    public $productInventoryIdArray = [];
+    public $selected;
+
     // data binding global
     public $search;
     public $isModalMutationsOpen = 0;
@@ -51,11 +55,7 @@ class MutationData extends Component
     public function mount()
     {
         $this->allDataInventory = ProductInventory::where('productStatus' ,'!=', 'AVAILABLE')->get();
-    }
-
-    public function openModal()
-    {
-        $this->isModalMutationsOpen = true;
+        // dd($this->allDataInventory);
     }
     
     public function closeModal()
@@ -84,15 +84,9 @@ class MutationData extends Component
         return view('livewire.mutation.mutation-data', ['mutations' => $mutations]);
     }
 
-    // public function formCreateMutation($id)
-    // {
-    //     $mutationInventory = ProductInventory::findOrFail($id);
+    public function formCreateMutation()
+    {
 
-    //     if($mutationInventory->productStatus == 'PLACED') {
-
-    //     }
-    //     dd($mutationInventory);
-
-    //     $this->isModalCreateMutationsOpen = true;
-    // }
+        $this->isModalMutationsOpen = true;
+    }
 }

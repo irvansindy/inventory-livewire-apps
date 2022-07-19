@@ -33,7 +33,7 @@
                         <tr>
                             <td class="border px-4 py-2">{{ $placement->placementDate }}</td>
                             <td class="border px-4 py-2">{{ $placement->user->name }}</td>
-                            <td class="border px-4 py-2">{{ $placement->location->locationName }}</td>
+                            <td class="border px-4 py-2">{{ $placement->office->officeName }}</td>
                             <td class="border px-4 py-2">{{ $placement->placementType }}</td>
                             <td class="border px-4 py-2">{{ $placement->placementDetails[0]->status }}</td>
                             <td class="border px-4 py-2">

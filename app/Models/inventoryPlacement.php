@@ -17,7 +17,7 @@ class InventoryPlacement extends Model
         'placementNumber',
         'placementDate',
         'userId',
-        'locationId',
+        'officeId',
         'placementDescription',
         'placementType',
     ];
@@ -34,9 +34,14 @@ class InventoryPlacement extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
-    public function location()
+    // public function location()
+    // {
+    //     return $this->belongsTo(Locations::class, 'locationId');
+    // }
+
+    public function office()
     {
-        return $this->belongsTo(Locations::class, 'locationId');
+        return $this->belongsTo(Office::class, 'officeId');
     }
 
     public function getAutoNumberOptions()

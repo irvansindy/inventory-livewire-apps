@@ -150,8 +150,6 @@
                             </div>
                             
                             <div class="mr-1">
-                                {{-- <input type="text"
-                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Product Spesification" name="orderProcurements[{{ $index }}][spesification]"  wire:model="orderProcurements.{{ $index }}.spesification"> --}}
                                     <textarea
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="orderProcurements.{{ $index }}.specification" wire:model="orderProcurements.{{ $index }}.specification"
