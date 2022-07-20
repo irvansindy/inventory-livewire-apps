@@ -19,4 +19,19 @@ class Office extends Model
 
     protected $hidden = [];
     
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'officeId');
+    }
+
+    public function productInventory()
+    {
+        return $this->hasMany(ProductInventory::class, 'officeId');
+    }
+
+    public function mutationFrom()
+    {
+        return $this->hasMany(MutationFrom::class, 'officeId');
+    }
 }

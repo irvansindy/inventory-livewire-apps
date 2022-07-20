@@ -13,6 +13,7 @@ use App\Http\Livewire\Placement\PlacementData;
 use App\Http\Livewire\Loan\LoanData;
 use App\Http\Livewire\Mutation\MutationData;
 use App\Http\Livewire\Testing\TestingAlpinsJs;
+use App\Http\Livewire\Dummy\DummyMultiSelect;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +66,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('placements', PlacementData::class)->name('placements');
     Route::get('loans', LoanData::class)->name('loans');
     Route::get('mutations', MutationData::class)->name('mutations');
-    Route::get('testingAlpin', TestingAlpinsJs::class)->name('testingAlpin');
+    // Route::get('testingAlpin', TestingAlpinsJs::class)->name('testingAlpin');
+    Route::get('dummyMultiSelect', DummyMultiSelect::class)->name('dummyMultiSelect');
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');

@@ -383,6 +383,8 @@ class ProcurementData extends Component
                 'productOrigin' => $this->supplierId,
                 'productPrice' => $value[0]['unitPrice'],
                 'productDescription' => $this->procurementDescription,
+                'productStatus' => 'AVAILABLE',
+                'officeId' => 1,
                 'inventoryImageUrl' => $value[0]['imageUrl'],
                 // 'inventoryImageUrl' => $images.'.webp',
             ]);

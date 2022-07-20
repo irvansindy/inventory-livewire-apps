@@ -18,7 +18,7 @@ class Mutations extends Model
         'mutationDate',
         'mutationDescription',
         'userId',
-        'inventoryId',
+        'mutationStatus'
     ];
 
     protected $hidden = [];
@@ -41,6 +41,11 @@ class Mutations extends Model
     public function mutationTo()
     {
         return $this->hasOne(MutationTo::class, 'mutationId');
+    }
+
+    public function mutationDetails()
+    {
+        return $this->hasMany(MutationDetails::class, 'mutationId');
     }
 
     public function getAutoNumberOptions()

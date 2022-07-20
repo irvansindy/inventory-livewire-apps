@@ -30,6 +30,7 @@ class ProductInventory extends Model
         'productPrice',
         'productDescription',
         'productStatus',
+        'officeId',
         'inventoryImageUrl'
     ];
 
@@ -47,6 +48,11 @@ class ProductInventory extends Model
 
     public function supplier() {
         return $this->belongsTo(Suppliers::class, 'productOrigin', 'id');
+    }
+
+    public function mutationDetails()
+    {
+        return $this->hasOne(MutationDetails::class, 'id', 'productInventoryId');
     }
 
     // public function inventoryPlacement()

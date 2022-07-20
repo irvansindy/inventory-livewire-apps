@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
 	[x-cloak] {
 		display: none !important;
 	}
@@ -144,4 +144,43 @@
 			}
 		}
 	}
+</script> --}}
+<div>
+	<div wire:ignore>
+		<label for="taskSelect" class="form-label">Select Tasks</label>
+		<select class="form-select" id="taskSelect" multiple="multiple" >
+			@foreach($this->allDataInventory as $task)
+				<option id="{{$task->id}}">{{$task->inventoryName}}</option>
+			@endforeach
+		</select>
+	</div>
+	<div class="my-3">
+		Selected Tasks :
+		@forelse($this->allDataInventory as $task)
+			{{$task}},
+		@empty
+			None
+		@endforelse
+	</div>
+</div>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script></script>
+<script>
+	$(document).ready(function() {
+		$('#taskSelect').select2();
+
+		$('#taskSelect').on('change', function (e) {
+			@this.set('selectedTasks', $(this).val());
+		});
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+		$('#selectedInventory').select2();
+
+		$('#selectedInventory').on('change', function (e) {
+			@this.set('selectedTasks', $(this).val());
+		});
+	});
 </script>

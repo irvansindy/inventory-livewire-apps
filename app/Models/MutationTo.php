@@ -18,4 +18,14 @@ class MutationTo extends Model
     ];
 
     protected $hidden = [];
+
+    public function mutation()
+    {
+        return $this->belongsTo(Mutations::class, 'mutationId');
+    }
+    
+    public function office()
+    {
+        return $this->belongsTo(Office::class, 'officeId');
+    }
 }

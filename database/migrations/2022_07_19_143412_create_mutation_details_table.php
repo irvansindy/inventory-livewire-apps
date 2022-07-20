@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMutationsTable extends Migration
+class CreateMutationDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateMutationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mutations', function (Blueprint $table) {
+        Schema::create('mutation_details', function (Blueprint $table) {
             $table->id();
-            $table->string('mutationNumber');
-            $table->date('mutationDate');
-            $table->text('mutationDescription');
-            $table->string('userId');
-            // $table->string('inventoryId');
+            $table->bigInteger('mutationId');
+            $table->bigInteger('productInventoryId');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +29,6 @@ class CreateMutationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mutations');
+        Schema::dropIfExists('mutation_details');
     }
 }
