@@ -5,23 +5,25 @@ namespace App\Http\Livewire\Mutation;
 use Livewire\Component;
 use App\Models\Mutations;
 use App\Models\MutationDetails;
+use App\Models\MutationApprovals;
 use App\Models\MutationFroms;
 use App\Models\MutationTo;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProductInventory;
 use App\Models\Locations;
+use Illuminate\Support\Facades\Gate;
 
 
 class MutationData extends Component
 {
     // data binding master mutations
-    public $mutationId, $mutationNumber, $mutationDate, $mutationDescription, $userId, $inventoryId;
+    public $mutationId, $mutationNumber, $mutationDate, $mutationDescription, $userId, $inventoryId, $mutationStatus, $mutationApprovalId;
 
     // data binding mutation from
-    public $mutationFromId, $mutationFromLocationId;
+    public $mutationFromId, $mutationFromOfficeId;
 
     // data binding mutation to
-    public $mutationToId, $mutationToLocationId;
+    public $mutationToId, $mutationToOfficeId;
 
     // data binding product inventory
     public $productInventoryId, $productInventoryName;
@@ -34,7 +36,7 @@ class MutationData extends Component
     public $isModalMutationsOpen = 0;
     public $isModalCreateMutationsOpen = 0;
     public $isModalDetailMutationsOpen = 0;
-    public $isModalEditMutationsOpen = 0;
+    public $isModalApprovalMutationsOpen = 0;
     public $limitPerPage = 10;
 
     protected $queryString = ['search'=> ['except' => '']];
@@ -47,6 +49,9 @@ class MutationData extends Component
     public $allDataInventory = [];
     public $allDataMutation = [];
 
+    // data binding approval
+    public $signature, $commentApproval, $mutationApproval;
+
     public function mutationPostData()
     {
         $this->limitPerPage = $this->limitPerPage+6;
@@ -55,7 +60,7 @@ class MutationData extends Component
     public function mount()
     {
         $this->allDataInventory = ProductInventory::where('productStatus' ,'=', 'AVAILABLE')->where('officeId', '=', 1)->get();
-        // dd($this->allDataInventory);
+        // $this->signature = '';
     }
     
     public function closeModal()
@@ -151,5 +156,131 @@ class MutationData extends Component
     public function closeDetail()
     {
         $this->isModalDetailMutationsOpen = false;
+    }
+
+    public function viewApprovalMutation($id)
+    {
+        Gate::authorize('admin');
+        // get data approval
+        $this->mutationApproval = MutationApprovals::with([
+            'user',
+            'mutation',
+        ])
+        ->where('userId', Auth::user()->id)
+        ->where('mutationId', $id)->get();
+
+        if ($this->mutationApproval->count() > 0) {
+            // && $this->mutationApproval[0]->status == 'WAITING'
+            // get data mutation detail
+            $listMutationDetails = MutationDetails::with([
+                'productInventory',
+                'mutation',
+            ])
+            ->where('mutationId', $id)->get();
+
+            // get data mutation from
+            $MutationFroms = MutationFroms::where('mutationId', $id)->get();
+
+            // get data mutation to
+            $MutationTo = MutationTo::where('mutationId', '=', $id)->get();
+
+            // data binding
+            // mutation master
+            $this->mutationId = $id;
+            $this->mutationNumber = $this->mutationApproval[0]->mutation->mutationNumber;
+            $this->mutationDate = $this->mutationApproval[0]->mutation->mutationDate;
+            $this->mutationDescription = $this->mutationApproval[0]->mutation->mutationDescription;
+            $this->userId = $this->mutationApproval[0]->mutation->user->name;
+            $this->mutationStatus = $this->mutationApproval[0]->mutation->mutationStatus;
+
+            $this->mutationApprovalId = $this->mutationApproval[0]->id;
+            // mutation detail
+            $this->allDataMutation = $listMutationDetails;
+
+            // mutation from
+            $this->mutationFromOfficeId = $MutationFroms[0]->office->officeName;
+
+            // mutation to
+            $this->mutationToOfficeId = $MutationTo[0]->office->officeName;
+
+            $this->isModalApprovalMutationsOpen = true;
+        } else {
+            alert()->warning('WarningAlert','Mutation has been approved.');
+        }
+        
+    }
+
+    public function closeApproval()
+    {
+        $this->isModalApprovalMutationsOpen = false;
+    }
+
+    public function storeAndUpdateStaggingApprovalMutation()
+    {
+        Gate::authorize('admin');
+
+        $this->validate([
+            'commentApproval' => 'required|string',
+            'signature' => 'required',
+        ]);
+
+        // check mutation master and mutation approval
+        $checkMutationMaster = Mutations::findOrFail($this->mutationId);
+        $checkMutationApproval = MutationApprovals::findOrFail($this->mutationApprovalId);
+        // dd($checkMutationApproval);
+        // store signature to local storage and database
+        $folderPath = public_path('upload/images/signature/');
+
+        $image_parts = explode(";base64,", $this->signature);
+
+        $image_type_aux = explode("image/", $image_parts[0]);
+
+        $image_type = $image_type_aux[1];
+
+        $image_base64 = base64_decode($image_parts[1]);
+
+        $fileToFolder = $folderPath . date('ymd-hi') . '.'.$image_type;
+
+        $fileToDatabase = date('ymd-hi') . '.'.$image_type;
+
+        // check if mutation master and mutation approval is same
+        if ($checkMutationMaster->mutationStatus == 'PENDING') {
+            if (Auth::user()->roles == 'ADMIN') {
+                $checkMutationMaster->update([
+                    'mutationStatus' => 'ON PROGRESS',
+                ]);
+    
+                $checkMutationApproval->update([
+                    'status' => 'FORWARD',
+                    'comment' => $this->commentApproval,
+                    'signature' => $fileToDatabase,
+                ]);
+    
+                MutationApprovals::create([
+                    'mutationId' => $this->mutationId,
+                    'userId' => Auth::user()->parentUserId,
+                    'status' => 'WAITING',
+                    'comment' => NULL,
+                    'signature' => NULL,
+                ]);
+            alert()->success('SuccessAlert','Mutation has been forward successfully.');
+            
+            $this-> closeApproval();
+            }
+        } elseif ($checkMutationMaster->mutationStatus == 'ON PROGRESS') {
+            if (Auth::user()->roles == 'SUPERADMIN') {
+                $checkMutationApproval->update([
+                    'status' => 'APPROVE',
+                    'comment' => $this->commentApproval,
+                    'signature' => $fileToDatabase,
+                ]);
+                alert()->success('SuccessAlert','Mutation has been approved successfully.');
+                
+                $this-> closeApproval();
+            }
+        } else {
+            alert()->warning('WarningAlert','Mutation has been error.');
+        }
+
     }
 }

@@ -53,7 +53,6 @@
                                     @if ($procurement->status !== 'CLAIM' && Auth::user()->roles != 'USER')
                                     {{-- && Auth::user()->roles != 'USER' --}}
                                     <button wire:click="detailProcurement({{ $procurement->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Detail</button>
-                                    {{-- <button wire:click="approveProcurement({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button> --}}
                                     <button wire:click="detailApproval({{ $procurement->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button>
                                     <button wire:click="doneProcurement({{ $procurement->id }})" class="bg-emerald-600 hover:bg-emerald-800 text-white font-bold py-2 px-4 rounded">Done</button>
                                     @else
@@ -73,7 +72,7 @@
                     </div>
                 </div>
                 {{-- form add procurement --}}
-                <div x-show="open">
+                <div x-show="open" x-transition>
                     <form>
                         <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
                             <h2 class="text-2xl font-bold leading-tight text-gray-900">

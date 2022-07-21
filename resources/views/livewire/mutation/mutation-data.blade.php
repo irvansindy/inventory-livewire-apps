@@ -3,7 +3,7 @@
     <x-slot name="header">
         <h2 class="text-left font-medium hover:font-bold">List Data Mutations
     </x-slot>
-    <div class="py-12">
+    <div class="py-12" x-data="{ open: false }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
             @include('sweetalert::alert')
@@ -13,6 +13,8 @@
                     @include('livewire.mutation.modal-mutation-data')
                 @elseif($isModalDetailMutationsOpen)
                     @include('livewire.mutation.detail-mutation')
+                @elseif ($isModalApprovalMutationsOpen)
+                    @include('livewire.mutation.approval-mutation')
                 @endif
                 <table class="table-auto w-full">
                     <thead>
@@ -33,6 +35,9 @@
                                 <td class="px-4 py-2">{{ $mutation->mutationStatus }}</td>
                                 <td class="px-4 py-2">
                                     <button wire:click="detailMutation({{ $mutation->id }})" class="bg-sky-600 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">View</button>
+                                    @can('admin')
+                                        <button wire:click="viewApprovalMutation({{ $mutation->id }})" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded">Approve</button>
+                                    @endcan
                                 </td>
                             </tr>
                         @empty
@@ -42,8 +47,11 @@
                         @endforelse
                     </tbody>
                 </table>
-                <div class="px-4 mt-4">
+                <div class="px-4">
                     {{$mutations->links()}}
+                </div>
+                <div x-show="open" x-transition>
+                    <x-signature-pad wire:model.defer="signature"/>
                 </div>
             </div>
         </div>
